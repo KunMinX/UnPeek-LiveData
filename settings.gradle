@@ -1,0 +1,3 @@
+include ':event-livedata'
+include ':app'
+rootProject.name = 'PureMusic'
