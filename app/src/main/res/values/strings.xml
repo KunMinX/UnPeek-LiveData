@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">PureMusic</string>
+    <string name="welcome_back">欢迎回来</string>
+
+    <string name="free_music_json">
+        "[{\"drawable\":2131165280,\"title\":\"Lifecycles\"},{\"drawable\":2131165280,\"title\":\"LiveData\"},{\"drawable\":2131165280,\"title\":\"ViewModel\"},{\"drawable\":2131165280,\"title\":\"DataBinding\"},{\"drawable\":2131165280,\"title\":\"Navigation\"},{\"drawable\":2131165280,\"title\":\"Room\"},{\"drawable\":2131165280,\"title\":\"Paging\"},{\"drawable\":2131165280,\"title\":\"WorkManager\"},{\"drawable\":2131165280,\"title\":\"xxx\"},{\"drawable\":2131165280,\"title\":\"xxx\"}]"
+    </string>
+
+
+    <string name="library_json">
+        "[{\"title\":\"Lifecycle\",\"summary\":\"主要用于在软件工程的背景下，解决生命周期管理的一致性问题\",\"url\":\"https://xiaozhuanlan.com/topic/3684721950\"},{\"title\":\"LiveData\",\"summary\":\"主要用于 配合唯一可信源 完成 生命周期安全的 事件统一分发，以避免收到 不可预期的推送 和 难以追溯的事件源\",\"url\":\"https://xiaozhuanlan.com/topic/0168753249\"},{\"title\":\"ViewModel\",\"summary\":\"主要用于 托管页面状态、分治视图控制器重建时的状态恢复，以及实现 生命周期安全的、事件源可追溯的 跨页面通信\",\"url\":\"https://xiaozhuanlan.com/topic/6257931840\"},{\"title\":\"DataBinding\",\"summary\":\"主要用于在软件工程的背景下，解决视图调用的一致性问题\",\"url\":\"https://xiaozhuanlan.com/topic/9816742350\"},{\"title\":\"Navigation\",\"summary\":\"通过声明式编程来解决 应用内路由导航 的一致性问题\",\"url\":\"https://xiaozhuanlan.com/topic/5860149732\"}]"
+    </string>
+    <string name="play">播放</string>
+    <string name="notify_of_play">播放时的通知栏展示</string>
+    <string name="network_unconnected">网络断开了</string>
+
+    <string name="play_repeat">列表循环</string>
+    <string name="play_repeat_once">单曲循环</string>
+    <string name="play_shuffle">随机播放</string>
+
+    <string name="unfinished">这是个前排吃瓜的按钮！ ^_^</string>
+    <string name="recently">最近播放</string>
+    <string name="best_practice">最佳实践</string>
+
+
+    <string name="app_summary">是难得一见的 Jetpack MVVM 最佳实践！</string>
+    <string name="project_title">本项目中用到的技术点包括：</string>
+    <string name="Copyright">Product with love by KunMinX @2019</string>
+    <string name="search_page_tip">本页面用于测试 Navigation 路由导航</string>
+    <string name="test_download">测试下载，返回页面仍有效</string>
+    <string name="test_lifecycle_download">测试下载，离开页面即中止</string>
+    <string name="search_back">右滑关闭本页面</string>
+
+    <string name="relearn_android">《重学安卓》</string>
+    <string name="learn_more_friends">付费读者加微信进群 myatejx</string>
+    <string name="learn_more">Learn More</string>
+    <string name="debug_fragment_databinding_warning">Debug 提示：此 Fragment 未遵循 DataBinding 严格模式，存在 视图调用的 Null 安全风险</string>
+    <string name="debug_activity_databinding_warning">Debug 提示：此 Activity 未遵循 DataBinding 严格模式，存在 视图调用的 Null 安全风险</string>
+    <string name="login_title">欢迎来到 Jetpack MVVM 的世界</string>
+    <string name="login_content">Welcome to the world of Jetpack MVVM best practice !</string>
+    <string name="user_name">请输入用户名</string>
+    <string name="user_password">请输入密码</string>
+    <string name="login">登录</string>
+
+    <string name="lifecycle_hint">测试 Lifecycles，请点击 \'添加定位\'</string>
+    <string name="livedate_hint">测试 LiveData，请点击 \'添加定位\'</string>
+    <string name="location_empty">添加定位</string>
+    <string name="choose_location">选择位置</string>
+    <string name="image">image</string>
+    <string name="location">位置</string>
+    <string name="moment_list">动态列表</string>
+    <string name="moment_content">刚刚在B站发表了最新一期的视频讲解，感兴趣的小伙伴可前往查阅</string>
+
+    <string name="tip_of_enter_moment">请输入动态</string>
+    <string name="viewmodel_item_click_tip">ViewModel 组件示例 item 点击不提供跳转，下一个组件示例（DataBinding）提供跳转</string>
+    <string name="save">保存</string>
+    <string name="lifecycle_save_tip">Lifecycle 组件示例不提供保存功能，具体会在 DataBinding 组件示例开始提供</string>
+    <string name="liveData_save_tip">liveData 组件示例不提供保存功能，具体会在 DataBinding 组件示例开始提供</string>
+
+</resources>
