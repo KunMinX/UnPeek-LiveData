@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+def theVersionName = "1.1.0"
 
 android {
     compileSdkVersion 29
@@ -7,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 10100
+        versionName theVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -25,8 +28,19 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+}
+
+publish {
+    userOrg = 'eventlivedata'
+    repoName = 'maven'
+    groupId = 'com.kunminx.event'
+    artifactId = 'eventlivedata'
+    publishVersion = theVersionName
+    desc = 'for page back callback'
+    licences = ['Apache-2.0']
+    website = 'https://github.com/KunMinX/Event-LiveData'
 }

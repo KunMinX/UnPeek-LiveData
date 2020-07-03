@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.event_livedata;
+package com.kunminx.event;
 
 import androidx.annotation.Nullable;
 

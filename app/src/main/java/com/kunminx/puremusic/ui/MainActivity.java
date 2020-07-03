@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.kunminx.event.EventObserver;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.ActivityMainBinding;
 import com.kunminx.puremusic.ui.base.BaseActivity;
@@ -46,9 +47,9 @@ public class MainActivity extends BaseActivity {
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setClick(new ClickProxy());
 
-        mSharedViewModel.moment.observe(this, moment -> {
+        mSharedViewModel.moment.observe(this, new EventObserver<>(moment -> {
             Toast.makeText(this, moment.getContent(), Toast.LENGTH_SHORT).show();
-        });
+        }));
     }
 
     public class ClickProxy {

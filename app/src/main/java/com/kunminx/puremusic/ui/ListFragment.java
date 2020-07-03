@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.kunminx.event.EventObserver;
 import com.kunminx.puremusic.ui.base.BaseFragment;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentListBinding;
@@ -69,10 +70,10 @@ public class ListFragment extends BaseFragment {
             mListViewModel.list.setValue(moments);
         });
 
-        mSharedViewModel.moment.observe(getViewLifecycleOwner(), moment -> {
+        mSharedViewModel.moment.observe(getViewLifecycleOwner(), new EventObserver<>(moment -> {
             mListViewModel.list.getValue().add(0, moment);
             mListViewModel.list.setValue(mListViewModel.list.getValue());
-        });
+        }));
 
         mListViewModel.requestList();
     }
