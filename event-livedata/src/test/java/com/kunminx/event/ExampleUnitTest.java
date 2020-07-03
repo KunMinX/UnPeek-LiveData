@@ -1,4 +1,4 @@
-package com.kunminx.event_livedata;
+package com.kunminx.event;
 
 import org.junit.Test;
 
