@@ -4,7 +4,7 @@
 
 Event-LiveData 主要用于 页面通信（如事件回调）等场景，避免 "数据倒灌" 现象的发生，
 
-（为什么页面通信的场景要使用 SharedViewModel + Event-LiveData 而不直接使用单例？背景缘由详见 [《独家记忆 | Jetpack MVVM 高频提问和解答》](https://juejin.im/post/5ef061d0e51d4573e71f3243)）
+（为什么在页面通信的场景使用 SharedViewModel + Event-LiveData 而不直接使用单例或 Bus？背景缘由详见 [《独家记忆 | Jetpack MVVM 高频提问和解答》](https://juejin.im/post/5ef061d0e51d4573e71f3243)）
 
 在发布的 1.1.0 版本中，通过创意性的设计：延迟清理消息，来一举解决三个问题：
 
