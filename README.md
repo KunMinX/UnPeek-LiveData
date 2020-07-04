@@ -14,7 +14,7 @@ Event-LiveData 主要用于 页面通信（如事件回调）等场景，避免 
 
 3. 得以在维持低入侵的、遵循开闭原则的前提下，实现上述两个需求
 
-`implementation 'com.kunminx.event:eventlivedata:1.1.0'`
+`implementation 'com.kunminx.event:eventlivedata:1.1.2'`
 
 
 Copyright © 2020 KunMinX
