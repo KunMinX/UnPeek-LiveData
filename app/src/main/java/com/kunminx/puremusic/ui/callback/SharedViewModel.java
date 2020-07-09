@@ -18,7 +18,7 @@ package com.kunminx.puremusic.ui.callback;
 
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.event.EventLiveData;
+import com.kunminx.event.UnPeekLiveData;
 import com.kunminx.puremusic.data.bean.Moment;
 
 /**
@@ -26,6 +26,6 @@ import com.kunminx.puremusic.data.bean.Moment;
  */
 public class SharedViewModel extends ViewModel {
 
-    public final EventLiveData<Moment> moment = new EventLiveData<>();
+    public final UnPeekLiveData<Moment> moment = new UnPeekLiveData<>();
 
 }
