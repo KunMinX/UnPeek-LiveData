@@ -72,7 +72,7 @@ public class EditorActivity extends BaseActivity {
                 moment.setUserName("KunMinX");
                 moment.setLocation(mEditorViewModel.location.get());
                 moment.setContent(mEditorViewModel.content.get());
-                mSharedViewModel.moment.setEvent(moment);
+                mSharedViewModel.moment.setValue(moment);
                 finish();
             }
             return true;
