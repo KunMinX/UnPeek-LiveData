@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
-def theVersionName = "1.1.2"
+def theVersionName = "2.9.5-beta1"
 
 android {
     compileSdkVersion 29
@@ -10,7 +10,7 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 10102
+        versionCode 2090501
         versionName theVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -30,6 +30,13 @@ android {
     }
 }
 
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+    options.encoding = 'UTF-8'
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -40,12 +47,12 @@ dependencies {
 }
 
 publish {
-    userOrg = 'eventlivedata'
+    userOrg = 'architecture'
     repoName = 'maven'
-    groupId = 'com.kunminx.event'
-    artifactId = 'eventlivedata'
+    groupId = 'com.kunminx.archi'
+    artifactId = 'unpeeklivedata'
     publishVersion = theVersionName
     desc = 'for page back callback'
     licences = ['Apache-2.0']
-    website = 'https://github.com/KunMinX/Event-LiveData'
+    website = 'https://github.com/KunMinX/UnPeekLiveData'
 }
