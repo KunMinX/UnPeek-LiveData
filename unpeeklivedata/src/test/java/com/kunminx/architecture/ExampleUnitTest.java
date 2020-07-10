@@ -1,4 +1,4 @@
-package com.kunminx.event;
+package com.kunminx.architecture;
 
 import org.junit.Test;
 

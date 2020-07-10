@@ -18,7 +18,7 @@ package com.kunminx.puremusic.ui.callback;
 
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.event.UnPeekLiveData;
+import com.kunminx.architecture.ui.callback.UnPeekLiveData;
 import com.kunminx.puremusic.data.bean.Moment;
 
 /**
