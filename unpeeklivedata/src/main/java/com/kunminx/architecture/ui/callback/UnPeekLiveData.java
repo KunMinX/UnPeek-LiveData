@@ -73,6 +73,28 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
         });
     }
 
+    @Override
+    public void observeForever(@NonNull Observer<? super T> observer) {
+
+        super.observeForever(t -> {
+
+            if (isCleaning) {
+                hasHandled = true;
+                isDelaying = false;
+                isCleaning = false;
+                return;
+            }
+
+            if (!hasHandled) {
+                hasHandled = true;
+                isDelaying = true;
+                observer.onChanged(t);
+            } else if (isDelaying) {
+                observer.onChanged(t);
+            }
+        });
+    }
+
     /**
      * 重写的 setValue 方法，默认不接收 null
      * 可通过 Builder 配置允许接收
@@ -117,14 +139,17 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
     public static class Builder<T> {
 
         /**
-         * time of event's life
+         * 消息的生存时长
          */
-        private int eventLiveTime = 1000;
+        private int eventSurvivalTime = 1000;
 
+        /**
+         * 是否允许传入 null value
+         */
         private boolean isAllowNullValue;
 
-        public Builder<T> setEventLiveTime(int eventLiveTime) {
-            this.eventLiveTime = eventLiveTime;
+        public Builder<T> setEventSurvivalTime(int eventSurvivalTime) {
+            this.eventSurvivalTime = eventSurvivalTime;
             return this;
         }
 
@@ -135,7 +160,7 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
 
         public UnPeekLiveData<T> create() {
             UnPeekLiveData<T> liveData = new UnPeekLiveData<>();
-            liveData.DELAY_TO_CLEAR_EVENT = this.eventLiveTime;
+            liveData.DELAY_TO_CLEAR_EVENT = this.eventSurvivalTime;
             liveData.isAllowNullValue = this.isAllowNullValue;
             return liveData;
         }
