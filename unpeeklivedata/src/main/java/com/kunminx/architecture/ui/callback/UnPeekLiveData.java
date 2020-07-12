@@ -49,6 +49,7 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
     private int DELAY_TO_CLEAR_EVENT = 1000;
     private Timer mTimer = new Timer();
     private TimerTask mTask;
+    private boolean isAllowNullValue;
 
     @Override
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
@@ -72,8 +73,24 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
         });
     }
 
+    /**
+     * 重写的 setValue 方法，默认不接收 null
+     * 可通过 Builder 配置允许接收
+     * 可通过 Builder 配置消息延时清理的时间
+     * <p>
+     * override setValue, do not receive null by default
+     * You can configure to allow receiving through Builder
+     * And also, You can configure the delay time of message clearing through Builder
+     *
+     * @param value
+     */
     @Override
     public void setValue(T value) {
+
+        if (!isAllowNullValue && value == null && !isCleaning) {
+            return;
+        }
+
         hasHandled = false;
         isDelaying = false;
         super.setValue(value);
@@ -104,14 +121,22 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
          */
         private int eventLiveTime = 1000;
 
+        private boolean isAllowNullValue;
+
         public Builder<T> setEventLiveTime(int eventLiveTime) {
             this.eventLiveTime = eventLiveTime;
+            return this;
+        }
+
+        public Builder<T> setAllowNullValue(boolean allowNullValue) {
+            this.isAllowNullValue = allowNullValue;
             return this;
         }
 
         public UnPeekLiveData<T> create() {
             UnPeekLiveData<T> liveData = new UnPeekLiveData<>();
             liveData.DELAY_TO_CLEAR_EVENT = this.eventLiveTime;
+            liveData.isAllowNullValue = this.isAllowNullValue;
             return liveData;
         }
     }
