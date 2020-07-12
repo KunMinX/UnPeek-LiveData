@@ -20,6 +20,6 @@ UnPeekLiveData 通过独创的 “延时自动清理消息” 的设计，来满
 
 并且 UnPeekLiveData 提供了构造器模式，可通过构造器组装适合自己业务场景的 UnPeekLiveData。
 
-`implementation 'com.kunminx.archi:unpeeklivedata:2.9.6-beta1'`
+`implementation 'com.kunminx.archi:unpeeklivedata:2.9.6-beta2'`
 
 Copyright © 2020 KunMinX
