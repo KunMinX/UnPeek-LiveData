@@ -8,7 +8,7 @@
 
 它主要发生在：通过 SharedViewModel + LiveData 的组合 来解决页面通信的场景。
 
-
+&nbsp;
 
 ## 本文的目标
 
@@ -25,6 +25,7 @@
 > 以及为什么在 “页面通信” 的场景下，不用静态单例、不用 LiveDataBus
 
 如果对于这些前置知识也尚不了解，可结合个人的兴趣前往[《LiveData 数据倒灌 背景缘由全貌 独家解析》](https://xiaozhuanlan.com/topic/6719328450)查阅，此处不再累述。
+
 &nbsp;
 
 ## 现有解决方案及各自缺陷
@@ -52,6 +53,7 @@
  是对 Event 事件包装器 一致性问题的改进，但未解决多观察者消费的问题；
 
  而且额外引入了消息未能从内存中释放的问题。
+
 &nbsp;
 
 ## UnPeekLiveData 特点
@@ -76,14 +78,13 @@ UnPeekLiveData 通过 **独创的 “延时自动清理消息” 的设计**，�
 
 PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flynn、[Joker_Wan](https://juejin.im/user/5829b958d20309005403f4d6) 等小伙伴积极的试用和反馈，使得未被觉察的问题 被及时发现和纳入考虑。
 
-
+&nbsp;
 
 ## JCenter 依赖
 
 ```groovy
 implementation 'com.kunminx.archi:unpeeklivedata:2.9.6-beta2'
 ```
-
 
 &nbsp;
 
