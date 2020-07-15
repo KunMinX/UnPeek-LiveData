@@ -6,7 +6,7 @@
 
 它主要发生在：通过 SharedViewModel + LiveData 的组合来解决页面通信的问题时。
 
-关于 为什么会存在这个现象、为什么要使用 SharedViewModel + LiveData 等问题，可详见《》篇对背景缘由的解析。
+关于 为什么会存在这个现象、为什么要使用 SharedViewModel + LiveData 等问题，可详见[《LiveData 数据倒灌》](https://juejin.im/post/5f0e7932e51d4534c36d9c01)篇对背景缘由的解析。
 
 &nbsp;
 &nbsp;
