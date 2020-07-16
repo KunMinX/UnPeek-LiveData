@@ -87,7 +87,7 @@ public class EditorFragment extends BaseFragment {
                 moment.setUserName("KunMinX");
                 moment.setLocation(mEditorViewModel.location.get());
                 moment.setContent(mEditorViewModel.content.get());
-                mSharedViewModel.moment.postValue(null);
+                mSharedViewModel.moment.postValue(moment);
                 nav().navigateUp();
             }
             return true;
