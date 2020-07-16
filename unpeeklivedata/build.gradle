@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
-def theVersionName = "2.9.6-beta2"
+def theVersionName = "2.9.7-beta4"
 
 android {
     compileSdkVersion 29
@@ -10,7 +10,7 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 2090602
+        versionCode 2090704
         versionName theVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -50,7 +50,7 @@ publish {
     userOrg = 'architecture'
     repoName = 'maven'
     groupId = 'com.kunminx.archi'
-    artifactId = 'unpeeklivedata'
+    artifactId = 'unpeek-livedata'
     publishVersion = theVersionName
     desc = 'for page back callback'
     licences = ['Apache-2.0']
