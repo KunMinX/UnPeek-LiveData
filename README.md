@@ -70,6 +70,16 @@ UnPeekLiveData 通过 **独创的 “延时自动清理消息” 的设计**，�
 
 并且 UnPeekLiveData 提供了构造器模式，可通过构造器组装适合自己业务场景的 UnPeekLiveData。
 
+```java
+UnPeekLiveData<Moment> test =
+  new UnPeekLiveData.Builder<Moment>()
+    .setAllowNullValue(false)
+    .setAllowToClear(true)
+    .setEventSurvivalTime(500)
+    .create();
+```
+
+
 |                          零入侵设计                          |                       延时自动清理消息                       |                        Builder 构造器                        |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | ![4021594785998_.pic_hd.jpg](https://i.loli.net/2020/07/15/5mXOKHp9DRjGzV7.jpg) | ![4031594785998_.pic_hd.jpg](https://i.loli.net/2020/07/15/up3D1gcItrywCK5.jpg) | ![4041594785999_.pic_hd.jpg](https://i.loli.net/2020/07/15/X4JCght5PRIHGFL.jpg) |
@@ -83,7 +93,7 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 ## JCenter 依赖
 
 ```groovy
-implementation 'com.kunminx.archi:unpeeklivedata:2.9.6-beta2'
+implementation 'com.kunminx.archi:unpeeklivedata:2.9.7-beta3'
 ```
 
 &nbsp;
