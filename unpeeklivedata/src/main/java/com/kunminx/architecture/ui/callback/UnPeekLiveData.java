@@ -50,6 +50,7 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
     private Timer mTimer = new Timer();
     private TimerTask mTask;
     private boolean isAllowNullValue;
+    private boolean isAllowToClear = true;
 
     @Override
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
@@ -132,8 +133,13 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
     }
 
     private void clear() {
-        isCleaning = true;
-        super.postValue(null);
+        if (isAllowToClear) {
+            isCleaning = true;
+            super.postValue(null);
+        } else {
+            hasHandled = true;
+            isDelaying = false;
+        }
     }
 
     public static class Builder<T> {
@@ -148,6 +154,11 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
          */
         private boolean isAllowNullValue;
 
+        /**
+         * 是否允许自动清理，默认 true
+         */
+        private boolean isAllowToClear = true;
+
         public Builder<T> setEventSurvivalTime(int eventSurvivalTime) {
             this.eventSurvivalTime = eventSurvivalTime;
             return this;
@@ -158,10 +169,16 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
             return this;
         }
 
+        public Builder<T> setAllowToClear(boolean allowToClear) {
+            this.isAllowToClear = allowToClear;
+            return this;
+        }
+
         public UnPeekLiveData<T> create() {
             UnPeekLiveData<T> liveData = new UnPeekLiveData<>();
             liveData.DELAY_TO_CLEAR_EVENT = this.eventSurvivalTime;
             liveData.isAllowNullValue = this.isAllowNullValue;
+            liveData.isAllowToClear = this.isAllowToClear;
             return liveData;
         }
     }
