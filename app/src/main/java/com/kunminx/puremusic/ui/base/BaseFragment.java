@@ -33,7 +33,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 
-import com.androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.fragment.NavHostFragment;
 import com.kunminx.puremusic.App;
 
 
