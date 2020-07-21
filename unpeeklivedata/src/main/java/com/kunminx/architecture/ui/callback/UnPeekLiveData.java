@@ -16,7 +16,7 @@ package com.kunminx.architecture.ui.callback;
  * 4.让非入侵设计成为可能，遵循开闭原则
  * <p>
  * TODO：增加一层 ProtectedUnPeekLiveData，
- * 用于限制从 Activity/Fragment 推送数据，推送数据务必通过唯一可信源来分发，
+ * 用于限制从 Activity/Fragment 篡改来自 "数据层" 的数据，数据层的数据务必通过唯一可信源来分发，
  * 如果这样说还不理解，详见：
  * https://xiaozhuanlan.com/topic/6719328450 和 https://xiaozhuanlan.com/topic/0168753249
  * <p>
