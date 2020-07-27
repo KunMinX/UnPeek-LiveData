@@ -115,7 +115,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     @Override
     protected void setValue(T value) {
 
-        if (!isAllowNullValue && value == null && !isCleaning) {
+        if (!isCleaning && (!isAllowNullValue && value == null)) {
             return;
         }
 
@@ -128,13 +128,15 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
             mTimer.purge();
         }
 
-        mTask = new TimerTask() {
-            @Override
-            public void run() {
-                clear();
-            }
-        };
-        mTimer.schedule(mTask, DELAY_TO_CLEAR_EVENT);
+        if (value != null) {
+            mTask = new TimerTask() {
+                @Override
+                public void run() {
+                    clear();
+                }
+            };
+            mTimer.schedule(mTask, DELAY_TO_CLEAR_EVENT);
+        }
     }
 
     private void clear() {
