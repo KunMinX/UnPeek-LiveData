@@ -93,7 +93,7 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 ## JCenter 依赖
 
 ```groovy
-implementation 'com.kunminx.architecture:unpeek-livedata:3.2.3-beta9'
+implementation 'com.kunminx.archi:unpeek-livedata:3.2.2-beta8'
 ```
 
 &nbsp;
