@@ -81,7 +81,9 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
     /**
      * UnPeekLiveData 主要用于表现层的 页面转场 和 页面间通信 场景下的非粘性消息分发，
-     * 出于生命周期安全等因素的考虑，不建议使用 observeForever 方法，如有需要，可结合实际场景使用 MutableLiveData。
+     * 出于生命周期安全等因素的考虑，不建议使用 observeForever 方法，
+     * <p>
+     * 对于数据层的工作，如有需要，可结合实际场景使用 MutableLiveData 或 kotlin flow。
      *
      * @param observer
      */
