@@ -86,7 +86,7 @@ UnPeekLiveData<Moment> test =
 
 &nbsp;
 
-PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flynn、[Joker_Wan](https://juejin.im/user/5829b958d20309005403f4d6)、小暑知秋 等小伙伴积极的试用和反馈，使得未被觉察的问题 被及时发现和纳入考虑。
+PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flynn、[Joker_Wan](https://juejin.im/user/5829b958d20309005403f4d6)、小暑知秋、[大棋](https://juejin.im/user/1785262613208376/posts) 等小伙伴积极的试用和反馈，使得未被觉察的问题 被及时发现和纳入考虑。
 
 &nbsp;
 

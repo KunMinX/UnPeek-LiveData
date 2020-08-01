@@ -79,26 +79,15 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
         });
     }
 
+    /**
+     * UnPeekLiveData 主要用于表现层的 页面转场 和 页面间通信 场景下的非粘性消息分发，
+     * 出于生命周期安全等因素的考虑，不建议使用 observeForever 方法，如有需要，可结合实际场景使用 MutableLiveData。
+     *
+     * @param observer
+     */
     @Override
     public void observeForever(@NonNull Observer<? super T> observer) {
-
-        super.observeForever(t -> {
-
-            if (isCleaning) {
-                hasHandled = true;
-                isDelaying = false;
-                isCleaning = false;
-                return;
-            }
-
-            if (!hasHandled) {
-                hasHandled = true;
-                isDelaying = true;
-                observer.onChanged(t);
-            } else if (isDelaying) {
-                observer.onChanged(t);
-            }
-        });
+        throw new IllegalArgumentException("Do not use observeForever for communication between pages to avoid lifecycle security issues");
     }
 
     /**
@@ -148,5 +137,4 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
             isDelaying = false;
         }
     }
-
 }
