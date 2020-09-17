@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PureMusic</string>
+    <string name="app_name">UnPeek-LiveData</string>
     <string name="welcome_back">欢迎回来</string>
 
     <string name="free_music_json">
