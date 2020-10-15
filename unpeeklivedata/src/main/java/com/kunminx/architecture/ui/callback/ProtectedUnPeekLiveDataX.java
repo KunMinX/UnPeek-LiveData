@@ -16,10 +16,6 @@
 
 package com.kunminx.architecture.ui.callback;
 
-import android.app.Activity;
-import android.util.SparseArray;
-import android.util.SparseBooleanArray;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -30,8 +26,6 @@ import androidx.lifecycle.ViewModelStore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * TODO：UnPeekLiveData 的存在是为了在 "重回二级页面" 的场景下，解决 "数据倒灌" 的问题。
@@ -55,16 +49,9 @@ import java.util.TimerTask;
  * <p>
  * Create by KunMinX at 19/9/23
  */
-public class ProtectedWrapperLiveData<T> extends LiveData<T> {
+public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
 
-    private boolean isCleaning;
-    private boolean hasHandled = true;
-    private boolean isDelaying;
-    protected int DELAY_TO_CLEAR_EVENT = 1000;
-    private Timer mTimer = new Timer();
-    private TimerTask mTask;
     protected boolean isAllowNullValue;
-    protected boolean isAllowToClear = true;
 
     private HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
 
@@ -86,7 +73,9 @@ public class ProtectedWrapperLiveData<T> extends LiveData<T> {
             if (finalStore != null) {
                 if (!observers.get(finalStore)) {
                     observers.put(finalStore, true);
-                    observer.onChanged(t);
+                    if (t != null && isAllowNullValue) {
+                        observer.onChanged(t);
+                    }
                 }
             }
         });
@@ -124,19 +113,15 @@ public class ProtectedWrapperLiveData<T> extends LiveData<T> {
      */
     @Override
     protected void setValue(T value) {
-        for (Map.Entry<ViewModelStore, Boolean> entry : observers.entrySet()) {
-            entry.setValue(false);
+        if (value != null || isAllowNullValue) {
+            for (Map.Entry<ViewModelStore, Boolean> entry : observers.entrySet()) {
+                entry.setValue(false);
+            }
+            super.setValue(value);
         }
-        super.setValue(value);
     }
 
-    private void clear() {
-        if (isAllowToClear) {
-            isCleaning = true;
-            super.postValue(null);
-        } else {
-            hasHandled = true;
-            isDelaying = false;
-        }
+    protected void clear() {
+        super.setValue(null);
     }
 }
