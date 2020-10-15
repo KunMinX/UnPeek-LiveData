@@ -47,11 +47,11 @@ public class MainActivity extends BaseActivity {
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setClick(new ClickProxy());
 
-        mSharedViewModel.moment.observe(this, moment -> {
+        mSharedViewModel.moment.observeActivity(this, moment -> {
             Toast.makeText(this, moment.getContent(), Toast.LENGTH_SHORT).show();
         });
 
-        mSharedViewModel.testDelayMsg.observe(this, s -> {
+        mSharedViewModel.testDelayMsg.observeActivity(this, s -> {
             if (!TextUtils.isEmpty(s)) {
                 showLongToast(s);
             }

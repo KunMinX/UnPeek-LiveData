@@ -55,31 +55,56 @@ public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
 
     private HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
 
-    @Override
-    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
+    public void observeActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
 
+        LifecycleOwner owner = null;
         ViewModelStore store = null;
-        if (owner instanceof AppCompatActivity) {
-            store = ((AppCompatActivity) owner).getViewModelStore();
-        } else if (owner instanceof Fragment) {
-            store = ((Fragment) owner).getViewModelStore();
+
+        if (activity != null) {
+            owner = activity;
+            store = activity.getViewModelStore();
         }
+
+        observe(store, owner, observer);
+    }
+
+    public void observeFragment(@NonNull Fragment fragment, @NonNull Observer<? super T> observer) {
+
+        LifecycleOwner owner = null;
+        ViewModelStore store = null;
+
+        if (fragment != null) {
+            owner = fragment.getViewLifecycleOwner();
+            store = fragment.getViewModelStore();
+        }
+
+        observe(store, owner, observer);
+    }
+
+    private void observe(@NonNull ViewModelStore store,
+                         @NonNull LifecycleOwner owner,
+                         @NonNull Observer<? super T> observer) {
 
         if (store != null && observers.get(store) == null) {
             observers.put(store, false);
         }
 
-        ViewModelStore finalStore = store;
         super.observe(owner, t -> {
-            if (finalStore != null) {
-                if (!observers.get(finalStore)) {
-                    observers.put(finalStore, true);
+            if (store != null) {
+                if (!observers.get(store)) {
+                    observers.put(store, true);
                     if (t != null || isAllowNullValue) {
                         observer.onChanged(t);
                     }
                 }
             }
         });
+    }
+
+    @Override
+    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
+        throw new IllegalArgumentException("Taking into account the normal permission of preventing backflow logic, " +
+                " do not use observeForever to communicate between pages");
     }
 
     @Override
@@ -98,7 +123,8 @@ public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
      */
     @Override
     public void observeForever(@NonNull Observer<? super T> observer) {
-        throw new IllegalArgumentException("Do not use observeForever for communication between pages to avoid lifecycle security issues");
+        throw new IllegalArgumentException("Considering avoid lifecycle security issues," +
+                " do not use observeForever for communication between pages.");
     }
 
     /**
