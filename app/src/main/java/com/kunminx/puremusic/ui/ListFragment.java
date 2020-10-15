@@ -17,6 +17,7 @@
 package com.kunminx.puremusic.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,12 @@ public class ListFragment extends BaseFragment {
         mSharedViewModel.moment.observe(getViewLifecycleOwner(), moment -> {
             mListViewModel.list.getValue().add(0, moment);
             mListViewModel.list.setValue(mListViewModel.list.getValue());
+        });
+
+        mSharedViewModel.testDelayMsg.observe(getViewLifecycleOwner(), s -> {
+            if (!TextUtils.isEmpty(s)) {
+                showLongToast(s);
+            }
         });
 
         mListViewModel.requestList();
