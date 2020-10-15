@@ -19,7 +19,6 @@ package com.kunminx.puremusic.ui.callback;
 import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.ui.callback.UnPeekLiveDataX;
-import com.kunminx.architecture.ui.callback.UnPeekLiveData;
 import com.kunminx.puremusic.data.bean.Moment;
 
 /**
@@ -27,7 +26,7 @@ import com.kunminx.puremusic.data.bean.Moment;
  */
 public class SharedViewModel extends ViewModel {
 
-    public final UnPeekLiveData<Moment> moment = new UnPeekLiveData<>();
+    public final UnPeekLiveDataX<Moment> moment = new UnPeekLiveDataX<>();
 
     public final UnPeekLiveDataX<String> testDelayMsg = new UnPeekLiveDataX<>();
 
