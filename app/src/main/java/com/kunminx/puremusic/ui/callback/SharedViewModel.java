@@ -18,6 +18,7 @@ package com.kunminx.puremusic.ui.callback;
 
 import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.callback.UnPeekLiveDataX;
 import com.kunminx.architecture.ui.callback.UnPeekLiveData;
 import com.kunminx.puremusic.data.bean.Moment;
 
@@ -28,11 +29,11 @@ public class SharedViewModel extends ViewModel {
 
     public final UnPeekLiveData<Moment> moment = new UnPeekLiveData<>();
 
-    public UnPeekLiveData<String> testDelayMsg =
-            new UnPeekLiveData.Builder<String>()
+    public UnPeekLiveDataX<String> testDelayMsg =
+            new UnPeekLiveDataX.Builder<String>()
 //                    .setAllowNullValue(false)
-                    .setAllowToClear(false)
-                    .setEventSurvivalTime(500)
+//                    .setAllowToClear(false)
+//                    .setEventSurvivalTime(500)
                     .create();
 
 }
