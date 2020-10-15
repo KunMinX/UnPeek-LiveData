@@ -55,6 +55,7 @@ public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
 
     private HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
 
+    @Override
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
 
         ViewModelStore store = null;
@@ -73,7 +74,7 @@ public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
             if (finalStore != null) {
                 if (!observers.get(finalStore)) {
                     observers.put(finalStore, true);
-                    if (t != null && isAllowNullValue) {
+                    if (t != null || isAllowNullValue) {
                         observer.onChanged(t);
                     }
                 }
