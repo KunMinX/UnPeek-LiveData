@@ -56,7 +56,7 @@ public class EditorActivity extends BaseActivity {
     public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
         public void locate() {
-
+            mSharedViewModel.testDelayMsg.setValue("延迟显示了");
         }
 
         public void back() {

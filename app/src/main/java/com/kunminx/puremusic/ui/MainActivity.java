@@ -18,6 +18,7 @@ package com.kunminx.puremusic.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
@@ -48,6 +49,12 @@ public class MainActivity extends BaseActivity {
 
         mSharedViewModel.moment.observe(this, moment -> {
             Toast.makeText(this, moment.getContent(), Toast.LENGTH_SHORT).show();
+        });
+
+        mSharedViewModel.testDelayMsg.observe(this, s -> {
+            if (!TextUtils.isEmpty(s)) {
+                showLongToast(s);
+            }
         });
     }
 

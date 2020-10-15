@@ -28,7 +28,7 @@ public class EditorViewModel extends ViewModel {
     public final ObservableField<String> location = new ObservableField<>();
 
     {
-        location.set("添加定位");
+        location.set("发送 Toast");
         content.set("");
     }
 }
