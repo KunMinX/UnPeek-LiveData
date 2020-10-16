@@ -81,7 +81,9 @@ public class ListFragment extends BaseFragment {
             }
         });
 
-        mListViewModel.requestList();
+        if (mListViewModel.list.getValue() == null || mListViewModel.list.getValue().size() == 0) {
+            mListViewModel.requestList();
+        }
     }
 
     public class ClickProxy {
