@@ -52,9 +52,14 @@ public class UnPeekLiveData<T> extends ProtectedUnPeekLiveData<T> {
      * @param observer
      */
     @Override
+    @Deprecated
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-        throw new IllegalArgumentException("Taking into account the normal permission of preventing backflow logic, " +
-                " do not use observeForever to communicate between pages");
+        throw new IllegalArgumentException("请不要在 UnPeekLiveData 中使用 observe 方法。" +
+                "取而代之的是在 Activity 和 fragment 中分别使用 observeActivity 和 observeFragment 来观察。\n\n" +
+                "Taking into account the normal permission of preventing backflow logic, " +
+                " do not use observeForever to communicate between pages." +
+                "Instead, you can use ObserveActivity and ObserveFragment methods " +
+                "to observe in Activity and Fragment respectively.");
     }
 
     /**
@@ -69,8 +74,10 @@ public class UnPeekLiveData<T> extends ProtectedUnPeekLiveData<T> {
      * @param observer
      */
     @Override
+    @Deprecated
     public void observeForever(@NonNull Observer<? super T> observer) {
-        throw new IllegalArgumentException("Considering avoid lifecycle security issues," +
+        throw new IllegalArgumentException("出于生命周期安全的考虑，请不要在 UnPeekLiveData 中使用 observeForever 方法。\n\n" +
+                "Considering avoid lifecycle security issues," +
                 " do not use observeForever for communication between pages.");
     }
 
