@@ -56,17 +56,19 @@
 
 &nbsp;
 
-## UnPeekLiveData 特点
+## UnPeekLiveData v4.0 特点
 
-UnPeekLiveData 通过 **独创的 “延时自动清理消息” 的设计**，来满足：
+我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 Flywith24 WrapperLiveData 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
 
-> 1.消息被分发给多个观察者时，**不会因第一个观察者消费了而直接被置空**
+目前为止，UnPeekLiveData 实现和保留的特点如下：
 
-> 2.时限到了，**消息便不再会被倒灌**
+> 1.一条消息能被多个观察者消费（since v1.0）
 
-> 3.时限到了，**消息自动从内存中清理释放**
+> 2.消息被所有观察者消费完毕后才开始阻止倒灌（since v4.0）
 
-> 4.使非入侵的设计成为可能，并最终结合官方 SingleLiveEvent 的设计实现了 **遵循开闭原则的非入侵重写**。
+> 3.可以通过 clear 方法手动将消息从内存中移除（since v4.0）
+
+> 4.让非入侵设计成为可能，遵循开闭原则（since v3.0）
 
 并且 UnPeekLiveData 提供了构造器模式，可通过构造器组装适合自己业务场景的 UnPeekLiveData。
 
@@ -74,8 +76,6 @@ UnPeekLiveData 通过 **独创的 “延时自动清理消息” 的设计**，�
 UnPeekLiveData<Moment> test =
   new UnPeekLiveData.Builder<Moment>()
     .setAllowNullValue(false)
-    .setAllowToClear(true)
-    .setEventSurvivalTime(500)
     .create();
 ```
 
@@ -93,10 +93,46 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 ## JCenter 依赖
 
 ```groovy
-implementation 'com.kunminx.archi:unpeek-livedata:3.2.3-beta10'
+implementation 'com.kunminx.archi:unpeek-livedata:4.0.0-beta1'
 ```
 
 &nbsp;
+
+## History
+
+### UnPeekLiveData v3.0
+
+Update since 2020.7.10
+
+通过 **独创的 “延时自动清理消息” 的设计**，来满足：
+
+> 1.消息被分发给多个观察者时，**不会因第一个观察者消费了而直接被置空**
+
+> 2.时限到了，**消息便不再会被倒灌**
+
+> 3.时限到了，**消息自动从内存中清理释放**
+
+> 4.使非入侵的设计成为可能，并最终结合官方 SingleLiveEvent 的设计实现了 **遵循开闭原则的非入侵重写**。
+
+
+
+### UnPeekLiveData v2.0
+
+Update since 2020.5
+
+> 结合 Event 包装类的使用，对 LiveData 类进行入侵性修改。
+
+
+
+### UnPeekLiveData v1.0
+
+Update since 2019
+
+> 1.针对 **“页面在 ‘二进宫’ 时收到旧数据推送” 的情况** 创建 “数据倒灌” 的定义，并在网上交流和传播。
+
+> 2.参考美团 LiveDataBus 的设计，透过反射的方式拦截并修改 Last Version 来防止倒灌。
+
+
 
 ## License
 
