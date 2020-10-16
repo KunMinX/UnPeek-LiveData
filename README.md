@@ -58,7 +58,7 @@
 
 ## UnPeekLiveData v4.0 特点
 
-我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 Flywith24 WrapperLiveData 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
+我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 Flywith24 [WrapperLiveData](https://github.com/Flywith24/WrapperLiveData) 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
 
 目前为止，UnPeekLiveData 实现和保留的特点如下：
 
