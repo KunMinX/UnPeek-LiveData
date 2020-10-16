@@ -53,7 +53,8 @@ public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
 
     protected boolean isAllowNullValue;
 
-    private HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
+    private final HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
+    private final HashMap<Observer<? super T>, ViewModelStore> stores = new HashMap<>();
 
     public void observeActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
 
@@ -87,6 +88,7 @@ public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
 
         if (store != null && observers.get(store) == null) {
             observers.put(store, false);
+            stores.put(observer, store);
         }
 
         super.observe(owner, t -> {
@@ -102,29 +104,23 @@ public class ProtectedUnPeekLiveDataX<T> extends LiveData<T> {
     }
 
     @Override
-    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-        throw new IllegalArgumentException("Taking into account the normal permission of preventing backflow logic, " +
-                " do not use observeForever to communicate between pages");
-    }
-
-    @Override
     public void removeObserver(@NonNull Observer<? super T> observer) {
+        if (observer == null) {
+            return;
+        }
+
+        ViewModelStore store = stores.get(observer);
+        if (store != null) {
+            for (Map.Entry<ViewModelStore, Boolean> entry : observers.entrySet()) {
+                if (store.equals(entry.getKey())) {
+                    observers.remove(entry.getKey());
+                    stores.remove(observer);
+                    break;
+                }
+            }
+        }
+
         super.removeObserver(observer);
-
-    }
-
-    /**
-     * UnPeekLiveData 主要用于表现层的 页面转场 和 页面间通信 场景下的非粘性消息分发，
-     * 出于生命周期安全等因素的考虑，不建议使用 observeForever 方法，
-     * <p>
-     * 对于数据层的工作，如有需要，可结合实际场景使用 MutableLiveData 或 kotlin flow。
-     *
-     * @param observer
-     */
-    @Override
-    public void observeForever(@NonNull Observer<? super T> observer) {
-        throw new IllegalArgumentException("Considering avoid lifecycle security issues," +
-                " do not use observeForever for communication between pages.");
     }
 
     /**
