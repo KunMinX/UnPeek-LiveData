@@ -70,12 +70,12 @@ public class ListFragment extends BaseFragment {
             mListViewModel.list.setValue(moments);
         });
 
-        mSharedViewModel.moment.observeFragment(this, moment -> {
+        mSharedViewModel.moment.observeInFragment(this, moment -> {
             mListViewModel.list.getValue().add(0, moment);
             mListViewModel.list.setValue(mListViewModel.list.getValue());
         });
 
-        mSharedViewModel.testDelayMsg.observeFragment(this, s -> {
+        mSharedViewModel.testDelayMsg.observeInFragment(this, s -> {
             if (!TextUtils.isEmpty(s)) {
                 showLongToast(s);
             }

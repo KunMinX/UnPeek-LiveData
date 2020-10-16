@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
-def theVersionName = "4.1.1-beta1"
+def theVersionName = "4.2.0-beta1"
 
 android {
     compileSdkVersion 29
@@ -10,7 +10,7 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 4010101
+        versionCode 4020001
         versionName theVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

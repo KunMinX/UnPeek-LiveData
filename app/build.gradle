@@ -52,7 +52,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation project(':unpeeklivedata')
-//    implementation 'com.kunminx.archi:unpeek-livedata:4.1.1-beta1'
+//    implementation 'com.kunminx.archi:unpeek-livedata:4.2.0-beta1'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'

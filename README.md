@@ -60,7 +60,7 @@
 
 我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 Flywith24 [WrapperLiveData](https://github.com/Flywith24/WrapperLiveData) 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
 
-> 注：出于在现有 AndroidX 源码的背景下实现 "防倒灌机制" 的需要，**v4.0 对 Observe 方法的使用做了微调**，改为分别针对 Activity/Fragment 提供 ObserveActivity 和 ObserveFragment 方法，具体缘由详见源码注释的说明。
+> 注：出于在现有 AndroidX 源码的背景下实现 "防倒灌机制" 的需要，**v4.0 对 Observe 方法的使用做了微调**，改为分别针对 Activity/Fragment 提供 ObserveInActivity 和 ObserveInFragment 方法，具体缘由详见源码注释的说明。
 
 目前为止，UnPeekLiveData 实现和保留的特点如下：
 
@@ -95,7 +95,7 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 ## JCenter 依赖
 
 ```groovy
-implementation 'com.kunminx.archi:unpeek-livedata:4.1.1-beta1'
+implementation 'com.kunminx.archi:unpeek-livedata:4.2.0-beta1'
 ```
 
 &nbsp;

@@ -57,7 +57,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     private final HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
     private final HashMap<Observer<? super T>, ViewModelStore> stores = new HashMap<>();
 
-    public void observeActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
+    public void observeInActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
 
         LifecycleOwner owner = null;
         ViewModelStore store = null;
@@ -70,7 +70,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
         observe(store, owner, observer);
     }
 
-    public void observeFragment(@NonNull Fragment fragment, @NonNull Observer<? super T> observer) {
+    public void observeInFragment(@NonNull Fragment fragment, @NonNull Observer<? super T> observer) {
 
         LifecycleOwner owner = null;
         ViewModelStore store = null;
