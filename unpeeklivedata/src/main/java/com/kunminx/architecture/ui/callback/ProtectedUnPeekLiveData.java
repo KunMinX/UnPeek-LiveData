@@ -17,12 +17,15 @@
 package com.kunminx.architecture.ui.callback;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelStore;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO：UnPeekLiveData 的存在是为了在 "重回二级页面" 的场景下，解决 "数据倒灌" 的问题。
@@ -48,48 +51,76 @@ import java.util.TimerTask;
  */
 public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
-    private boolean isCleaning;
-    private boolean hasHandled = true;
-    private boolean isDelaying;
-    protected int DELAY_TO_CLEAR_EVENT = 1000;
-    private Timer mTimer = new Timer();
-    private TimerTask mTask;
     protected boolean isAllowNullValue;
-    protected boolean isAllowToClear = true;
 
-    @Override
-    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
+    private final HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
+    private final HashMap<Observer<? super T>, ViewModelStore> stores = new HashMap<>();
+
+    public void observeActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
+
+        LifecycleOwner owner = null;
+        ViewModelStore store = null;
+
+        if (activity != null) {
+            owner = activity;
+            store = activity.getViewModelStore();
+        }
+
+        observe(store, owner, observer);
+    }
+
+    public void observeFragment(@NonNull Fragment fragment, @NonNull Observer<? super T> observer) {
+
+        LifecycleOwner owner = null;
+        ViewModelStore store = null;
+
+        if (fragment != null) {
+            owner = fragment.getViewLifecycleOwner();
+            store = fragment.getViewModelStore();
+        }
+
+        observe(store, owner, observer);
+    }
+
+    private void observe(@NonNull ViewModelStore store,
+                         @NonNull LifecycleOwner owner,
+                         @NonNull Observer<? super T> observer) {
+
+        if (store != null && observers.get(store) == null) {
+            observers.put(store, false);
+            stores.put(observer, store);
+        }
 
         super.observe(owner, t -> {
-
-            if (isCleaning) {
-                hasHandled = true;
-                isDelaying = false;
-                isCleaning = false;
-                return;
-            }
-
-            if (!hasHandled) {
-                hasHandled = true;
-                isDelaying = true;
-                observer.onChanged(t);
-            } else if (isDelaying) {
-                observer.onChanged(t);
+            if (store != null) {
+                if (!observers.get(store)) {
+                    observers.put(store, true);
+                    if (t != null || isAllowNullValue) {
+                        observer.onChanged(t);
+                    }
+                }
             }
         });
     }
 
-    /**
-     * UnPeekLiveData 主要用于表现层的 页面转场 和 页面间通信 场景下的非粘性消息分发，
-     * 出于生命周期安全等因素的考虑，不建议使用 observeForever 方法，
-     * <p>
-     * 对于数据层的工作，如有需要，可结合实际场景使用 MutableLiveData 或 kotlin flow。
-     *
-     * @param observer
-     */
     @Override
-    public void observeForever(@NonNull Observer<? super T> observer) {
-        throw new IllegalArgumentException("Do not use observeForever for communication between pages to avoid lifecycle security issues");
+    public void removeObserver(@NonNull Observer<? super T> observer) {
+        if (observer == null) {
+            return;
+        }
+
+        ViewModelStore store = stores.get(observer);
+        if (store != null) {
+            for (Map.Entry<ViewModelStore, Boolean> entry : observers.entrySet()) {
+                if (store.equals(entry.getKey())) {
+                    observers.remove(entry.getKey());
+                    stores.remove(observer);
+                    break;
+                }
+            }
+        }
+
+        super.removeObserver(observer);
     }
 
     /**
@@ -105,38 +136,15 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
      */
     @Override
     protected void setValue(T value) {
-
-        if (!isCleaning && (!isAllowNullValue && value == null)) {
-            return;
-        }
-
-        hasHandled = false;
-        isDelaying = false;
-        super.setValue(value);
-
-        if (mTask != null) {
-            mTask.cancel();
-            mTimer.purge();
-        }
-
-        if (value != null) {
-            mTask = new TimerTask() {
-                @Override
-                public void run() {
-                    clear();
-                }
-            };
-            mTimer.schedule(mTask, DELAY_TO_CLEAR_EVENT);
+        if (value != null || isAllowNullValue) {
+            for (Map.Entry<ViewModelStore, Boolean> entry : observers.entrySet()) {
+                entry.setValue(false);
+            }
+            super.setValue(value);
         }
     }
 
-    private void clear() {
-        if (isAllowToClear) {
-            isCleaning = true;
-            super.postValue(null);
-        } else {
-            hasHandled = true;
-            isDelaying = false;
-        }
+    protected void clear() {
+        super.setValue(null);
     }
 }
