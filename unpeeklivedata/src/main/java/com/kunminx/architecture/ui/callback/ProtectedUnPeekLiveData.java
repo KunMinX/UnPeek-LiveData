@@ -88,7 +88,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
                          @NonNull Observer<? super T> observer) {
 
         if (store != null && observers.get(store) == null) {
-            observers.put(store, false);
+            observers.put(store, true);
             stores.put(observer, store);
         }
 
