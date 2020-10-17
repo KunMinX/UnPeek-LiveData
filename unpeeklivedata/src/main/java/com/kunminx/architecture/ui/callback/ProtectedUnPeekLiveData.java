@@ -55,6 +55,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     protected boolean isAllowNullValue;
 
     private final HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
+
     private final HashMap<Observer<? super T>, ViewModelStore> stores = new HashMap<>();
 
     public void observeInActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
