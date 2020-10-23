@@ -36,7 +36,7 @@ import java.util.Map;
  * 本类参考了官方 SingleEventLive 的非入侵设计，
  * 以及小伙伴 Flywith24 在 wrapperLiveData 中通过 ViewModelStore 来唯一确定订阅者的思路，
  * <p>
- * TODO：在当前最新版中，我们透过对 ViewModelStore 和 Observer 的内存地址的遍历，
+ * TODO：在当前最新版中，我们透过对 ViewModelStore 的内存地址的遍历，
  * 来确保：
  * 1.一条消息能被多个观察者消费
  * 2.消息被所有观察者消费完毕后才开始阻止倒灌
@@ -55,8 +55,6 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     protected boolean isAllowNullValue;
 
     private final HashMap<Integer, Boolean> observers = new HashMap<>();
-
-    private final HashMap<Integer, Integer> stores = new HashMap<>();
 
     public void observeInActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
 
@@ -80,10 +78,8 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
                          @NonNull LifecycleOwner owner,
                          @NonNull Observer<? super T> observer) {
 
-        int observeId = System.identityHashCode(observer);
         if (observers.get(storeId) == null) {
             observers.put(storeId, true);
-            stores.put(observeId, storeId);
         }
 
         super.observe(owner, t -> {
@@ -94,27 +90,6 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
                 }
             }
         });
-    }
-
-    @Override
-    public void removeObserver(@NonNull Observer<? super T> observer) {
-        if (observer == null) {
-            return;
-        }
-
-        Integer observeId = System.identityHashCode(observer);
-        Integer storeId = stores.get(observeId);
-        if (storeId != null) {
-            for (Map.Entry<Integer, Boolean> entry : observers.entrySet()) {
-                if (storeId.equals(entry.getKey())) {
-                    observers.remove(entry.getKey());
-                    stores.remove(observeId);
-                    break;
-                }
-            }
-        }
-
-        super.removeObserver(observer);
     }
 
     /**

@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer;
  * 本类参考了官方 SingleEventLive 的非入侵设计，
  * 以及小伙伴 Flywith24 在 wrapperLiveData 中通过 ViewModelStore 来唯一确定订阅者的思路，
  * <p>
- * TODO：在当前最新版中，我们透过对 ViewModelStore 和 Observer 的内存地址的遍历，
+ * TODO：在当前最新版中，我们透过对 ViewModelStore 的内存地址的遍历，
  * 来确保：
  * 1.一条消息能被多个观察者消费
  * 2.消息被所有观察者消费完毕后才开始阻止倒灌
