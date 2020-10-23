@@ -1,5 +1,6 @@
+
 /*
- * Copyright 2018-2019 KunMinX
+ * Copyright 2018-present KunMinX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelStore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ import java.util.Map;
  * 本类参考了官方 SingleEventLive 的非入侵设计，
  * 以及小伙伴 Flywith24 在 wrapperLiveData 中通过 ViewModelStore 来唯一确定订阅者的思路，
  * <p>
- * TODO：在当前最新版中，我们透过对 ViewModelStore 和 Observer 的遍历，
+ * TODO：在当前最新版中，我们透过对 ViewModelStore 和 Observer 的内存地址的遍历，
  * 来确保：
  * 1.一条消息能被多个观察者消费
  * 2.消息被所有观察者消费完毕后才开始阻止倒灌
@@ -54,52 +54,43 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
     protected boolean isAllowNullValue;
 
-    private final HashMap<ViewModelStore, Boolean> observers = new HashMap<>();
+    private final HashMap<Integer, Boolean> observers = new HashMap<>();
 
-    private final HashMap<Observer<? super T>, ViewModelStore> stores = new HashMap<>();
+    private final HashMap<Integer, Integer> stores = new HashMap<>();
 
     public void observeInActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
 
-        LifecycleOwner owner = null;
-        ViewModelStore store = null;
-
         if (activity != null) {
-            owner = activity;
-            store = activity.getViewModelStore();
+            LifecycleOwner owner = activity;
+            Integer storeId = System.identityHashCode(activity.getViewModelStore());
+            observe(storeId, owner, observer);
         }
-
-        observe(store, owner, observer);
     }
 
     public void observeInFragment(@NonNull Fragment fragment, @NonNull Observer<? super T> observer) {
 
-        LifecycleOwner owner = null;
-        ViewModelStore store = null;
-
         if (fragment != null) {
-            owner = fragment.getViewLifecycleOwner();
-            store = fragment.getViewModelStore();
+            LifecycleOwner owner = fragment.getViewLifecycleOwner();
+            Integer storeId = System.identityHashCode(fragment.getViewModelStore());
+            observe(storeId, owner, observer);
         }
-
-        observe(store, owner, observer);
     }
 
-    private void observe(@NonNull ViewModelStore store,
+    private void observe(@NonNull Integer storeId,
                          @NonNull LifecycleOwner owner,
                          @NonNull Observer<? super T> observer) {
 
-        if (store != null && observers.get(store) == null) {
-            observers.put(store, true);
-            stores.put(observer, store);
+        int observeId = System.identityHashCode(observer);
+        if (observers.get(storeId) == null) {
+            observers.put(storeId, true);
+            stores.put(observeId, storeId);
         }
 
         super.observe(owner, t -> {
-            if (store != null) {
-                if (!observers.get(store)) {
-                    observers.put(store, true);
-                    if (t != null || isAllowNullValue) {
-                        observer.onChanged(t);
-                    }
+            if (storeId != null && !observers.get(storeId)) {
+                observers.put(storeId, true);
+                if (t != null || isAllowNullValue) {
+                    observer.onChanged(t);
                 }
             }
         });
@@ -111,12 +102,13 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
             return;
         }
 
-        ViewModelStore store = stores.get(observer);
-        if (store != null) {
-            for (Map.Entry<ViewModelStore, Boolean> entry : observers.entrySet()) {
-                if (store.equals(entry.getKey())) {
+        Integer observeId = System.identityHashCode(observer);
+        Integer storeId = stores.get(observeId);
+        if (storeId != null) {
+            for (Map.Entry<Integer, Boolean> entry : observers.entrySet()) {
+                if (storeId.equals(entry.getKey())) {
                     observers.remove(entry.getKey());
-                    stores.remove(observer);
+                    stores.remove(observeId);
                     break;
                 }
             }
@@ -139,7 +131,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     @Override
     protected void setValue(T value) {
         if (value != null || isAllowNullValue) {
-            for (Map.Entry<ViewModelStore, Boolean> entry : observers.entrySet()) {
+            for (Map.Entry<Integer, Boolean> entry : observers.entrySet()) {
                 entry.setValue(false);
             }
             super.setValue(value);
@@ -150,3 +142,4 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
         super.setValue(null);
     }
 }
+
