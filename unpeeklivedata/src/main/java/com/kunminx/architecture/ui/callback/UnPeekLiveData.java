@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer;
  * 本类参考了官方 SingleEventLive 的非入侵设计，
  * 以及小伙伴 Flywith24 在 wrapperLiveData 中通过 ViewModelStore 来唯一确定订阅者的思路，
  * <p>
- * TODO：在当前最新版中，我们透过对 ViewModelStore 和 Observer 的遍历，
+ * TODO：在当前最新版中，我们透过对 ViewModelStore 和 Observer 的内存地址的遍历，
  * 来确保：
  * 1.一条消息能被多个观察者消费
  * 2.消息被所有观察者消费完毕后才开始阻止倒灌
@@ -41,7 +41,7 @@ public class UnPeekLiveData<T> extends ProtectedUnPeekLiveData<T> {
 
     /**
      * TODO：Tip：请不要在 UnPeekLiveData 中使用 observe 方法。
-     * 取而代之的是在 Activity 和 fragment 中分别使用 observeActivity 和 observeFragment 来观察。
+     * 取而代之的是在 Activity 和 fragment 中分别使用 observeInActivity 和 observeInFragment 来观察。
      * <p>
      * 2020.10.15 背景缘由：
      * UnPeekLiveData 通过 ViewModelStore 来在各种场景下（如旋屏后）确定订阅者的唯一性和消息的消费状况，
@@ -55,10 +55,10 @@ public class UnPeekLiveData<T> extends ProtectedUnPeekLiveData<T> {
     @Deprecated
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
         throw new IllegalArgumentException("请不要在 UnPeekLiveData 中使用 observe 方法。" +
-                "取而代之的是在 Activity 和 fragment 中分别使用 observeActivity 和 observeFragment 来观察。\n\n" +
+                "取而代之的是在 Activity 和 Fragment 中分别使用 observeInActivity 和 observeInFragment 来观察。\n\n" +
                 "Taking into account the normal permission of preventing backflow logic, " +
                 " do not use observeForever to communicate between pages." +
-                "Instead, you can use ObserveActivity and ObserveFragment methods " +
+                "Instead, you can use ObserveInActivity and ObserveInFragment methods " +
                 "to observe in Activity and Fragment respectively.");
     }
 
