@@ -72,6 +72,8 @@
 
 > 4.让非入侵设计成为可能，遵循开闭原则（since v3.0）
 
+> 5.基于 "访问权限控制" 支持 "读写分离"，遵循唯一可信源的消息分发理念（since v2.0，详见 ProtectedUnPeekLiveData）
+
 并且 UnPeekLiveData 提供了构造器模式，可通过构造器组装适合自己业务场景的 UnPeekLiveData。
 
 ```java
@@ -122,7 +124,9 @@ Update since 2020.7.10
 
 Update since 2020.5
 
-> 结合 Event 包装类的使用，对 LiveData 类进行入侵性修改。
+> 1.结合 Event 包装类的使用，对 LiveData 类进行入侵性修改。
+
+> 2.提供 ProtectedUnPeekLiveData，基于访问权限控制实现 "读写分离"：支持只从 "唯一可信源"（例如 ViewModel）内部发送、而 Activity/Fragment 只允许 Observe。
 
 
 
