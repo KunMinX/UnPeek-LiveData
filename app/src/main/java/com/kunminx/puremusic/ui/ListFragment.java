@@ -66,7 +66,7 @@ public class ListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mListViewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), moments -> {
+        mListViewModel.momentRequest.getListMutableLiveData().observe(getViewLifecycleOwner(), moments -> {
             mListViewModel.list.setValue(moments);
         });
 
@@ -82,7 +82,7 @@ public class ListFragment extends BaseFragment {
         });
 
         if (mListViewModel.list.getValue() == null || mListViewModel.list.getValue().size() == 0) {
-            mListViewModel.requestList();
+            mListViewModel.momentRequest.requestList();
         }
     }
 
