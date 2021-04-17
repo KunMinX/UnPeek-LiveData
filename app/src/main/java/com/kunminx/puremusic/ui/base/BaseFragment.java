@@ -20,20 +20,17 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.os.Handler;
-import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-
 import androidx.navigation.fragment.NavHostFragment;
+
 import com.kunminx.puremusic.App;
 
 
@@ -42,9 +39,7 @@ import com.kunminx.puremusic.App;
  */
 public abstract class BaseFragment extends Fragment {
 
-    private static final Handler HANDLER = new Handler();
     protected AppCompatActivity mActivity;
-    protected boolean mAnimationLoaded;
     private ViewModelProvider mFragmentProvider;
     private ViewModelProvider mActivityProvider;
     private ViewModelProvider.Factory mFactory;
@@ -54,22 +49,6 @@ public abstract class BaseFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (AppCompatActivity) context;
-    }
-
-    @Nullable
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        HANDLER.postDelayed(() -> {
-            if (!mAnimationLoaded) {
-                mAnimationLoaded = true;
-                loadInitData();
-            }
-        }, 280);
-        return super.onCreateAnimation(transit, enter, nextAnim);
-    }
-
-    protected void loadInitData() {
-
     }
 
     public boolean isDebug() {
