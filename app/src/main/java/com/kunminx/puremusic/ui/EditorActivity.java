@@ -56,7 +56,7 @@ public class EditorActivity extends BaseActivity {
     public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
         public void locate() {
-            mSharedViewModel.testDelayMsg.setValue("延迟显示了");
+            mSharedViewModel.requestTestDelayMsg("延迟显示了");
         }
 
         public void back() {
@@ -72,7 +72,7 @@ public class EditorActivity extends BaseActivity {
                 moment.setUserName("KunMinX");
                 moment.setLocation(mEditorViewModel.location.get());
                 moment.setContent(mEditorViewModel.content.get());
-                mSharedViewModel.moment.setValue(moment);
+                mSharedViewModel.requestMoment(moment);
                 finish();
             }
             return true;
