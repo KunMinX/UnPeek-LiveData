@@ -71,7 +71,7 @@ public class EditorFragment extends BaseFragment {
     public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
         public void locate() {
-            mSharedViewModel.testDelayMsg.setValue("延迟显示了");
+            mSharedViewModel.requestTestDelayMsg("延迟显示了");
         }
 
         public void back() {
@@ -87,7 +87,7 @@ public class EditorFragment extends BaseFragment {
                 moment.setUserName("KunMinX");
                 moment.setLocation(mEditorViewModel.location.get());
                 moment.setContent(mEditorViewModel.content.get());
-                mSharedViewModel.moment.postValue(moment);
+                mSharedViewModel.requestMoment(moment);
                 nav().navigateUp();
             }
             return true;
