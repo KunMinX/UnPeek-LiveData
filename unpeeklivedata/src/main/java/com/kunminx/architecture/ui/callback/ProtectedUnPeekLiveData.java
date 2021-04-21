@@ -34,13 +34,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  *
  * 对{@link ProtectedUnPeekLiveDataV4}进行了重构，修复了V4版本的已知问题：
- * TODO: 1、UnPeekLiveData 中的 observers 这个 HashMap 恒久存在，注册的 Observer 越多，占用的内存越大，并且除非 UnPeekLiveData 被回收，否则恒久存在内存当中
+ * TODO: 1、UnPeekLiveDataV4 中的 observers 这个 HashMap 恒久存在，注册的 Observer 越多，占用的内存越大，并且除非 UnPeekLiveDataV4 被回收，否则恒久存在内存当中
  * 在 removeObserver 方法中移除 map 中对应存储的 storeId
  *
  * TODO: 2、无法通过 removeObserver 方法移除指定的 Observer（某些场景需要提前 removeObserver）
  * 通过维护外部传入 Observer 与内部代理 Observer 的映射关系，在 removeObserver 调用时，通过反射找到真正注册到 LiveData 中的 Observer，实现移除
  *
- * TODO: 3、同一个 Observer 对象，注册多次，UnPeekLiveData 内部实际上会注册了多个不同的 Observer，从而导致重复回调，产生一些不可预期的问题
+ * TODO: 3、同一个 Observer 对象，注册多次，UnPeekLiveDataV4 内部实际上会注册了多个不同的 Observer，从而导致重复回调，产生一些不可预期的问题
  * 内部不会每次调用 observe 方法时都新创建一个代理 Observer，而是复用已经存在的代理 Observer
  * 注意！！！Kotlin + LiveData + Lambda 由于编译器优化，可能会抛 Cannot add the same observer with different lifecycles 异常
  *
