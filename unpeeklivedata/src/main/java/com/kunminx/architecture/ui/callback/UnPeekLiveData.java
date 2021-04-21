@@ -16,7 +16,7 @@ package com.kunminx.architecture.ui.callback;
  *
  * TODO: 3、同一个 Observer 对象，注册多次，UnPeekLiveData 内部实际上会注册了多个不同的 Observer，从而导致重复回调，产生一些不可预期的问题
  * 内部不会每次调用 observe 方法时都新创建一个代理 Observer，而是复用已经存在的代理 Observer
- * 注意！！！Kotlin + LiveData + Lamda 由于编译器优化，可能会抛 Cannot add the same observer with different lifecycles 异常
+ * 注意！！！Kotlin + LiveData + Lambda 由于编译器优化，可能会抛 Cannot add the same observer with different lifecycles 异常
  *
  * TODO: 4、无法使用 observerForever 方法
  * UnPeekLiveData 内部直接持有 forever 类型的 Observer
