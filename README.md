@@ -56,9 +56,25 @@
 
 &nbsp;
 
-## UnPeekLiveData v4.0 特点
 
-我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 Flywith24 [WrapperLiveData](https://github.com/Flywith24/WrapperLiveData) 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
+
+## 最新更新动态
+
+### UnPeekLiveData v5.0 特点
+
+感谢就职于 “腾讯音乐部门” 的小伙伴 @[zhangjianlaoda](https://github.com/zhangjianlaoda) 应邀对 UnPeekLiveData 做的优化和升级。
+
+**该版本保留了 UnPeekLiveData v4 的下述几大特点**，并在适当时机基于反射等机制，来彻底解决 UnPeekLiveData v4 下 Observers 无法释放、重复创建，以及 foreverObserver、removeObserver 被禁用等问题，将 UnPeekLiveData 的内存性能再往上提升了一个阶梯。
+
+同时，该版本使 Observe 等方法的方法名和形参列表与官方 API 保持一致，尽可能减少新上手小伙伴的学习成本。
+
+> 具体可参见 UnPeekLiveData 最新源码注释的说明。
+
+
+
+### UnPeekLiveData v4.0 特点
+
+我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 [Flywith24](https://github.com/Flywith24) [WrapperLiveData](https://github.com/Flywith24/WrapperLiveData) 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
 
 > 注：出于在现有 AndroidX 源码的背景下实现 "防倒灌机制" 的需要，**v4.0 对 Observe 方法的使用做了微调**，改为分别针对 Activity/Fragment 提供 ObserveInActivity 和 ObserveInFragment 方法，具体缘由详见源码注释的说明。
 
@@ -84,8 +100,8 @@ UnPeekLiveData<Moment> test =
 ```
 
 
-|                          零入侵设计                          |                       防倒灌机制                       |                        Builder 构造器                        |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                       零入侵设计                       |                       防倒灌机制                       |                     Builder 构造器                     |
+| :----------------------------------------------------: | :----------------------------------------------------: | :----------------------------------------------------: |
 | ![](https://i.loli.net/2020/10/17/WTXzc48qkajwvd1.jpg) | ![](https://i.loli.net/2020/10/17/PbAkvTwVCflXY7G.jpg) | ![](https://i.loli.net/2020/10/17/RBfncrZkCWwb9eV.jpg) |
 
 &nbsp;
@@ -99,12 +115,24 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 ## JCenter 依赖
 
 ```groovy
-implementation 'com.kunminx.archi:unpeek-livedata:4.5.0-beta1'
+implementation 'com.kunminx.archi:unpeek-livedata:5.0.0-beta1'
 ```
 
 &nbsp;
 
 ## History
+
+### UnPeekLiveData v5.0
+
+Update since 2021.4.21
+
+
+
+### UnPeekLiveData v4.0
+
+Update since 2020.10.16
+
+
 
 ### UnPeekLiveData v3.0
 
