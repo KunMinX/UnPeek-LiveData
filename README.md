@@ -120,19 +120,41 @@ implementation 'com.kunminx.archi:unpeek-livedata:5.0.0-beta1'
 
 &nbsp;
 
+## 谁在使用
+
+感谢小伙伴们对 “开源库使用情况” 匿名调查问卷的参与，截至 2021年4月25日，我们了解到
+
+包括 “腾讯音乐、BMW、TCL” 在内的诸多知名厂商的软件，都参考过我们开源的 [Jetpack MVVM Scaffold](https://github.com/KunMinX/Jetpack-MVVM-Scaffold) 架构模式，以及正在使用我们维护的 UnPeek-LiveData 等框架。
+
+目前我们已将具体的统计数据更新到 相关的开源库 ReadMe 中，问卷调查我们也继续保持开放，不定期将小伙伴们登记的公司和产品更新到表格，以便吸引到更多的小伙伴 参与到对这些架构组件的 使用、反馈，集众人之所长，让架构组件得以不断演化和升级。
+
+https://wj.qq.com/s2/8362688/124a/
+
+| 集团 / 公司          | 产品               |
+| -------------------- | ------------------ |
+| 腾讯音乐             | 即将上线，暂时保密 |
+| TCL                  | 内置应用，暂时保密 |
+| 左医科技             | 诊室听译机器人     |
+| BMW                  | Speech             |
+| 上海互教信息有限公司 | 知心慧学教师       |
+| 美术宝               | 弹唱宝             |
+|                      | 网安               |
+
+&nbsp;
+
 ## History
 
 ### UnPeekLiveData v5.0
 
 Update since 2021.4.21
 
-
+&nbsp;
 
 ### UnPeekLiveData v4.0
 
 Update since 2020.10.16
 
-
+&nbsp;
 
 ### UnPeekLiveData v3.0
 
@@ -148,7 +170,7 @@ Update since 2020.7.10
 
 > 4.使非入侵的设计成为可能，并最终结合官方 SingleLiveEvent 的设计实现了 **遵循开闭原则的非入侵重写**。
 
-
+&nbsp;
 
 ### UnPeekLiveData v2.0
 
@@ -158,7 +180,7 @@ Update since 2020.5
 
 > 2.提供 ProtectedUnPeekLiveData，基于访问权限控制实现 "读写分离"：支持只从 "唯一可信源"（例如 ViewModel）内部发送、而 Activity/Fragment 只允许 Observe。
 
-
+&nbsp;
 
 ### UnPeekLiveData v1.0
 
@@ -168,6 +190,7 @@ Update since 2019
 
 > 2.参考美团 LiveDataBus 的设计，透过反射的方式拦截并修改 Last Version 来防止倒灌。
 
+&nbsp;
 
 
 ## License
