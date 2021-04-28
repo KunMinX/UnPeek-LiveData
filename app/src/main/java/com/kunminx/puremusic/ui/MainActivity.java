@@ -35,23 +35,23 @@ import com.kunminx.puremusic.ui.state.MainViewModel;
 
 public class MainActivity extends BaseActivity {
 
-    private MainViewModel mMainViewModel;
-    private SharedViewModel mSharedViewModel;
+    private MainViewModel mState;
+    private SharedViewModel mPageCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainViewModel = getActivityViewModel(MainViewModel.class);
-        mSharedViewModel = getAppViewModelProvider(this).get(SharedViewModel.class);
+        mState = getActivityViewModel(MainViewModel.class);
+        mPageCallback = getAppViewModelProvider(this).get(SharedViewModel.class);
 
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setClick(new ClickProxy());
 
-        mSharedViewModel.getMoment().observe(this, moment -> {
+        mPageCallback.getMoment().observe(this, moment -> {
             Toast.makeText(this, moment.getContent(), Toast.LENGTH_SHORT).show();
         });
 
-        mSharedViewModel.getTestDelayMsg().observe(this, s -> {
+        mPageCallback.getTestDelayMsg().observe(this, s -> {
             if (!TextUtils.isEmpty(s)) {
                 showLongToast(s);
             }

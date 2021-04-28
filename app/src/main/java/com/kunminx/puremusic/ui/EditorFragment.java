@@ -40,14 +40,14 @@ import java.util.UUID;
  */
 public class EditorFragment extends BaseFragment {
 
-    private EditorViewModel mEditorViewModel;
-    private SharedViewModel mSharedViewModel;
+    private EditorViewModel mState;
+    private SharedViewModel mPageCallback;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEditorViewModel = getFragmentViewModel(EditorViewModel.class);
-        mSharedViewModel = getActivityViewModel(SharedViewModel.class);
+        mState = getFragmentViewModel(EditorViewModel.class);
+        mPageCallback = getActivityViewModel(SharedViewModel.class);
     }
 
     @Nullable
@@ -56,7 +56,7 @@ public class EditorFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_editor, container, false);
         FragmentEditorBinding binding = FragmentEditorBinding.bind(view);
         binding.setLifecycleOwner(this);
-        binding.setVm(mEditorViewModel);
+        binding.setVm(mState);
         binding.setClick(new ClickProxy());
         return view;
     }
@@ -71,7 +71,7 @@ public class EditorFragment extends BaseFragment {
     public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
         public void locate() {
-            mSharedViewModel.requestTestDelayMsg("延迟显示了");
+            mPageCallback.requestTestDelayMsg("延迟显示了");
         }
 
         public void back() {
@@ -85,9 +85,9 @@ public class EditorFragment extends BaseFragment {
                 Moment moment = new Moment();
                 moment.setUuid(UUID.randomUUID().toString());
                 moment.setUserName("KunMinX");
-                moment.setLocation(mEditorViewModel.location.get());
-                moment.setContent(mEditorViewModel.content.get());
-                mSharedViewModel.requestMoment(moment);
+                moment.setLocation(mState.location.get());
+                moment.setContent(mState.content.get());
+                mPageCallback.requestMoment(moment);
                 nav().navigateUp();
             }
             return true;

@@ -31,12 +31,8 @@ public class ListViewModel extends ViewModel {
 
     public final MutableLiveData<List<Moment>> list = new MutableLiveData<>();
 
-    public final MutableLiveData<Boolean> autoScrollToTopWhenInsert = new MutableLiveData<>();
+    public final MutableLiveData<Boolean> autoScrollToTopWhenInsert = new MutableLiveData<>(true);
 
     public final MomentRequest momentRequest = new MomentRequest();
-
-    {
-        autoScrollToTopWhenInsert.setValue(true);
-    }
-
+    
 }

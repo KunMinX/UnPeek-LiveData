@@ -24,11 +24,7 @@ import androidx.lifecycle.ViewModel;
  */
 public class EditorViewModel extends ViewModel {
 
-    public final ObservableField<String> content = new ObservableField<>();
-    public final ObservableField<String> location = new ObservableField<>();
+    public final ObservableField<String> content = new ObservableField<>("");
+    public final ObservableField<String> location = new ObservableField<>("发送 Toast");
 
-    {
-        location.set("发送 Toast");
-        content.set("");
-    }
 }

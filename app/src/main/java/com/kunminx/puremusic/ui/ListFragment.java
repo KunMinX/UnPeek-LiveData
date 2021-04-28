@@ -37,14 +37,14 @@ import com.kunminx.puremusic.ui.state.ListViewModel;
  */
 public class ListFragment extends BaseFragment {
 
-    private ListViewModel mListViewModel;
-    private SharedViewModel mSharedViewModel;
+    private ListViewModel mState;
+    private SharedViewModel mPageCallback;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListViewModel = getFragmentViewModel(ListViewModel.class);
-        mSharedViewModel = getActivityViewModel(SharedViewModel.class);
+        mState = getFragmentViewModel(ListViewModel.class);
+        mPageCallback = getActivityViewModel(SharedViewModel.class);
     }
 
     @Nullable
@@ -53,7 +53,7 @@ public class ListFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         FragmentListBinding binding = FragmentListBinding.bind(view);
         binding.setLifecycleOwner(this);
-        binding.setVm(mListViewModel);
+        binding.setVm(mState);
         binding.setClick(new ClickProxy());
 
         MomentAdapter adapter = new MomentAdapter(mActivity.getApplicationContext());
@@ -66,23 +66,23 @@ public class ListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mListViewModel.momentRequest.getListMutableLiveData().observe(getViewLifecycleOwner(), moments -> {
-            mListViewModel.list.setValue(moments);
+        mState.momentRequest.getListMutableLiveData().observe(getViewLifecycleOwner(), moments -> {
+            mState.list.setValue(moments);
         });
 
-        mSharedViewModel.getMoment().observe(this, moment -> {
-            mListViewModel.list.getValue().add(0, moment);
-            mListViewModel.list.setValue(mListViewModel.list.getValue());
+        mPageCallback.getMoment().observe(this, moment -> {
+            mState.list.getValue().add(0, moment);
+            mState.list.setValue(mState.list.getValue());
         });
 
-        mSharedViewModel.getTestDelayMsg().observe(this, s -> {
+        mPageCallback.getTestDelayMsg().observe(this, s -> {
             if (!TextUtils.isEmpty(s)) {
                 showLongToast(s);
             }
         });
 
-        if (mListViewModel.list.getValue() == null || mListViewModel.list.getValue().size() == 0) {
-            mListViewModel.momentRequest.requestList();
+        if (mState.list.getValue() == null || mState.list.getValue().size() == 0) {
+            mState.momentRequest.requestList();
         }
     }
 
