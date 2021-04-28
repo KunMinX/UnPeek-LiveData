@@ -65,20 +65,20 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     private final ConcurrentHashMap<Integer, Boolean> observers = new ConcurrentHashMap<>();
 
     /**
-     * 保存外部传入的Observer与代理Observer之间的映射关系
+     * 保存外部传入的 Observer 与代理 Observer 之间的映射关系
      */
     private final ConcurrentHashMap<Integer, Integer> observerMap = new ConcurrentHashMap<>();
 
     /**
-     * 这里会持有永久性注册的Observer对象，因为是永久性注册的，必须调用remove才会注销，所有这里持有Observer对象不存在内存泄漏问题，
-     * 因为一旦泄漏了，只能说明是业务使用方没有remove
+     * 这里会持有永久性注册的 Observer 对象，因为是永久性注册的，必须调用 remove 才会注销，所有这里持有 Observer 对象不存在内存泄漏问题，
+     * 因为一旦泄漏了，只能说明是业务使用方没有 remove
      */
     private final ConcurrentHashMap<Integer, Observer> foreverObservers = new ConcurrentHashMap<>();
 
-    private Observer<T> createProxyObserver(@NonNull Observer originalObserver, @NonNull Integer storeId) {
+    private Observer<T> createProxyObserver(@NonNull Observer originalObserver, @NonNull Integer observeKey) {
         return t -> {
-            if (!observers.get(storeId)) {
-                observers.put(storeId, true);
+            if (!observers.get(observeKey)) {
+                observers.put(observeKey, true);
                 if (t != null || isAllowNullValue) {
                     originalObserver.onChanged(t);
                 }
@@ -90,60 +90,63 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
         if (owner instanceof Fragment && ((Fragment) owner).getViewLifecycleOwner() != null) {
             /**
-             * 2020年起，Fragment中LiveData传入的LifeCycleOwner从fragment.this改进为getViewLifeCycleOwner。这样设计，主要是为了解决getView()的生命长度比fragment短（仅存活于onCreateView之后和onDestroyView之前），
-             * 导致某些时候fragment其他成员还活着，但getView()为null的生命周期安全问题，
-             * 也即，在Fragment的场景下，请使用getViewLifeCycleOwner来作为liveData的订阅者。（并且注意，对getViewLifeCycleOwner的使用应在onCreateView之后和onDestroyView之前）
+             * Fragment 的场景下使用 getViewLifeCycleOwner 来作为 liveData 的订阅者，
+             * 如此可确保 "视图实例" 的生命周期安全（getView 不为 null），
+             * 因而需要注意的是，对 getViewLifeCycleOwner 的使用应在 onCreateView 之后和 onDestroyView 之前。
+             *
+             * 如果这样说还不理解，详见《LiveData 鲜为人知的 身世背景 和 独特使命》篇的解析
+             * https://xiaozhuanlan.com/topic/0168753249
              */
             owner = ((Fragment) owner).getViewLifecycleOwner();
         }
 
-        Integer storeId = System.identityHashCode(observer);
-        observe(storeId, owner, observer);
+        Integer observeKey = System.identityHashCode(observer);
+        observe(observeKey, owner, observer);
     }
 
     @Override
     public void observeForever(@NonNull Observer<? super T> observer) {
-        Integer storeId = System.identityHashCode(observer);
-        observeForever(storeId, observer);
+        Integer observeKey = System.identityHashCode(observer);
+        observeForever(observeKey, observer);
     }
 
-    private void observe(@NonNull Integer storeId,
+    private void observe(@NonNull Integer observeKey,
                          @NonNull LifecycleOwner owner,
                          @NonNull Observer<? super T> observer) {
 
-        if (observers.get(storeId) == null) {
-            observers.put(storeId, true);
+        if (observers.get(observeKey) == null) {
+            observers.put(observeKey, true);
         }
 
         Observer registerObserver;
-        if (observerMap.get(storeId) == null) {
-            registerObserver = createProxyObserver(observer, storeId);
-            // 保存外部Observer以及内部代理Observer的映射关系
-            observerMap.put(storeId, System.identityHashCode(registerObserver));
+        if (observerMap.get(observeKey) == null) {
+            registerObserver = createProxyObserver(observer, observeKey);
+            // 保存外部 Observer 以及内部代理 Observer 的映射关系
+            observerMap.put(observeKey, System.identityHashCode(registerObserver));
         } else {
-            // 通过反射拿到真正注册到LiveData中的Observer
-            Integer registerObserverStoreId = observerMap.get(storeId);
+            // 通过反射拿到真正注册到 LiveData 中的 Observer
+            Integer registerObserverStoreId = observerMap.get(observeKey);
             registerObserver = LiveDataUtil.getObserver(this, registerObserverStoreId);
             if (registerObserver == null) {
-                registerObserver = createProxyObserver(observer, storeId);
-                // 保存外部Observer以及内部代理Observer的映射关系
-                observerMap.put(storeId, System.identityHashCode(registerObserver));
+                registerObserver = createProxyObserver(observer, observeKey);
+                // 保存外部 Observer 以及内部代理 Observer 的映射关系
+                observerMap.put(observeKey, System.identityHashCode(registerObserver));
             }
         }
 
         super.observe(owner, registerObserver);
     }
 
-    private void observeForever(@NonNull Integer storeId, @NonNull Observer<? super T> observer) {
+    private void observeForever(@NonNull Integer observeKey, @NonNull Observer<? super T> observer) {
 
-        if (observers.get(storeId) == null) {
-            observers.put(storeId, true);
+        if (observers.get(observeKey) == null) {
+            observers.put(observeKey, true);
         }
 
-        Observer registerObserver = foreverObservers.get(storeId);
+        Observer registerObserver = foreverObservers.get(observeKey);
         if (registerObserver == null) {
-            registerObserver = createProxyObserver(observer, storeId);
-            foreverObservers.put(storeId, registerObserver);
+            registerObserver = createProxyObserver(observer, observeKey);
+            foreverObservers.put(observeKey, registerObserver);
         }
 
         super.observeForever(registerObserver);
@@ -151,16 +154,16 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
     @Override
     public void removeObserver(@NonNull Observer<? super T> observer) {
-        Integer storeId = System.identityHashCode(observer);
-        Observer registerObserver = foreverObservers.remove(storeId);
-        if (registerObserver == null && observerMap.containsKey(storeId)) {
-            // 反射拿到真正注册到LiveData中的observer
-            Integer registerObserverStoreId = observerMap.remove(storeId);
+        Integer observeKey = System.identityHashCode(observer);
+        Observer registerObserver = foreverObservers.remove(observeKey);
+        if (registerObserver == null && observerMap.containsKey(observeKey)) {
+            // 反射拿到真正注册到 LiveData 中的 observer
+            Integer registerObserverStoreId = observerMap.remove(observeKey);
             registerObserver = LiveDataUtil.getObserver(this, registerObserverStoreId);
         }
 
         if (registerObserver != null) {
-            observers.remove(storeId);
+            observers.remove(observeKey);
         }
 
         super.removeObserver(registerObserver != null ? registerObserver : observer);
