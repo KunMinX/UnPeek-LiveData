@@ -115,7 +115,7 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 ## JCenter 依赖
 
 ```groovy
-//jfrog 已停服，无法下载最新 library，我们正在申请 maven-central，暂时请使用 4.4.1-beta1
+//jfrog 已停服，无法下载最新 library，我们正在申请 maven-central，暂时请使用 4.5.0-beta1
 implementation 'com.kunminx.archi:unpeek-livedata:5.0.1-beta1'
 ```
 
