@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.ui.callback;
+package com.kunminx.puremusic.ui.event;
 
 import androidx.lifecycle.ViewModel;
 

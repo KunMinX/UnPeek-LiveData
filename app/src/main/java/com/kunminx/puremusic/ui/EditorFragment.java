@@ -30,7 +30,7 @@ import com.kunminx.puremusic.ui.base.BaseFragment;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.FragmentEditorBinding;
-import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.state.EditorViewModel;
 
 import java.util.UUID;
@@ -41,13 +41,13 @@ import java.util.UUID;
 public class EditorFragment extends BaseFragment {
 
     private EditorViewModel mState;
-    private SharedViewModel mPageCallback;
+    private SharedViewModel mEvent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mState = getFragmentViewModel(EditorViewModel.class);
-        mPageCallback = getActivityViewModel(SharedViewModel.class);
+        mEvent = getActivityViewModel(SharedViewModel.class);
     }
 
     @Nullable
@@ -71,7 +71,7 @@ public class EditorFragment extends BaseFragment {
     public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
         public void locate() {
-            mPageCallback.requestTestDelayMsg("延迟显示了");
+            mEvent.requestTestDelayMsg("延迟显示了");
         }
 
         public void back() {
@@ -87,7 +87,7 @@ public class EditorFragment extends BaseFragment {
                 moment.setUserName("KunMinX");
                 moment.setLocation(mState.location.get());
                 moment.setContent(mState.content.get());
-                mPageCallback.requestMoment(moment);
+                mEvent.requestMoment(moment);
                 nav().navigateUp();
             }
             return true;

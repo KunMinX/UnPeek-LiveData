@@ -27,7 +27,7 @@ import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.ActivityEditorBinding;
 import com.kunminx.puremusic.ui.base.BaseActivity;
-import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.state.EditorViewModel;
 
 import java.util.UUID;
@@ -38,13 +38,13 @@ import java.util.UUID;
 public class EditorActivity extends BaseActivity {
 
     private EditorViewModel mState;
-    private SharedViewModel mPageCallback;
+    private SharedViewModel mEvent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mState = getActivityViewModel(EditorViewModel.class);
-        mPageCallback = getAppViewModelProvider(this).get(SharedViewModel.class);
+        mEvent = getAppViewModelProvider(this).get(SharedViewModel.class);
 
         ActivityEditorBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_editor);
         binding.setLifecycleOwner(this);
@@ -56,7 +56,7 @@ public class EditorActivity extends BaseActivity {
     public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
         public void locate() {
-            mPageCallback.requestTestDelayMsg("延迟显示了");
+            mEvent.requestTestDelayMsg("延迟显示了");
         }
 
         public void back() {
@@ -72,7 +72,7 @@ public class EditorActivity extends BaseActivity {
                 moment.setUserName("KunMinX");
                 moment.setLocation(mState.location.get());
                 moment.setContent(mState.content.get());
-                mPageCallback.requestMoment(moment);
+                mEvent.requestMoment(moment);
                 finish();
             }
             return true;

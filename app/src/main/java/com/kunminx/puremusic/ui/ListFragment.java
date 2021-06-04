@@ -29,7 +29,7 @@ import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentListBinding;
 import com.kunminx.puremusic.ui.adapter.MomentAdapter;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.callback.SharedViewModel;
+import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.state.ListViewModel;
 
 /**
@@ -38,13 +38,13 @@ import com.kunminx.puremusic.ui.state.ListViewModel;
 public class ListFragment extends BaseFragment {
 
     private ListViewModel mState;
-    private SharedViewModel mPageCallback;
+    private SharedViewModel mEvent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mState = getFragmentViewModel(ListViewModel.class);
-        mPageCallback = getActivityViewModel(SharedViewModel.class);
+        mEvent = getActivityViewModel(SharedViewModel.class);
     }
 
     @Nullable
@@ -70,12 +70,12 @@ public class ListFragment extends BaseFragment {
             mState.list.setValue(moments);
         });
 
-        mPageCallback.getMoment().observe(this, moment -> {
+        mEvent.getMoment().observe(this, moment -> {
             mState.list.getValue().add(0, moment);
             mState.list.setValue(mState.list.getValue());
         });
 
-        mPageCallback.getTestDelayMsg().observe(this, s -> {
+        mEvent.getTestDelayMsg().observe(this, s -> {
             if (!TextUtils.isEmpty(s)) {
                 showLongToast(s);
             }
