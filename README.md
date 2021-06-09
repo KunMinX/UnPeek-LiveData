@@ -115,9 +115,15 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 ## JCenter 依赖
 
 ```groovy
-//jfrog 已停服，无法下载最新 library，我们正在申请 maven-central，暂时请使用 4.5.0-beta1
-implementation 'com.kunminx.archi:unpeek-livedata:5.0.1-beta1'
+implementation 'com.kunminx.arch:unpeek-livedata:5.0.1-beta1'
 ```
+
+> 温馨提示：
+>
+> 1.上述 implementation 的命名，我们已从 `archi` 改为 `arch`，请注意修改，
+>
+> 2.鉴于 Jcenter 的关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
+
 
 &nbsp;
 
