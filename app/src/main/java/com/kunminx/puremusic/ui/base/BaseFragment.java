@@ -42,7 +42,7 @@ public abstract class BaseFragment extends Fragment {
     protected AppCompatActivity mActivity;
     private ViewModelProvider mFragmentProvider;
     private ViewModelProvider mActivityProvider;
-    private ViewModelProvider.Factory mFactory;
+    private ViewModelProvider mApplicationProvider;
 
 
     @Override
@@ -86,18 +86,18 @@ public abstract class BaseFragment extends Fragment {
         return mActivityProvider.get(modelClass);
     }
 
-    protected ViewModelProvider getAppViewModelProvider(Activity activity) {
-        return new ViewModelProvider((App) activity.getApplicationContext(),
-                getAppFactory(activity));
+    protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
+        if (mApplicationProvider == null) {
+            mApplicationProvider = new ViewModelProvider(
+                    (App) mActivity.getApplicationContext(), getApplicationFactory(mActivity));
+        }
+        return mApplicationProvider.get(modelClass);
     }
 
-    private ViewModelProvider.Factory getAppFactory(Activity activity) {
+    private ViewModelProvider.Factory getApplicationFactory(Activity activity) {
         checkActivity(this);
         Application application = checkApplication(activity);
-        if (mFactory == null) {
-            mFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application);
-        }
-        return mFactory;
+        return ViewModelProvider.AndroidViewModelFactory.getInstance(application);
     }
 
     private Application checkApplication(Activity activity) {
