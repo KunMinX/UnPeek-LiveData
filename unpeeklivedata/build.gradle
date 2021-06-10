@@ -1,17 +1,41 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
-def theVersionName = "5.0.1-beta1"
+ext {
+    PUBLISH_GROUP_ID = 'com.kunminx.arch'
+    PUBLISH_VERSION = '5.0.1-beta1'
+    VERSION_CODE = 5000101
+
+    PUBLISH_ARTIFACT_ID = 'unpeek-livedata'
+    ARTIFACT_DESCRIPTION = 'Perfect alternative to SingleLiveEvent, supporting multiple observers.'
+
+    POM_URL='https://github.com/KunMinX/UnPeek-LiveData'
+    POM_SCM_URL='https://github.com/KunMinX/UnPeek-LiveData/tree/master'
+    POM_SCM_CONNECTION='scm:git:github.com/KunMinX/UnPeek-LiveData.git'
+    POM_SCM_DEV_CONNECTION='scm:git:ssh://github.com/KunMinX/UnPeek-LiveData.git'
+
+    POM_DEVELOPER_ID='KunMinX'
+    POM_DEVELOPER_NAME='KunMinX'
+    POM_DEVELOPER_URL='https://github.com/KunMinX'
+    POM_DEVELOPER_EMAIL='kunminx@gmail.com'
+
+    LICENSE_NAME='The Apache Software License, Version 2.0'
+    LICENSE_URL='http://www.apache.org/licenses/LICENSE-2.0.txt'
+
+    uploadJavadocs = false
+    uploadSources = false
+}
+
+apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
+
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 29
-        versionCode 5000101
-        versionName theVersionName
+        minSdkVersion 14
+        targetSdkVersion 30
+        versionCode VERSION_CODE
+        versionName PUBLISH_VERSION
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -24,10 +48,6 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 tasks.withType(Javadoc) {
@@ -39,20 +59,9 @@ tasks.withType(Javadoc) {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    testImplementation 'junit:junit:4.13.1'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
 }
 
-publish {
-    userOrg = 'architecture'
-    repoName = 'maven'
-    groupId = 'com.kunminx.archi'
-    artifactId = 'unpeek-livedata'
-    publishVersion = theVersionName
-    desc = 'for page back callback'
-    licences = ['Apache-2.0']
-    website = 'https://github.com/KunMinX/UnPeekLiveData'
-}
