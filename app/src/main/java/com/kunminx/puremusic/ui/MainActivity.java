@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mState = getActivityViewModel(MainViewModel.class);
-        mEvent = getAppViewModelProvider(this).get(SharedViewModel.class);
+        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
 
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setClick(new ClickProxy());

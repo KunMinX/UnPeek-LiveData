@@ -44,7 +44,7 @@ public class EditorActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mState = getActivityViewModel(EditorViewModel.class);
-        mEvent = getAppViewModelProvider(this).get(SharedViewModel.class);
+        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
 
         ActivityEditorBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_editor);
         binding.setLifecycleOwner(this);
