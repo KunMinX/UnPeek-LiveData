@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 
 ext {
     PUBLISH_GROUP_ID = 'com.kunminx.arch'
-    PUBLISH_VERSION = '5.0.1-beta1'
-    VERSION_CODE = 5000101
+    PUBLISH_VERSION = '5.0.2-beta1'
+    VERSION_CODE = 5000201
 
     PUBLISH_ARTIFACT_ID = 'unpeek-livedata'
     ARTIFACT_DESCRIPTION = 'Perfect alternative to SingleLiveEvent, supporting multiple observers.'

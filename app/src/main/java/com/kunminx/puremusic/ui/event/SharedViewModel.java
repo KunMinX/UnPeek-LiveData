@@ -27,24 +27,24 @@ import com.kunminx.puremusic.data.bean.Moment;
  */
 public class SharedViewModel extends ViewModel {
 
-    private final UnPeekLiveData<Moment> mMoment = new UnPeekLiveData<>();
+  private final UnPeekLiveData<Moment> mMoment = new UnPeekLiveData<>();
 
-    private final UnPeekLiveData<String> mTestDelayMsg = new UnPeekLiveData<>();
+  private final UnPeekLiveData<String> mTestDelayMsg = new UnPeekLiveData<>();
 
-    public ProtectedUnPeekLiveData<Moment> getMoment() {
-        return mMoment;
-    }
+  public ProtectedUnPeekLiveData<Moment> getMoment() {
+    return mMoment;
+  }
 
-    public ProtectedUnPeekLiveData<String> getTestDelayMsg() {
-        return mTestDelayMsg;
-    }
+  public ProtectedUnPeekLiveData<String> getTestDelayMsg() {
+    return mTestDelayMsg;
+  }
 
-    public void requestMoment(Moment moment) {
-        mMoment.setValue(moment);
-    }
+  public void requestMoment(Moment moment) {
+    mMoment.setValue(moment);
+  }
 
-    public void requestTestDelayMsg(String s) {
-        mTestDelayMsg.setValue(s);
-    }
+  public void requestTestDelayMsg(String s) {
+    mTestDelayMsg.setValue(s);
+  }
 
 }

@@ -8,12 +8,14 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.0-alpha08'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.30.0'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0'
     }
 
     tasks.withType(Javadoc) {
