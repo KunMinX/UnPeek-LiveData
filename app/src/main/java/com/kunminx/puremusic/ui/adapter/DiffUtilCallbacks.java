@@ -26,17 +26,17 @@ import com.kunminx.puremusic.data.bean.Moment;
  */
 public class DiffUtilCallbacks {
 
-    public DiffUtil.ItemCallback<Moment> getMomentItemCallback() {
-        return new DiffUtil.ItemCallback<Moment>() {
-            @Override
-            public boolean areItemsTheSame(@NonNull Moment oldItem, @NonNull Moment newItem) {
-                return oldItem.equals(newItem);
-            }
+  public DiffUtil.ItemCallback<Moment> getMomentItemCallback() {
+    return new DiffUtil.ItemCallback<Moment>() {
+      @Override
+      public boolean areItemsTheSame(@NonNull Moment oldItem, @NonNull Moment newItem) {
+        return oldItem.getUuid().equals(newItem.getUuid());
+      }
 
-            @Override
-            public boolean areContentsTheSame(@NonNull Moment oldItem, @NonNull Moment newItem) {
-                return oldItem.getUuid().equals(newItem.getUuid());
-            }
-        };
-    }
+      @Override
+      public boolean areContentsTheSame(@NonNull Moment oldItem, @NonNull Moment newItem) {
+        return oldItem.getContent().equals(newItem.getContent());
+      }
+    };
+  }
 }

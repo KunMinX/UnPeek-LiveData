@@ -26,11 +26,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.kunminx.puremusic.R;
+import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.FragmentListBinding;
 import com.kunminx.puremusic.ui.adapter.MomentAdapter;
 import com.kunminx.puremusic.ui.base.BaseFragment;
 import com.kunminx.puremusic.ui.event.SharedViewModel;
 import com.kunminx.puremusic.ui.state.ListViewModel;
+
+import java.util.List;
 
 /**
  * Create by KunMinX at 2020/5/30
@@ -57,6 +60,11 @@ public class ListFragment extends BaseFragment {
     binding.setClick(new ClickProxy());
 
     MomentAdapter adapter = new MomentAdapter(mActivity.getApplicationContext());
+    adapter.setOnItemClickListener((item, position) -> {
+      Bundle bundle = new Bundle();
+      bundle.putParcelable(Moment.MOMENT, item);
+      nav().navigate(R.id.action_listFragment_to_detailFragment, bundle);
+    });
     binding.setAdapter(adapter);
 
     return view;
@@ -71,8 +79,20 @@ public class ListFragment extends BaseFragment {
     });
 
     mEvent.getMoment().observe(getViewLifecycleOwner(), moment -> {
-      mState.list.getValue().add(0, moment);
-      mState.list.setValue(mState.list.getValue());
+      List<Moment> list = mState.list.getValue();
+      assert list != null;
+      boolean modify = false;
+      for (Moment moment1 : list) {
+        if (moment1.getUuid().equals(moment.getUuid())) {
+          moment1.setContent(moment.getContent());
+          modify = true;
+          break;
+        }
+      }
+      if (!modify) {
+        list.add(0, moment);
+      }
+      mState.list.setValue(list);
     });
 
     mEvent.getTestDelayMsg().observe(getViewLifecycleOwner(), s -> {

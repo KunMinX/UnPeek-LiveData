@@ -18,49 +18,42 @@ package com.kunminx.puremusic.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
-import com.kunminx.puremusic.databinding.FragmentEditorBinding;
+import com.kunminx.puremusic.databinding.FragmentDetailBinding;
 import com.kunminx.puremusic.ui.base.BaseFragment;
 import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.EditorViewModel;
-
-import java.util.UUID;
+import com.kunminx.puremusic.ui.state.DetailViewModel;
 
 /**
  * Create by KunMinX at 2020/5/30
  */
-public class EditorFragment extends BaseFragment {
+public class DetailFragment extends BaseFragment {
 
-  private EditorViewModel mState;
+  private DetailViewModel mState;
   private SharedViewModel mEvent;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mState = getFragmentViewModel(EditorViewModel.class);
+    mState = getFragmentViewModel(DetailViewModel.class);
     mEvent = getActivityViewModel(SharedViewModel.class);
     if (mState.moment == null && getArguments() != null) {
       mState.moment = getArguments().getParcelable(Moment.MOMENT);
-    }
-    if (mState.moment == null) {
-      mState.moment = new Moment();
     }
   }
 
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_editor, container, false);
-    FragmentEditorBinding binding = FragmentEditorBinding.bind(view);
+    View view = inflater.inflate(R.layout.fragment_detail, container, false);
+    FragmentDetailBinding binding = FragmentDetailBinding.bind(view);
     binding.setLifecycleOwner(this);
     binding.setVm(mState);
     binding.setClick(new ClickProxy());
@@ -72,32 +65,24 @@ public class EditorFragment extends BaseFragment {
     super.onViewCreated(view, savedInstanceState);
 
     mState.content.set(mState.moment.getContent());
+
+    mEvent.getMoment().observe(getViewLifecycleOwner(), moment -> {
+      mState.moment = moment;
+      mState.content.set(moment.getContent());
+    });
   }
 
-  public class ClickProxy implements Toolbar.OnMenuItemClickListener {
+  public class ClickProxy {
 
-    public void locate() {
-      mEvent.requestTestDelayMsg("延迟显示了");
+    public void edit() {
+      Bundle bundle = new Bundle();
+      bundle.putParcelable(Moment.MOMENT, mState.moment);
+      nav().navigate(R.id.action_detailFragment_to_editorFragment, bundle);
     }
 
     public void back() {
       nav().navigateUp();
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-      if (item.getItemId() == R.id.menu_save) {
-        toggleSoftInput();
-        if(mState.moment.getUuid()==null){
-          mState.moment.setUuid(UUID.randomUUID().toString());
-          mState.moment.setUserName("KunMinX");
-          mState.moment.setLocation(mState.location.get());
-        }
-        mState.moment.setContent(mState.content.get());
-        mEvent.requestMoment(mState.moment);
-        nav().navigateUp();
-      }
-      return true;
-    }
   }
 }

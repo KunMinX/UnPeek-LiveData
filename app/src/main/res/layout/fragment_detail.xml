@@ -20,11 +20,11 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.ui.state.EditorViewModel" />
+            type="com.kunminx.puremusic.ui.state.DetailViewModel" />
 
         <variable
             name="click"
-            type="com.kunminx.puremusic.ui.EditorFragment.ClickProxy" />
+            type="com.kunminx.puremusic.ui.DetailFragment.ClickProxy" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +34,6 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            toolbarMenuItemClick="@{click}"
             toolbarNavigationClick="@{()->click.back()}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,11 +42,10 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/editor_menu"
             app:navigationIcon="@drawable/ic_back"
-            app:title="编辑页" />
+            app:title="详情" />
 
-        <EditText
+        <TextView
             android:id="@+id/et"
             drawable_radius="@{12}"
             drawable_solidColor="@{0xFFEEEEEE}"
@@ -71,12 +69,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:onClick="@{()->click.locate()}"
+            android:onClick="@{()->click.edit()}"
             android:paddingLeft="12dp"
             android:paddingTop="4dp"
             android:paddingRight="12dp"
             android:paddingBottom="4dp"
-            android:text="@{vm.location}"
+            android:text="@{vm.edit}"
             android:textColor="@color/blue"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et" />
@@ -89,7 +87,7 @@
             android:paddingTop="8dp"
             android:paddingRight="12dp"
             android:paddingBottom="8dp"
-            android:text="点击发送 Toast 在返回列表页后显示，此举用于检测延迟通知的效果"
+            android:text="点击编辑按钮，跳转到编辑页"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_locate" />
 

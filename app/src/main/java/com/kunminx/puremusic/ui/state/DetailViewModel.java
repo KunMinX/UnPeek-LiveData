@@ -24,10 +24,10 @@ import com.kunminx.puremusic.data.bean.Moment;
 /**
  * Create by KunMinX at 2020/5/30
  */
-public class EditorViewModel extends ViewModel {
+public class DetailViewModel extends ViewModel {
 
   public final ObservableField<String> content = new ObservableField<>("");
-  public final ObservableField<String> location = new ObservableField<>("发送 Toast");
+  public final ObservableField<String> edit = new ObservableField<>("编辑");
   public Moment moment;
 
 }

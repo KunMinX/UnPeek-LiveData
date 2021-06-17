@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kunminx.puremusic.ui.base.adapter.SimpleBindingAdapter;
+
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ import java.util.List;
 public class RecyclerViewBindingAdapter {
 
     @BindingAdapter(value = {"adapter", "refreshList", "autoScrollToTopWhenInsert", "autoScrollToBottomWhenInsert"}, requireAll = false)
-    public static void bindList(RecyclerView recyclerView, ListAdapter adapter, List list,
+    public static void bindList(RecyclerView recyclerView, SimpleBindingAdapter adapter, List list,
                                 boolean autoScrollToTopWhenInsert, boolean autoScrollToBottomWhenInsert) {
 
         if (recyclerView != null && list != null) {
@@ -49,6 +51,7 @@ public class RecyclerViewBindingAdapter {
             }
 
             adapter.submitList(list);
+            adapter.notifyDataSetChanged();
         }
     }
 }
