@@ -62,9 +62,9 @@
 
 ### UnPeekLiveData v6.0 特点
 
-TODO 感谢小伙伴 wl0073921 对 UnPeekLiveData 源码的演化做出的贡献，
+感谢小伙伴 @[wl0073921](https://github.com/wl0073921) 对 UnPeekLiveData 源码的演化做出的贡献，
 
-V6 版源码翻译和完善自小伙伴 [wl0073921](https://github.com/wl0073921) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/11) 中的分享，
+V6 版源码翻译和完善自小伙伴 wl0073921 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/11) 中的分享，
 
 V6 版源码相比于 V5 版的改进之处在于，引入 Observer 代理类的设计，这使得在旋屏重建时，无需通过反射方式跟踪和复用基类 Map 中的 Observer，转而通过 removeObserver 的方式来自动移除和在页面重建后重建新的 Observer，
 
@@ -88,7 +88,7 @@ V6 版源码相比于 V5 版的改进之处在于，引入 Observer 代理类的
 
 ### UnPeekLiveData v4.0 特点
 
-我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 [Flywith24](https://github.com/Flywith24) [WrapperLiveData](https://github.com/Flywith24/WrapperLiveData) 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
+我们在 UnPeekLiveData v3.0 的基础上，参考了小伙伴 [Flywith24](https://github.com/Flywith24) - [WrapperLiveData](https://github.com/Flywith24/WrapperLiveData) 遍历 ViewModelStore 的思路，以此提升 “防止倒灌时机” 的精准度。
 
 > 注：出于在现有 AndroidX 源码的背景下实现 "防倒灌机制" 的需要，**v4.0 对 Observe 方法的使用做了微调**，改为分别针对 Activity/Fragment 提供 ObserveInActivity 和 ObserveInFragment 方法，具体缘由详见源码注释的说明。
 
