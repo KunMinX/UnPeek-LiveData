@@ -70,12 +70,12 @@ public class ListFragment extends BaseFragment {
       mState.list.setValue(moments);
     });
 
-    mEvent.getMoment().observe(this, moment -> {
+    mEvent.getMoment().observe(getViewLifecycleOwner(), moment -> {
       mState.list.getValue().add(0, moment);
       mState.list.setValue(mState.list.getValue());
     });
 
-    mEvent.getTestDelayMsg().observe(this, s -> {
+    mEvent.getTestDelayMsg().observe(getViewLifecycleOwner(), s -> {
       if (!TextUtils.isEmpty(s)) {
         showLongToast(s);
       }

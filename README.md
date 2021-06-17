@@ -60,6 +60,20 @@
 
 ## 最新更新动态
 
+### UnPeekLiveData v6.0 特点
+
+TODO 感谢小伙伴 wl0073921 对 UnPeekLiveData 源码的演化做出的贡献，
+
+V6 版源码翻译和完善自小伙伴 [wl0073921](https://github.com/wl0073921) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/11) 中的分享，
+
+V6 版源码相比于 V5 版的改进之处在于，引入 Observer 代理类的设计，这使得在旋屏重建时，无需通过反射方式跟踪和复用基类 Map 中的 Observer，转而通过 removeObserver 的方式来自动移除和在页面重建后重建新的 Observer，
+
+因而复杂度由原先的分散于基类数据结构，到集中在 proxy 对象这一处，进一步方便了源码逻辑的阅读和后续的修改。
+
+> 具体可参见 UnPeekLiveData 最新源码及注释的说明。
+
+&nbsp;
+
 ### UnPeekLiveData v5.0 特点
 
 感谢就职于 “腾讯音乐部门” 的小伙伴 @[zhangjianlaoda](https://github.com/zhangjianlaoda) 应邀对 UnPeekLiveData 做的优化和升级。
@@ -68,7 +82,7 @@
 
 同时，该版本使 Observe 等方法的方法名和形参列表与官方 API 保持一致，尽可能减少新上手小伙伴的学习成本。
 
-> 具体可参见 UnPeekLiveData 最新源码注释的说明。
+> 具体可参见 UnPeekLiveData 最新源码及注释的说明。
 
 &nbsp;
 

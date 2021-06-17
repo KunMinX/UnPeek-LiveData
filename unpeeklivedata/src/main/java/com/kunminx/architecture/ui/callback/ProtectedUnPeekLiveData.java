@@ -1,231 +1,191 @@
-
-/*
- * Copyright 2018-present KunMinX
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.kunminx.architecture.ui.callback;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
-import androidx.arch.core.internal.SafeIterableMap;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * TODO：UnPeekLiveData 的存在是为了在 "重回二级页面" 的场景下，解决 "数据倒灌" 的问题。
- * 对 "数据倒灌" 的状况不理解的小伙伴，可参考《LiveData 数据倒灌 背景缘由全貌 独家解析》文章开头的解析
+ * TODO 感谢小伙伴 wl0073921 对 UnPeekLiveData 源码的演化做出的贡献，
+ * V6 版源码翻译和完善自小伙伴 wl0073921 在 issue 中的分享，
+ * https://github.com/KunMinX/UnPeek-LiveData/issues/11
  * <p>
- * https://xiaozhuanlan.com/topic/6719328450
+ * V6 版源码相比于 V5 版的改进之处在于，引入 Observer 代理类的设计，
+ * 这使得在旋屏重建时，无需通过反射方式跟踪和复用基类 Map 中的 Observer，
+ * 转而通过 removeObserver 的方式来自动移除和在页面重建后重建新的 Observer，
  * <p>
- * <p>
- * 对{@link ProtectedUnPeekLiveDataV4}进行了重构，修复了V4版本的已知问题：
- * TODO: 1、UnPeekLiveDataV4 中的 observers 这个 HashMap 恒久存在，注册的 Observer 越多，占用的内存越大，并且除非 UnPeekLiveDataV4 被回收，否则恒久存在内存当中
- * 在 removeObserver 方法中移除 map 中对应存储的 storeId
- * <p>
- * TODO: 2、无法通过 removeObserver 方法移除指定的 Observer（某些场景需要提前 removeObserver）
- * 通过维护外部传入 Observer 与内部代理 Observer 的映射关系，在 removeObserver 调用时，通过反射找到真正注册到 LiveData 中的 Observer，实现移除
- * <p>
- * TODO: 3、同一个 Observer 对象，注册多次，UnPeekLiveDataV4 内部实际上会注册了多个不同的 Observer，从而导致重复回调，产生一些不可预期的问题
- * 内部不会每次调用 observe 方法时都新创建一个代理 Observer，而是复用已经存在的代理 Observer
- * 注意！！！Kotlin + LiveData + Lambda 由于编译器优化，可能会抛 Cannot add the same observer with different lifecycles 异常
- * <p>
- * TODO: 4、无法使用 observerForever 方法
- * UnPeekLiveData 内部直接持有 forever 类型的 Observer
- * <p>
- * TODO: 最终实现对谷歌原生 LiveData 完全无侵入性的目的。在多人协作的场景下，其他同学就只需要理解 UnPeekLiveData 能够解决粘性事件、数据倒灌问题，其他的完全不需要理解，用法上完全跟原生 LiveData 保持一致
- *
- * <p>
- * TODO：增加一层 ProtectedUnPeekLiveData，
- * 用于限制从 Activity/Fragment 篡改来自 "数据层" 的数据，数据层的数据务必通过 "唯一可信源" 来分发，
- * 如果这样说还不理解，详见：
- * https://xiaozhuanlan.com/topic/0168753249 和 https://xiaozhuanlan.com/topic/2049857631
+ * 因而复杂度由原先的分散于基类数据结构，到集中在 proxy 对象这一处，
+ * 进一步方便了源码逻辑的阅读和后续的修改。
  * <p>
  * <p>
- * Create by Jim at 2021/4/21
+ * TODO 唯一可信源设计
+ * 我们在 V6 中继续沿用从 V3 版延续下来的基于 "唯一可信源" 理念的设计，
+ * 来确保 "事件" 的发送权牢牢握在可信的逻辑中枢单元手里，从而确保所有订阅者收到的信息都是可靠且一致的，
+ * <p>
+ * 如果这样说还不理解，可自行查阅《LiveData 唯一可信源 读写分离设计》的解析：
+ * https://xiaozhuanlan.com/topic/2049857631
+ * <p>
+ * TODO 以及支持消息从内存清空
+ * 我们在 V6 中继续沿用从 V3 版延续下来的 "消息清空" 设计，
+ * 我们支持通过 clear 方法手动将消息从内存中清空，
+ * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
+ * <p>
+ * Create by KunMinX at 2021/6/17
  */
 public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
+  private final static String TAG = "V6Test";
+
   protected boolean isAllowNullValue;
 
-  private final ConcurrentHashMap<Integer, Boolean> observers = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<Observer<? super T>, Boolean> observerStateMap = new ConcurrentHashMap();
+
+  private final ConcurrentHashMap<Observer<? super T>, Observer<? super T>> observerProxyMap = new ConcurrentHashMap();
 
   /**
-   * 保存外部传入的 Observer 与代理 Observer 之间的映射关系
+   * TODO 当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期敏感" 的非粘性消息
+   *
+   * state 是可变且私用的，event 是只读且公用的，
+   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   *
+   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
+   * https://xiaozhuanlan.com/topic/2049857631
+   *
+   * @param owner
+   * @param observer
    */
-  private final ConcurrentHashMap<Integer, Integer> observerMap = new ConcurrentHashMap<>();
-
-  /**
-   * 这里会持有永久性注册的 Observer 对象，因为是永久性注册的，必须调用 remove 才会注销，所有这里持有 Observer 对象不存在内存泄漏问题，
-   * 因为一旦泄漏了，只能说明是业务使用方没有 remove
-   */
-  private final ConcurrentHashMap<Integer, Observer<? super T>> foreverObservers = new ConcurrentHashMap<>();
-
-  private Observer<? super T> createProxyObserver(@NonNull Observer<? super T> originalObserver, @NonNull Integer observeKey) {
-    return t -> {
-      if (!observers.get(observeKey)) {
-        observers.put(observeKey, true);
-        if (t != null || isAllowNullValue) {
-          originalObserver.onChanged(t);
-        }
-      }
-    };
-  }
-
   @Override
   public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-    if (owner instanceof Fragment && ((Fragment) owner).getViewLifecycleOwner() != null) {
-      /**
-       * Fragment 的场景下使用 getViewLifeCycleOwner 来作为 liveData 的订阅者，
-       * 如此可确保 "视图实例" 的生命周期安全（getView 不为 null），
-       * 因而需要注意的是，对 getViewLifeCycleOwner 的使用应在 onCreateView 之后和 onDestroyView 之前。
-       *
-       * 如果这样说还不理解，详见《LiveData 鲜为人知的 身世背景 和 独特使命》篇的解析
-       * https://xiaozhuanlan.com/topic/0168753249
-       */
-      owner = ((Fragment) owner).getViewLifecycleOwner();
+    Observer<? super T> observer1 = getObserverProxy(observer);
+    if (observer1 != null) {
+      super.observe(owner, observer1);
     }
-
-    Integer observeKey = System.identityHashCode(observer);
-    observe(observeKey, owner, observer);
-  }
-
-  @Override
-  public void observeForever(@NonNull Observer<? super T> observer) {
-    Integer observeKey = System.identityHashCode(observer);
-    observeForever(observeKey, observer);
-  }
-
-  private void observe(@NonNull Integer observeKey,
-                       @NonNull LifecycleOwner owner,
-                       @NonNull Observer<? super T> observer) {
-
-    if (observers.get(observeKey) == null) {
-      observers.put(observeKey, true);
-    }
-
-    Observer<? super T> registerObserver;
-    if (observerMap.get(observeKey) == null) {
-      registerObserver = createProxyObserver(observer, observeKey);
-      // 保存外部 Observer 以及内部代理 Observer 的映射关系
-      observerMap.put(observeKey, System.identityHashCode(registerObserver));
-    } else {
-      // 通过反射拿到真正注册到 LiveData 中的 Observer
-      Integer registerObserverStoreId = observerMap.get(observeKey);
-      assert registerObserverStoreId != null;
-      registerObserver = getObserver(this, registerObserverStoreId);
-      if (registerObserver == null) {
-        registerObserver = createProxyObserver(observer, observeKey);
-        // 保存外部 Observer 以及内部代理 Observer 的映射关系
-        observerMap.put(observeKey, System.identityHashCode(registerObserver));
-      }
-    }
-
-    super.observe(owner, registerObserver);
-  }
-
-  private void observeForever(@NonNull Integer observeKey, @NonNull Observer<? super T> observer) {
-
-    if (observers.get(observeKey) == null) {
-      observers.put(observeKey, true);
-    }
-
-    Observer<? super T> registerObserver = foreverObservers.get(observeKey);
-    if (registerObserver == null) {
-      registerObserver = createProxyObserver(observer, observeKey);
-      foreverObservers.put(observeKey, registerObserver);
-    }
-
-    super.observeForever(registerObserver);
-  }
-
-  @Override
-  public void removeObserver(@NonNull Observer<? super T> observer) {
-    Integer observeKey = System.identityHashCode(observer);
-    Observer<? super T> registerObserver = foreverObservers.remove(observeKey);
-    if (registerObserver == null && observerMap.containsKey(observeKey)) {
-      // 反射拿到真正注册到 LiveData 中的 observer
-      Integer registerObserverStoreId = observerMap.remove(observeKey);
-      assert registerObserverStoreId != null;
-      registerObserver = getObserver(this, registerObserverStoreId);
-    }
-
-    if (registerObserver != null) {
-      observers.remove(observeKey);
-    }
-
-    super.removeObserver(registerObserver != null ? registerObserver : observer);
   }
 
   /**
-   * 重写的 setValue 方法，默认不接收 null
-   * 可通过 Builder 配置允许接收
-   * 可通过 Builder 配置消息延时清理的时间
-   * <p>
-   * override setValue, do not receive null by default
-   * You can configure to allow receiving through Builder
-   * And also, You can configure the delay time of message clearing through Builder
+   * TODO 当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期不敏感" 的非粘性消息
    *
-   * @param value
+   * state 是可变且私用的，event 是只读且公用的，
+   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   *
+   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
+   * https://xiaozhuanlan.com/topic/2049857631
+   *
+   * @param observer
    */
+  @Override
+  public void observeForever(@NonNull Observer<? super T> observer) {
+    Observer<? super T> observer1 = getObserverProxy(observer);
+    if (observer1 != null) {
+      super.observeForever(observer1);
+    }
+  }
+
+  private Observer<? super T> getObserverProxy(Observer<? super T> observer) {
+    if (observerStateMap.containsKey(observer)) {
+      Log.d(TAG, "observe repeatedly, observer has been attached to owner");
+      return null;
+    } else {
+      observerStateMap.put(observer, false);
+      ObserverProxy proxy = new ObserverProxy(observer);
+      observerProxyMap.put(observer, proxy);
+      return proxy;
+    }
+  }
+
+  private class ObserverProxy implements Observer<T> {
+
+    private final Observer<? super T> target;
+
+    public ObserverProxy(Observer<? super T> target) {
+      this.target = target;
+    }
+
+    public Observer<? super T> getTarget() {
+      return target;
+    }
+
+    @Override
+    public void onChanged(T t) {
+      if (observerStateMap.get(target) != null && observerStateMap.get(target)) {
+        observerStateMap.put(target, false);
+        if (t != null || isAllowNullValue) {
+          target.onChanged(t);
+        }
+      }
+    }
+  }
+
+  /**
+   * TODO 当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期敏感" 的粘性消息
+   *
+   * state 是可变且私用的，event 是只读且公用的，
+   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   *
+   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
+   * https://xiaozhuanlan.com/topic/2049857631
+   *
+   * @param owner
+   * @param observer
+   */
+  public void observeSticky(LifecycleOwner owner, Observer<T> observer) {
+    super.observe(owner, observer);
+  }
+
+  /**
+   * TODO 当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期不敏感" 的粘性消息
+   *
+   * state 是可变且私用的，event 是只读且公用的
+   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   *
+   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
+   * https://xiaozhuanlan.com/topic/2049857631
+   *
+   * @param observer
+   */
+  public void observeStickyForever(Observer<T> observer) {
+    super.observeForever(observer);
+  }
+
   @Override
   protected void setValue(T value) {
     if (value != null || isAllowNullValue) {
-      for (Map.Entry<Integer, Boolean> entry : observers.entrySet()) {
-        entry.setValue(false);
+      for (Map.Entry<Observer<? super T>, Boolean> entry : observerStateMap.entrySet()) {
+        entry.setValue(true);
       }
       super.setValue(value);
     }
   }
 
+  @Override
+  public void removeObserver(@NonNull Observer<? super T> observer) {
+    Observer<? super T> proxy;
+    Observer<? super T> target;
+    if (observer instanceof ProtectedUnPeekLiveData.ObserverProxy) {
+      proxy = observer;
+      target = ((ObserverProxy) observer).getTarget();
+    } else {
+      proxy = observerProxyMap.get(observer);
+      target = (proxy != null) ? observer : null;
+    }
+    if (proxy != null && target != null) {
+      observerProxyMap.remove(target);
+      observerStateMap.remove(target);
+      super.removeObserver(proxy);
+    }
+  }
+
+  /**
+   * 手动将消息从内存中清空，
+   * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
+   */
   public void clear() {
     super.setValue(null);
   }
 
-  /**
-   * 通过反射，获取指定LiveData中的Observer对象
-   *
-   * @param liveData         指定的LiveData
-   * @param identityHashCode 想要获取的Observer对象的identityHashCode {@code System.identityHashCode}
-   * @return
-   */
-  private Observer<? super T> getObserver(@NonNull LiveData<T> liveData, @NonNull Integer identityHashCode) {
-
-    try {
-      Field field = LiveData.class.getDeclaredField("mObservers");
-      field.setAccessible(true);
-      SafeIterableMap<Observer<? super T>, Object> observers
-              = (SafeIterableMap<Observer<? super T>, Object>) field.get(liveData);
-      if (observers != null) {
-        for (Map.Entry<Observer<? super T>, Object> entry : observers) {
-          Observer<? super T> observer = entry.getKey();
-          if (System.identityHashCode(observer) == identityHashCode) {
-            return observer;
-          }
-        }
-      }
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (NoSuchFieldException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
 }
-
