@@ -56,7 +56,19 @@
 
 &nbsp;
 
+## Maven 依赖
 
+```groovy
+implementation 'com.kunminx.arch:unpeek-livedata:6.0.0-beta1'
+```
+
+> 温馨提示：
+>
+> 1.上述 implementation 的命名，我们已从 `archi` 改为 `arch`，请注意修改，
+>
+> 2.鉴于 Jcenter 的关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
+
+&nbsp;
 
 ## 最新更新动态
 
@@ -126,21 +138,6 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 
 &nbsp;
 
-## Maven 依赖
-
-```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:6.0.0-beta1'
-```
-
-> 温馨提示：
->
-> 1.上述 implementation 的命名，我们已从 `archi` 改为 `arch`，请注意修改，
->
-> 2.鉴于 Jcenter 的关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
-
-
-&nbsp;
-
 ## 谁在使用
 
 感谢小伙伴们对 “开源库使用情况” 匿名调查问卷的参与，截至 2021年4月25日，我们了解到
@@ -164,6 +161,12 @@ https://wj.qq.com/s2/8362688/124a/
 &nbsp;
 
 ## History
+
+### UnPeekLiveData v6.0
+
+Update since 2021.6.17
+
+&nbsp;
 
 ### UnPeekLiveData v5.0
 
