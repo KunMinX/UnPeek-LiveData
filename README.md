@@ -14,7 +14,7 @@
 
 由于本文的目标主要是来介绍 官方 Demo 现有解决方案的缺陷，以及经过 2 年迭代的趋于完美的解决方案，
 
-所以我假设在座的诸位 对最基本的背景缘由有一定的了解，知道：
+所以我们假设在座的诸位 对最基本的背景缘由有一定的了解，知道：
 
 > 为什么 LiveData 默认被设计为粘性事件
 
@@ -30,9 +30,9 @@
 
 ## 现有解决方案及各自缺陷
 
-在[《Jetpack MVVM 精讲》](https://juejin.im/post/5dafc49b6fb9a04e17209922)中我分别提到了 **Event 事件包装器、反射方式、SingleLiveEvent** 这三种方式来解决 “数据倒灌” 的问题。它们分别来自上文我们提到的[外网](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150)、[美团](https://tech.meituan.com/2018/07/26/android-livedatabus.html)的文章，和[官方最新 demo](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java)。
+在[《Jetpack MVVM 精讲》](https://juejin.im/post/5dafc49b6fb9a04e17209922)中我们分别提到了 **Event 事件包装器、反射方式、SingleLiveEvent** 这三种方式来解决 “数据倒灌” 的问题。它们分别来自上文我们提到的[外网](https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150)、[美团](https://tech.meituan.com/2018/07/26/android-livedatabus.html)的文章，和[官方最新 demo](https://github.com/android/architecture-samples/blob/dev-todo-mvvm-live/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/SingleLiveEvent.java)。
 
-但正如我在[《Jetpack MVVM 精讲》](https://juejin.im/post/5dafc49b6fb9a04e17209922)介绍的，它们分别存在如下问题：
+但正如我们在[《Jetpack MVVM 精讲》](https://juejin.im/post/5dafc49b6fb9a04e17209922)介绍的，它们分别存在如下问题：
 
 > **Event 事件包装器：**
 
