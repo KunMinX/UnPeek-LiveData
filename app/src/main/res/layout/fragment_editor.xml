@@ -89,7 +89,7 @@
             android:paddingTop="8dp"
             android:paddingRight="12dp"
             android:paddingBottom="8dp"
-            android:text="点击发送 Toast 在返回列表页后显示，此举用于检测延迟通知的效果"
+            android:text="点击发送 Toast 在返回列表页后显示，此举用于检测延迟通知的效果，当然，由于此处我们用的是 Smooth-Navigation（show hide 而非 replace），因而此处（Fragment）可以成功完成消息回调，但不具备延迟效果"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_locate" />
 

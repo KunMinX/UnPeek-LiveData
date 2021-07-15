@@ -2,7 +2,7 @@
 
 ## 前言
 
-很高兴见到你！我是[《Jetpack MVVM Best Practice》](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice)作者 KunMinX。
+大家好，我是[《Jetpack MVVM Best Practice》](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice)作者 KunMinX。
 
 今天提到的 “数据倒灌” 一词，是我为了方便理解和记忆 **“页面在 ‘二进宫’ 时收到旧数据推送” 的情况**，而在 2019 年 **自创并在网上传播的 对此类现象的概括**。
 
@@ -59,7 +59,7 @@
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:6.0.0-beta1'
+implementation 'com.kunminx.arch:unpeek-livedata:6.1.0-beta1'
 ```
 
 > 温馨提示：
@@ -71,6 +71,12 @@ implementation 'com.kunminx.arch:unpeek-livedata:6.0.0-beta1'
 &nbsp;
 
 ## 最新更新动态
+
+### UnPeekLiveData v6.1 特点
+
+感谢小伙伴 @[liweiGe](https://github.com/liweiGe) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/16) 中的启发，
+
+相较于上一版，我们在 V6.1 版源码中，将 state 演变为 ObserverProxy 的字段来管理，从而将 Map 合二为一，让代码逻辑进一步简化。
 
 ### UnPeekLiveData v6.0 特点
 
@@ -150,7 +156,7 @@ https://wj.qq.com/s2/8362688/124a/
 
 | 集团 / 公司          | 产品               |
 | -------------------- | ------------------ |
-| 腾讯音乐             | 即将上线，暂时保密 |
+| 腾讯音乐             | 即将更新，暂时保密 |
 | TCL                  | 内置应用，暂时保密 |
 | 左医科技             | 诊室听译机器人     |
 | BMW                  | Speech             |
@@ -161,6 +167,10 @@ https://wj.qq.com/s2/8362688/124a/
 &nbsp;
 
 ## History
+
+### UnPeekLiveData v6.1
+
+Update since 2021.7.15
 
 ### UnPeekLiveData v6.0
 
