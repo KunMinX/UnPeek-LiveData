@@ -34,8 +34,6 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode VERSION_CODE
-        versionName PUBLISH_VERSION
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
