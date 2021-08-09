@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 我们支持通过 clear 方法手动将消息从内存中清空，
  * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
  * <p>
+ * <p>
  * Create by KunMinX at 2021/6/17
  */
 public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
@@ -111,9 +112,8 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
     @Override
     public void onChanged(T t) {
-      ObserverProxy proxy = observerMap.get(target);
-      if (proxy != null && proxy.state) {
-        proxy.state = false;
+      if (state) {
+        state = false;
         if (t != null || isAllowNullValue) {
           target.onChanged(t);
         }
@@ -166,6 +166,8 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   public void removeObserver(@NonNull Observer<? super T> observer) {
     Observer<? super T> proxy;
     Observer<? super T> target;
+
+    //移除防倒灌的 ObserverProxy，否则就是移除粘性的 Observer
     if (observer instanceof ProtectedUnPeekLiveData.ObserverProxy) {
       proxy = observer;
       target = ((ObserverProxy) observer).target;
