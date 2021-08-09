@@ -104,7 +104,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
     public final Observer<? super T> target;
 
-    public boolean state;
+    public boolean allow;
 
     public ObserverProxy(Observer<? super T> target) {
       this.target = target;
@@ -112,8 +112,8 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
     @Override
     public void onChanged(T t) {
-      if (state) {
-        state = false;
+      if (allow) {
+        allow = false;
         if (t != null || isAllowNullValue) {
           target.onChanged(t);
         }
@@ -156,7 +156,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   protected void setValue(T value) {
     if (value != null || isAllowNullValue) {
       for (Map.Entry<Observer<? super T>, ObserverProxy> entry : observerMap.entrySet()) {
-        entry.getValue().state = true;
+        entry.getValue().allow = true;
       }
       super.setValue(value);
     }

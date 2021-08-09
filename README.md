@@ -59,7 +59,7 @@
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:6.1.0-beta1'
+implementation 'com.kunminx.arch:unpeek-livedata:6.1.2-beta1'
 ```
 
 > 温馨提示：
