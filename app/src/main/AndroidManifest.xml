@@ -28,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.EditorActivity" />
+        <activity android:name=".ui.MultiPageActivity" />
 
     </application>
 

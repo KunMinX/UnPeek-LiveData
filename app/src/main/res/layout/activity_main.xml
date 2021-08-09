@@ -25,7 +25,8 @@
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -33,21 +34,34 @@
             android:id="@+id/main_fragment_host"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
+            android:layout_height="0dp"
             app:defaultNavHost="true"
+            android:layout_weight="1"
             app:navGraph="@navigation/nav_graph" />
 
-        <ImageButton
-            android:id="@+id/btn_to_second_activity"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="28dp"
-            android:background="@color/transparent"
-            android:onClick="@{()->click.toSecondActivity()}"
-            android:src="@drawable/ic_add"
-            android:tint="@color/gray" />
+        <LinearLayout
+            android:layout_weight="0"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
-    </FrameLayout>
+            <Button
+                android:id="@+id/btn_to_second_activity"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:onClick="@{()->click.toSecondActivity()}"
+                android:text="Activity 回调测试" />
+
+            <Button
+                android:id="@+id/btn_to_multi_test"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:onClick="@{()->click.toMultiObserverTest()}"
+                android:text="多观察者测试" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 </layout>

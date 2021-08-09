@@ -31,6 +31,8 @@ public class SharedViewModel extends ViewModel {
 
   private final UnPeekLiveData<String> mTestDelayMsg = new UnPeekLiveData<>();
 
+  private final UnPeekLiveData<String> mDispatchString = new UnPeekLiveData<>();
+
   public ProtectedUnPeekLiveData<Moment> getMoment() {
     return mMoment;
   }
@@ -39,12 +41,20 @@ public class SharedViewModel extends ViewModel {
     return mTestDelayMsg;
   }
 
+  public ProtectedUnPeekLiveData<String> getDispatchString() {
+    return mDispatchString;
+  }
+
   public void requestMoment(Moment moment) {
     mMoment.setValue(moment);
   }
 
   public void requestTestDelayMsg(String s) {
     mTestDelayMsg.setValue(s);
+  }
+
+  public void requestDispatchString(String s) {
+    mDispatchString.setValue(s);
   }
 
 }

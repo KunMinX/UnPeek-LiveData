@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.kunminx.puremusic.ui.state.SenderViewModel" />
+
+        <variable
+            name="click"
+            type="com.kunminx.puremusic.ui.SenderFragment.ClickProxy" />
+
+    </data>
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:gravity="center"
+        android:onClick="@{()->click.addNumber()}"
+        android:text="@{String.valueOf(vm.number)}"
+        android:textSize="60sp"
+        tools:text="123">
+
+    </TextView>
+</layout>

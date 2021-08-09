@@ -35,33 +35,37 @@ import com.kunminx.puremusic.ui.state.MainViewModel;
 
 public class MainActivity extends BaseActivity {
 
-    private MainViewModel mState;
-    private SharedViewModel mEvent;
+  private MainViewModel mState;
+  private SharedViewModel mEvent;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mState = getActivityViewModel(MainViewModel.class);
-        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    mState = getActivityViewModel(MainViewModel.class);
+    mEvent = getApplicationScopeViewModel(SharedViewModel.class);
 
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.setClick(new ClickProxy());
+    ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+    binding.setClick(new ClickProxy());
 
-        mEvent.getMoment().observe(this, moment -> {
-            Toast.makeText(this, moment.getContent(), Toast.LENGTH_SHORT).show();
-        });
+    mEvent.getMoment().observe(this, moment -> {
+      Toast.makeText(this, moment.getContent(), Toast.LENGTH_SHORT).show();
+    });
 
-        mEvent.getTestDelayMsg().observe(this, s -> {
-            if (!TextUtils.isEmpty(s)) {
-                showLongToast(s);
-            }
-        });
+    mEvent.getTestDelayMsg().observe(this, s -> {
+      if (!TextUtils.isEmpty(s)) {
+        showLongToast(s);
+      }
+    });
+  }
+
+  public class ClickProxy {
+
+    public void toSecondActivity() {
+      startActivity(new Intent(MainActivity.this, EditorActivity.class));
     }
 
-    public class ClickProxy {
-
-        public void toSecondActivity() {
-            startActivity(new Intent(MainActivity.this, EditorActivity.class));
-        }
+    public void toMultiObserverTest() {
+      startActivity(new Intent(MainActivity.this, MultiPageActivity.class));
     }
+  }
 }
