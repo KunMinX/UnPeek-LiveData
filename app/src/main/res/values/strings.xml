@@ -2,7 +2,7 @@
     <string name="app_name">UnPeek-LiveData</string>
 
     <string name="moment_list">动态列表</string>
-    <string name="moment_content">刚刚在B站发表了最新一期的视频讲解，感兴趣的小伙伴可前往查阅</string>
+    <string name="moment_content">刚刚发行了最新一期的讲解，感兴趣的小伙伴可自行查阅</string>
 
     <string name="tip_of_enter_moment">请输入动态</string>
     <string name="save">保存</string>
