@@ -40,13 +40,13 @@
             app:navGraph="@navigation/nav_graph" />
 
         <HorizontalScrollView
+            android:layout_weight="0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_weight="0"
                 android:orientation="horizontal">
 
                 <Button
