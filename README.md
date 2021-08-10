@@ -82,11 +82,15 @@ implementation 'com.kunminx.arch:unpeek-livedata:7.0.0-beta1'
 
 > 具体可参见 UnPeekLiveData 最新源码及注释的说明。
 
+&nbsp;
+
 ### UnPeekLiveData v6.1 特点
 
 感谢小伙伴 @[liweiGe](https://github.com/liweiGe) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/16) 中的启发，
 
 相较于上一版，我们在 V6.1 版源码中，将 state 演变为 ObserverProxy 的字段来管理，从而将 Map 合二为一，让代码逻辑进一步简化。
+
+&nbsp;
 
 ### UnPeekLiveData v6.0 特点
 
