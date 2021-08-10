@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -150,20 +150,12 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
         return false;
       }
       ObserverWrapper that = (ObserverWrapper) o;
-      return isObjectEquals(observer, that.observer);
+      return Objects.equals(observer, that.observer);
     }
 
     @Override
     public int hashCode() {
-      return getObjectHash(observer);
-    }
-
-    private boolean isObjectEquals(Object a, Object b) {
-      return (a == b) || (a != null && a.equals(b));
-    }
-
-    private int getObjectHash(Object... values) {
-      return Arrays.hashCode(values);
+      return Objects.hash(observer);
     }
   }
 
