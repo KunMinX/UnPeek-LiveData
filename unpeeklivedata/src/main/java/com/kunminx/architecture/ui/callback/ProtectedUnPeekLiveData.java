@@ -39,7 +39,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
-  private final AtomicInteger currentVersion = new AtomicInteger(-1);
+  private final static int START_VERSION = -1;
+
+  private final AtomicInteger currentVersion = new AtomicInteger(START_VERSION);
 
   protected boolean isAllowNullValue;
 
@@ -89,7 +91,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    * @param observer
    */
   public void observeSticky(@NonNull LifecycleOwner owner, @NonNull Observer<T> observer) {
-    super.observe(owner, observer);
+    super.observe(owner, createObserverWrapper(observer, START_VERSION));
   }
 
   /**
@@ -104,9 +106,8 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    * @param observer
    */
   public void observeStickyForever(@NonNull Observer<? super T> observer) {
-    super.observeForever(observer);
+    super.observeForever(createObserverWrapper(observer, START_VERSION));
   }
-
 
   @Override
   protected void setValue(T value) {
@@ -126,7 +127,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    */
   class ObserverWrapper implements Observer<T> {
     private final Observer<? super T> observer;
-    private int mVersion = -1;
+    private int mVersion = START_VERSION;
 
     public ObserverWrapper(@NonNull Observer<? super T> observer, int mVersion) {
       this.observer = observer;
