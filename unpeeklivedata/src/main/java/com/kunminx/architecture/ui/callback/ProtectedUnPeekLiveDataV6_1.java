@@ -42,7 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Create by KunMinX at 2021/6/17
  */
-public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
+@Deprecated
+public class ProtectedUnPeekLiveDataV6_1<T> extends LiveData<T> {
 
   private final static String TAG = "V6Test";
 
@@ -168,7 +169,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     Observer<? super T> target;
 
     //移除防倒灌的 ObserverProxy，否则就是移除粘性的 Observer
-    if (observer instanceof ProtectedUnPeekLiveData.ObserverProxy) {
+    if (observer instanceof ProtectedUnPeekLiveDataV6_1.ObserverProxy) {
       proxy = observer;
       target = ((ObserverProxy) observer).target;
     } else {
