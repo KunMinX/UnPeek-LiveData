@@ -1,14 +1,11 @@
 package com.kunminx.architecture.ui.callback;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import java.util.Objects;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -143,7 +140,6 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
       }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
@@ -154,13 +150,20 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
         return false;
       }
       ObserverWrapper that = (ObserverWrapper) o;
-      return Objects.equals(observer, that.observer);
+      return isObjectEquals(observer, that.observer);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public int hashCode() {
-      return Objects.hash(observer);
+      return getObjectHash(observer);
+    }
+
+    private boolean isObjectEquals(Object a, Object b) {
+      return (a == b) || (a != null && a.equals(b));
+    }
+
+    private int getObjectHash(Object... values) {
+      return Arrays.hashCode(values);
     }
   }
 
@@ -180,4 +183,5 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   public void clear() {
     super.setValue(null);
   }
+
 }
