@@ -182,9 +182,17 @@ https://wj.qq.com/s2/8362688/124a/
 
 ## History
 
+### UnPeekLiveData v7.0
+
+Update since 2021.8.10
+
+&nbsp;
+
 ### UnPeekLiveData v6.1
 
 Update since 2021.7.15
+
+&nbsp;
 
 ### UnPeekLiveData v6.0
 
