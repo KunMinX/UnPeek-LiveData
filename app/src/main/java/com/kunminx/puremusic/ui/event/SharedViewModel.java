@@ -18,8 +18,8 @@ package com.kunminx.puremusic.ui.event;
 
 import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
 import com.kunminx.architecture.ui.callback.UnPeekLiveData;
-import com.kunminx.architecture.ui.callback.MutableUnPeekLiveData;
 import com.kunminx.puremusic.data.bean.Moment;
 
 /**
@@ -27,21 +27,21 @@ import com.kunminx.puremusic.data.bean.Moment;
  */
 public class SharedViewModel extends ViewModel {
 
-  private final MutableUnPeekLiveData<Moment> mMoment = new MutableUnPeekLiveData<>();
+  private final UnPeekLiveData<Moment> mMoment = new UnPeekLiveData<>();
 
-  private final MutableUnPeekLiveData<String> mTestDelayMsg = new MutableUnPeekLiveData<>();
+  private final UnPeekLiveData<String> mTestDelayMsg = new UnPeekLiveData<>();
 
-  private final MutableUnPeekLiveData<String> mDispatchString = new MutableUnPeekLiveData<>();
+  private final UnPeekLiveData<String> mDispatchString = new UnPeekLiveData<>();
 
-  public UnPeekLiveData<Moment> getMoment() {
+  public ProtectedUnPeekLiveData<Moment> getMoment() {
     return mMoment;
   }
 
-  public UnPeekLiveData<String> getTestDelayMsg() {
+  public ProtectedUnPeekLiveData<String> getTestDelayMsg() {
     return mTestDelayMsg;
   }
 
-  public UnPeekLiveData<String> getDispatchString() {
+  public ProtectedUnPeekLiveData<String> getDispatchString() {
     return mDispatchString;
   }
 

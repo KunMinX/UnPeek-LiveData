@@ -59,7 +59,7 @@
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:6.1.2-beta1'
+implementation 'com.kunminx.arch:unpeek-livedata:7.0.0-beta1'
 ```
 
 > 温馨提示：
@@ -71,6 +71,16 @@ implementation 'com.kunminx.arch:unpeek-livedata:6.1.2-beta1'
 &nbsp;
 
 ## 最新更新动态
+
+### UnPeekLiveData v7.0 特点
+
+感谢小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/17) 中的分享，
+
+相较于上一版，我们在 V7 版源码中，通过在 "代理类/包装类" 中自行维护一个版本号，在 UnPeekLiveData 中维护一个当前版本号，分别来在 setValue 和 Observe 的时机来改变和对齐版本号，如此使得无需另外管理一个 Observer map，从而进一步规避了内存管理的问题，
+
+同时这也是继 V6 版源码以来，最简的源码设计，方便阅读理解和后续修改。
+
+> 具体可参见 UnPeekLiveData 最新源码及注释的说明。
 
 ### UnPeekLiveData v6.1 特点
 
