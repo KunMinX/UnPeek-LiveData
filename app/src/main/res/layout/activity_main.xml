@@ -39,37 +39,40 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graph" />
 
-        <LinearLayout
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="0"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btn_to_second_activity"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_weight="1"
-                android:onClick="@{()->click.toSecondActivity()}"
-                android:text="Activity 回调测试" />
+                android:layout_weight="0"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btn_to_multi_test"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:onClick="@{()->click.toMultiObserverTest()}"
-                android:text="多观察者测试" />
+                <Button
+                    android:id="@+id/btn_to_second_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:onClick="@{()->click.toSecondActivity()}"
+                    android:text="Activity 回调测试" />
 
-            <Button
-                android:id="@+id/btn_to_forever_test"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:onClick="@{()->click.toObserverForeverTest()}"
-                android:text="forever 观察者测试" />
+                <Button
+                    android:id="@+id/btn_to_multi_test"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:onClick="@{()->click.toMultiObserverTest()}"
+                    android:text="多观察者测试" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/btn_to_forever_test"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:onClick="@{()->click.toObserverForeverTest()}"
+                    android:text="forever 观察者测试" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
 
     </LinearLayout>
 </layout>
