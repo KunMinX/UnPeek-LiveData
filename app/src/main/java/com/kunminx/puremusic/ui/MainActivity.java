@@ -67,5 +67,9 @@ public class MainActivity extends BaseActivity {
     public void toMultiObserverTest() {
       startActivity(new Intent(MainActivity.this, MultiPageActivity.class));
     }
+
+    public void toObserverForeverTest() {
+      startActivity(new Intent(MainActivity.this, ObserveForeverActivity.class));
+    }
   }
 }
