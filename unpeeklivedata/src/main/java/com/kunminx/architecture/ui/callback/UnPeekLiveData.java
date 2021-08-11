@@ -38,8 +38,8 @@ public class UnPeekLiveData<T> extends ProtectedUnPeekLiveData<T> {
       return this;
     }
 
-    public ProtectedUnPeekLiveData<T> create() {
-      ProtectedUnPeekLiveData<T> liveData = new ProtectedUnPeekLiveData<>();
+    public UnPeekLiveData<T> create() {
+      UnPeekLiveData<T> liveData = new UnPeekLiveData<>();
       liveData.isAllowNullValue = this.isAllowNullValue;
       return liveData;
     }
