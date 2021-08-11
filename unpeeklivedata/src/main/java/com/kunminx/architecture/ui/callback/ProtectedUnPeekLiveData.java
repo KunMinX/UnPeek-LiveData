@@ -91,16 +91,16 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     super.observeForever(createObserverWrapper(observer, START_VERSION));
   }
 
+  /**
+   * TODO tip：只需重写 setValue
+   * postValue 最终还是会经过这里
+   *
+   * @param value value
+   */
   @Override
   protected void setValue(T value) {
     currentVersion.getAndIncrement();
     super.setValue(value);
-  }
-
-  @Override
-  protected void postValue(T value) {
-    currentVersion.getAndIncrement();
-    super.postValue(value);
   }
 
   /**
