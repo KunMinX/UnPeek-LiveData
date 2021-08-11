@@ -46,7 +46,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   protected boolean isAllowNullValue;
 
   /**
-   * TODO 当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期敏感" 的非粘性消息
+   * TODO tip：当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期敏感" 的非粘性消息
    * <p>
    * state 是可变且私用的，event 是只读且公用的，
    * state 的倒灌是应景的，event 倒灌是不符预期的，
@@ -54,8 +54,8 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
    * https://xiaozhuanlan.com/topic/2049857631
    *
-   * @param owner
-   * @param observer
+   * @param owner    activity 传入 this，fragment 建议传入 getViewLifecycleOwner
+   * @param observer observer
    */
   @Override
   public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
@@ -63,15 +63,9 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   }
 
   /**
-   * TODO 当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期不敏感" 的非粘性消息
-   * <p>
-   * state 是可变且私用的，event 是只读且公用的，
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
-   * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * TODO tip：当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期不敏感" 的非粘性消息
    *
-   * @param observer
+   * @param observer observer
    */
   @Override
   public void observeForever(@NonNull Observer<? super T> observer) {
@@ -79,31 +73,19 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   }
 
   /**
-   * TODO 当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期敏感" 的粘性消息
-   * <p>
-   * state 是可变且私用的，event 是只读且公用的，
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
-   * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * TODO tip：当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期敏感" 的粘性消息
    *
-   * @param owner
-   * @param observer
+   * @param owner    activity 传入 this，fragment 建议传入 getViewLifecycleOwner
+   * @param observer observer
    */
   public void observeSticky(@NonNull LifecycleOwner owner, @NonNull Observer<T> observer) {
     super.observe(owner, createObserverWrapper(observer, START_VERSION));
   }
 
   /**
-   * TODO 当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期不敏感" 的粘性消息
-   * <p>
-   * state 是可变且私用的，event 是只读且公用的
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
-   * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * TODO tip：当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期不敏感" 的粘性消息
    *
-   * @param observer
+   * @param observer observer
    */
   public void observeStickyForever(@NonNull Observer<? super T> observer) {
     super.observeForever(createObserverWrapper(observer, START_VERSION));
@@ -122,6 +104,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   }
 
   /**
+   * TODO tip：
    * 1.添加一个包装类，自己维护一个版本号判断，用于无需 map 的帮助也能逐一判断消费情况
    * 2.重写 equals 方法和 hashCode，在用于手动 removeObserver 时，忽略版本号的变化引起的变化
    */
@@ -170,6 +153,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   }
 
   /**
+   * TODO tip：
    * 手动将消息从内存中清空，
    * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
    */
