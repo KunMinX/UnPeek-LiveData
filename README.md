@@ -59,7 +59,7 @@
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.0.5-beta1'
+implementation 'com.kunminx.arch:unpeek-livedata:7.1.0-beta1'
 ```
 
 > 温馨提示：
@@ -71,6 +71,12 @@ implementation 'com.kunminx.arch:unpeek-livedata:7.0.5-beta1'
 &nbsp;
 
 ## 最新更新动态
+
+### UnPeekLiveData v7.1 特点
+
+修复 removeObserver 潜在的内存泄漏。
+
+&nbsp;
 
 ### UnPeekLiveData v7.0 特点
 

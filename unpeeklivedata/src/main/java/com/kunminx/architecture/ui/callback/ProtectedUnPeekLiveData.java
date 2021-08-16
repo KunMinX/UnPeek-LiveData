@@ -1,5 +1,7 @@
 package com.kunminx.architecture.ui.callback;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -69,7 +71,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    */
   @Override
   public void observeForever(@NonNull Observer<? super T> observer) {
-    super.observeForever(createObserverWrapper(observer, currentVersion.get()));
+    super.observeForever(createObserverForeverWrapper(observer, currentVersion.get()));
   }
 
   /**
@@ -88,7 +90,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    * @param observer observer
    */
   public void observeStickyForever(@NonNull Observer<? super T> observer) {
-    super.observeForever(createObserverWrapper(observer, START_VERSION));
+    super.observeForever(createObserverForeverWrapper(observer, START_VERSION));
   }
 
   /**
@@ -109,18 +111,24 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    * 2.重写 equals 方法和 hashCode，在用于手动 removeObserver 时，忽略版本号的变化引起的变化
    */
   class ObserverWrapper implements Observer<T> {
-    private final Observer<? super T> observer;
+    private final Observer<? super T> mObserver;
     private int mVersion = START_VERSION;
+    private boolean mIsForever;
 
-    public ObserverWrapper(@NonNull Observer<? super T> observer, int mVersion) {
-      this.observer = observer;
-      this.mVersion = mVersion;
+    public ObserverWrapper(@NonNull Observer<? super T> observer, int version, boolean isForever) {
+      this(observer, version);
+      this.mIsForever = isForever;
+    }
+
+    public ObserverWrapper(@NonNull Observer<? super T> observer, int version) {
+      this.mObserver = observer;
+      this.mVersion = version;
     }
 
     @Override
     public void onChanged(T t) {
       if (currentVersion.get() > mVersion && (t != null || isAllowNullValue)) {
-        observer.onChanged(t);
+        mObserver.onChanged(t);
       }
     }
 
@@ -134,18 +142,32 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
         return false;
       }
       ObserverWrapper that = (ObserverWrapper) o;
-      return Objects.equals(observer, that.observer);
+      return Objects.equals(mObserver, that.mObserver);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(observer);
+      return Objects.hash(mObserver);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+      return mIsForever ? "IS_FOREVER" : "";
     }
   }
 
   @Override
   public void removeObserver(@NonNull Observer<? super T> observer) {
-    super.removeObserver(createObserverWrapper(observer, -1));
+    if (TextUtils.isEmpty(observer.toString())) {
+      super.removeObserver(observer);
+    } else {
+      super.removeObserver(createObserverWrapper(observer, -1));
+    }
+  }
+
+  private ObserverWrapper createObserverForeverWrapper(@NonNull Observer<? super T> observer, int version) {
+    return new ObserverWrapper(observer, version, true);
   }
 
   private ObserverWrapper createObserverWrapper(@NonNull Observer<? super T> observer, int version) {
