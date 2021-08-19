@@ -50,7 +50,6 @@ public class EditorActivity extends BaseActivity {
         binding.setLifecycleOwner(this);
         binding.setVm(mState);
         binding.setClick(new ClickProxy());
-
     }
 
     public class ClickProxy implements Toolbar.OnMenuItemClickListener {

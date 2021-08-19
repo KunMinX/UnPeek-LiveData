@@ -51,6 +51,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_tip"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="12dp"

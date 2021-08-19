@@ -16,6 +16,7 @@
 
 package com.kunminx.puremusic.ui.event;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 
 import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
@@ -57,4 +58,7 @@ public class SharedViewModel extends ViewModel {
     mDispatchString.setValue(s);
   }
 
+  public void requestRemoveObservers(LifecycleOwner owner){
+    mDispatchString.removeObservers(owner);
+  }
 }

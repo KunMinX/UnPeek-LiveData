@@ -7,18 +7,41 @@
         <variable
             name="vm"
             type="com.kunminx.puremusic.ui.state.ObserverViewModel" />
-        
+
     </data>
 
-    <TextView
-        android:id="@+id/tv"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:gravity="center"
-        android:text="@{vm.number}"
-        android:textSize="60sp"
-        tools:text="123">
+        android:orientation="vertical">
 
-    </TextView>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="Observer"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:text="@{vm.number}"
+            android:textSize="60sp"
+            tools:text="123" />
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="remove_Observers" />
+
+    </LinearLayout>
+
+
 </layout>

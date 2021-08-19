@@ -36,6 +36,11 @@ public class ObserverFragment extends BaseFragment {
     FragmentObserverBinding binding = FragmentObserverBinding.bind(view);
     binding.setLifecycleOwner(this);
     binding.setVm(mState);
+
+    binding.btn.setOnClickListener(v -> {
+      mEvent.requestRemoveObservers(getViewLifecycleOwner());
+    });
+
     return view;
   }
 
