@@ -43,7 +43,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
   private final static int START_VERSION = -1;
 
-  private final AtomicInteger currentVersion = new AtomicInteger(START_VERSION);
+  private final AtomicInteger mCurrentVersion = new AtomicInteger(START_VERSION);
 
   protected boolean isAllowNullValue;
 
@@ -61,7 +61,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    */
   @Override
   public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-    super.observe(owner, createObserverWrapper(observer, currentVersion.get()));
+    super.observe(owner, createObserverWrapper(observer, mCurrentVersion.get()));
   }
 
   /**
@@ -71,7 +71,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    */
   @Override
   public void observeForever(@NonNull Observer<? super T> observer) {
-    super.observeForever(createObserverForeverWrapper(observer, currentVersion.get()));
+    super.observeForever(createObserverForeverWrapper(observer, mCurrentVersion.get()));
   }
 
   /**
@@ -101,7 +101,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    */
   @Override
   protected void setValue(T value) {
-    currentVersion.getAndIncrement();
+    mCurrentVersion.getAndIncrement();
     super.setValue(value);
   }
 
@@ -127,7 +127,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
     @Override
     public void onChanged(T t) {
-      if (currentVersion.get() > mVersion && (t != null || isAllowNullValue)) {
+      if (mCurrentVersion.get() > mVersion && (t != null || isAllowNullValue)) {
         mObserver.onChanged(t);
       }
     }
@@ -162,7 +162,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     if (TextUtils.isEmpty(observer.toString())) {
       super.removeObserver(observer);
     } else {
-      super.removeObserver(createObserverWrapper(observer, -1));
+      super.removeObserver(createObserverWrapper(observer, START_VERSION));
     }
   }
 

@@ -58,7 +58,7 @@ public class SharedViewModel extends ViewModel {
     mDispatchString.setValue(s);
   }
 
-  public void requestRemoveObservers(LifecycleOwner owner){
+  public void requestRemoveObservers(LifecycleOwner owner) {
     mDispatchString.removeObservers(owner);
   }
 }
