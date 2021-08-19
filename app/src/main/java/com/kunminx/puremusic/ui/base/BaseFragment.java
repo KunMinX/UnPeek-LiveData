@@ -17,7 +17,6 @@
 package com.kunminx.puremusic.ui.base;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -39,89 +38,66 @@ import com.kunminx.puremusic.App;
  */
 public abstract class BaseFragment extends Fragment {
 
-    protected AppCompatActivity mActivity;
-    private ViewModelProvider mFragmentProvider;
-    private ViewModelProvider mActivityProvider;
-    private ViewModelProvider mApplicationProvider;
+  protected AppCompatActivity mActivity;
+  private ViewModelProvider mFragmentProvider;
+  private ViewModelProvider mActivityProvider;
+  private ViewModelProvider mApplicationProvider;
 
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        mActivity = (AppCompatActivity) context;
+  @Override
+  public void onAttach(@NonNull Context context) {
+    super.onAttach(context);
+    mActivity = (AppCompatActivity) context;
+  }
+
+  public boolean isDebug() {
+    return mActivity.getApplicationContext().getApplicationInfo() != null &&
+            (mActivity.getApplicationContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+  }
+
+  protected void showLongToast(String text) {
+    Toast.makeText(mActivity.getApplicationContext(), text, Toast.LENGTH_LONG).show();
+  }
+
+  protected void showShortToast(String text) {
+    Toast.makeText(mActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+  }
+
+  protected void showLongToast(int stringRes) {
+    showLongToast(mActivity.getApplicationContext().getString(stringRes));
+  }
+
+  protected void showShortToast(int stringRes) {
+    showShortToast(mActivity.getApplicationContext().getString(stringRes));
+  }
+
+  protected <T extends ViewModel> T getFragmentViewModel(@NonNull Class<T> modelClass) {
+    if (mFragmentProvider == null) {
+      mFragmentProvider = new ViewModelProvider(this);
     }
+    return mFragmentProvider.get(modelClass);
+  }
 
-    public boolean isDebug() {
-        return mActivity.getApplicationContext().getApplicationInfo() != null &&
-                (mActivity.getApplicationContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+  protected <T extends ViewModel> T getActivityViewModel(@NonNull Class<T> modelClass) {
+    if (mActivityProvider == null) {
+      mActivityProvider = new ViewModelProvider(mActivity);
     }
+    return mActivityProvider.get(modelClass);
+  }
 
-    protected void showLongToast(String text) {
-        Toast.makeText(mActivity.getApplicationContext(), text, Toast.LENGTH_LONG).show();
+  protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
+    if (mApplicationProvider == null) {
+      mApplicationProvider = new ViewModelProvider((App) mActivity.getApplicationContext());
     }
+    return mApplicationProvider.get(modelClass);
+  }
 
-    protected void showShortToast(String text) {
-        Toast.makeText(mActivity.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-    }
+  protected NavController nav() {
+    return NavHostFragment.findNavController(this);
+  }
 
-    protected void showLongToast(int stringRes) {
-        showLongToast(mActivity.getApplicationContext().getString(stringRes));
-    }
-
-    protected void showShortToast(int stringRes) {
-        showShortToast(mActivity.getApplicationContext().getString(stringRes));
-    }
-
-    protected <T extends ViewModel> T getFragmentViewModel(@NonNull Class<T> modelClass) {
-        if (mFragmentProvider == null) {
-            mFragmentProvider = new ViewModelProvider(this);
-        }
-        return mFragmentProvider.get(modelClass);
-    }
-
-    protected <T extends ViewModel> T getActivityViewModel(@NonNull Class<T> modelClass) {
-        if (mActivityProvider == null) {
-            mActivityProvider = new ViewModelProvider(mActivity);
-        }
-        return mActivityProvider.get(modelClass);
-    }
-
-    protected <T extends ViewModel> T getApplicationScopeViewModel(@NonNull Class<T> modelClass) {
-        if (mApplicationProvider == null) {
-            mApplicationProvider = new ViewModelProvider(
-                    (App) mActivity.getApplicationContext(), getApplicationFactory(mActivity));
-        }
-        return mApplicationProvider.get(modelClass);
-    }
-
-    private ViewModelProvider.Factory getApplicationFactory(Activity activity) {
-        checkActivity(this);
-        Application application = checkApplication(activity);
-        return ViewModelProvider.AndroidViewModelFactory.getInstance(application);
-    }
-
-    private Application checkApplication(Activity activity) {
-        Application application = activity.getApplication();
-        if (application == null) {
-            throw new IllegalStateException("Your activity/fragment is not yet attached to "
-                    + "Application. You can't request ViewModel before onCreate call.");
-        }
-        return application;
-    }
-
-    private void checkActivity(Fragment fragment) {
-        Activity activity = fragment.getActivity();
-        if (activity == null) {
-            throw new IllegalStateException("Can't create ViewModelProvider for detached fragment");
-        }
-    }
-
-    protected NavController nav() {
-        return NavHostFragment.findNavController(this);
-    }
-
-    protected void toggleSoftInput() {
-        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-    }
+  protected void toggleSoftInput() {
+    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+  }
 }
