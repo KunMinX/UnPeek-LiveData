@@ -51,6 +51,14 @@ public class ObserveForeverFragment extends BaseFragment {
     });
   }
 
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    if (mObserver != null) {
+      mEvent.getDispatchString().removeObserver(mObserver);
+    }
+  }
+
   public class ClickProxy {
     public void removeObserver() {
       if (mObserver != null) {
