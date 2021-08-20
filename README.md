@@ -72,6 +72,10 @@ implementation 'com.kunminx.arch:unpeek-livedata:7.1.0-beta1'
 
 ## 最新更新动态
 
+### UnPeekLiveData v7.2 特点
+
+感谢小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/21) 的分享，通过更简便的方式来修复 v7.0 的 removeObserver 内存泄漏问题。
+
 ### UnPeekLiveData v7.1 特点
 
 修复 removeObserver 潜在的内存泄漏。

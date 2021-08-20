@@ -1,5 +1,7 @@
 package com.kunminx.architecture.ui.callback;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -37,7 +39,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * Create by RebornWolfman, KunMinX at 2021/8/10
  */
-public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
+@Deprecated
+public class ProtectedUnPeekLiveDataV7_1<T> extends LiveData<T> {
 
   private final static int START_VERSION = -1;
 
@@ -69,7 +72,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    */
   @Override
   public void observeForever(@NonNull Observer<? super T> observer) {
-    super.observeForever(createObserverWrapper(observer, mCurrentVersion.get()));
+    super.observeForever(createObserverForeverWrapper(observer, mCurrentVersion.get()));
   }
 
   /**
@@ -88,7 +91,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    * @param observer observer
    */
   public void observeStickyForever(@NonNull Observer<? super T> observer) {
-    super.observeForever(createObserverWrapper(observer, START_VERSION));
+    super.observeForever(createObserverForeverWrapper(observer, START_VERSION));
   }
 
   /**
@@ -111,6 +114,12 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   class ObserverWrapper implements Observer<T> {
     private final Observer<? super T> mObserver;
     private int mVersion = START_VERSION;
+    private boolean mIsForever;
+
+    public ObserverWrapper(@NonNull Observer<? super T> observer, int version, boolean isForever) {
+      this(observer, version);
+      this.mIsForever = isForever;
+    }
 
     public ObserverWrapper(@NonNull Observer<? super T> observer, int version) {
       this.mObserver = observer;
@@ -141,23 +150,25 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
     public int hashCode() {
       return Objects.hash(mObserver);
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+      return mIsForever ? "IS_FOREVER" : "";
+    }
   }
 
-  /**
-   * TODO tip：
-   * 通过 ObserveForever 的 Observe，需要记得 remove，不然存在 LiveData 内存泄漏的隐患，
-   * 保险的做法是，在页面的 onDestroy 环节安排 removeObserver 代码，
-   * 具体可参见 app module 中 ObserveForeverFragment 的案例
-   *
-   * @param observer observeForever 注册的 observer，或 observe 注册的 observerWrapper
-   */
   @Override
   public void removeObserver(@NonNull Observer<? super T> observer) {
-    if (observer.getClass().isAssignableFrom(ObserverWrapper.class)) {
+    if (TextUtils.isEmpty(observer.toString())) {
       super.removeObserver(observer);
     } else {
       super.removeObserver(createObserverWrapper(observer, START_VERSION));
     }
+  }
+
+  private ObserverWrapper createObserverForeverWrapper(@NonNull Observer<? super T> observer, int version) {
+    return new ObserverWrapper(observer, version, true);
   }
 
   private ObserverWrapper createObserverWrapper(@NonNull Observer<? super T> observer, int version) {
