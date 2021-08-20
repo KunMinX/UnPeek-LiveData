@@ -59,7 +59,7 @@
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.1.0-beta1'
+implementation 'com.kunminx.arch:unpeek-livedata:7.2.0-beta1'
 ```
 
 > 温馨提示：
@@ -74,7 +74,9 @@ implementation 'com.kunminx.arch:unpeek-livedata:7.1.0-beta1'
 
 ### UnPeekLiveData v7.2 特点
 
-感谢小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/21) 的分享，通过更简便的方式来修复 v7.0 的 removeObserver 内存泄漏问题。
+感谢小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/21) 的分享，通过更简便的方式来修复 v7.0 潜在的 removeObserver 内存泄漏问题。
+
+&nbsp;
 
 ### UnPeekLiveData v7.1 特点
 
@@ -170,7 +172,7 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 
 ## 谁在使用
 
-感谢小伙伴们对 “开源库使用情况” 匿名调查问卷的参与，截至 2021年4月25日，我们了解到
+感谢小伙伴们对 “开源库使用情况” 匿名调查问卷的参与，截至 2021年4月25日，通过小伙伴的私下反馈和调查问卷我们了解到
 
 包括 “腾讯音乐、BMW、TCL” 在内的诸多知名厂商的软件，都参考过我们开源的 [Jetpack MVVM Scaffold](https://github.com/KunMinX/Jetpack-MVVM-Scaffold) 架构模式，以及正在使用我们维护的 UnPeek-LiveData 等框架。
 
@@ -192,33 +194,17 @@ https://wj.qq.com/s2/8362688/124a/
 
 ## History
 
-### UnPeekLiveData v7.0
-
-Update since 2021.8.10
-
-&nbsp;
-
-### UnPeekLiveData v6.1
-
-Update since 2021.7.15
-
-&nbsp;
-
-### UnPeekLiveData v6.0
-
-Update since 2021.6.17
-
-&nbsp;
-
-### UnPeekLiveData v5.0
-
-Update since 2021.4.21
-
-&nbsp;
-
-### UnPeekLiveData v4.0
-
-Update since 2020.10.16
+| 版本                | 更新日期   |
+| ------------------- | ---------- |
+| UnPeekLiveData v7.2 | 2021.8.20  |
+| UnPeekLiveData v7.1 | 2021.8.16  |
+| UnPeekLiveData v7   | 2021.8.10  |
+| UnPeekLiveData v6.1 | 2021.7.15  |
+| UnPeekLiveData v6   | 2021.6.17  |
+| UnPeekLiveData v5   | 2021.4.21  |
+| UnPeekLiveData v4.4 | 2021.1.27  |
+| UnPeekLiveData v4.2 | 2020.12.15 |
+| UnPeekLiveData v4   | 2020.10.16 |
 
 &nbsp;
 
