@@ -14,16 +14,30 @@
 
     </data>
 
-    <TextView
-        android:id="@+id/tv"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:gravity="center"
-        android:onClick="@{()->click.addNumber()}"
-        android:text="@{String.valueOf(vm.number)}"
-        android:textSize="60sp"
-        tools:text="123">
+        android:orientation="vertical">
 
-    </TextView>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="Requester"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:onClick="@{()->click.addNumber()}"
+            android:text="@{String.valueOf(vm.number)}"
+            android:textSize="60sp"
+            tools:text="123" />
+
+    </LinearLayout>
 </layout>
