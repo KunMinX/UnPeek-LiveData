@@ -40,35 +40,65 @@
             app:navGraph="@navigation/nav_graph" />
 
         <HorizontalScrollView
-            android:layout_weight="0"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="0">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="42dp"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:id="@+id/btn_to_second_activity"
+                    drawable_radius="@{8}"
+                    drawable_strokeColor="@{0xFF1E90FF}"
+                    drawable_strokeWidth="@{1}"
                     android:layout_width="wrap_content"
-                    android:layout_height="60dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center"
                     android:onClick="@{()->click.toSecondActivity()}"
-                    android:text="Activity 回调测试" />
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="Activity 回调测试"
+                    android:textColor="@color/blue"
+                    android:textSize="12sp" />
 
-                <Button
+                <TextView
                     android:id="@+id/btn_to_multi_test"
+                    drawable_radius="@{8}"
+                    drawable_strokeColor="@{0xFF1E90FF}"
+                    drawable_strokeWidth="@{1}"
                     android:layout_width="wrap_content"
-                    android:layout_height="60dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center"
                     android:onClick="@{()->click.toMultiObserverTest()}"
-                    android:text="多观察者测试" />
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="多观察者测试"
+                    android:textColor="@color/blue"
+                    android:textSize="12sp" />
 
-                <Button
+                <TextView
                     android:id="@+id/btn_to_forever_test"
+                    drawable_radius="@{8}"
+                    drawable_strokeColor="@{0xFF1E90FF}"
+                    drawable_strokeWidth="@{1}"
                     android:layout_width="wrap_content"
-                    android:layout_height="60dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center"
                     android:onClick="@{()->click.toObserverForeverTest()}"
-                    android:text="forever 观察者测试" />
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="forever 观察者测试"
+                    android:textColor="@color/blue"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
