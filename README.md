@@ -4,7 +4,7 @@
 
 大家好，我是[《Jetpack MVVM Best Practice》](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice)作者 KunMinX。
 
-今天提到的 “数据倒灌” 一词，缘于我为了方便理解和记忆 **“页面在 ‘二进宫’ 时收到旧数据推送” 的情况**，而在 2019 年 **自创并在网上传播的 对此类现象的概括**。
+今天提到的 “数据倒灌” 一词，缘于我为了方便理解和记忆 **“页面在 ‘二进宫’ 时收到旧数据推送” 的情况**，而在 2019 年 **自创并在网上传播的 关于此类现象的概括**。
 
 它主要发生在：通过 SharedViewModel + LiveData 的组合 来解决页面通信的场景。
 
@@ -101,7 +101,7 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 
 ## 谁在使用
 
-感谢小伙伴们对 “开源库使用情况” 匿名调查问卷的参与，通过小伙伴的私下反馈和调查问卷我们了解到
+通过小伙伴的私下反馈和调查问卷我们了解到
 
 包括 “腾讯音乐、BMW、TCL” 在内的诸多知名厂商的软件，都参考过我们开源的 [Jetpack MVVM Scaffold](https://github.com/KunMinX/Jetpack-MVVM-Scaffold) 架构模式，以及正在使用我们维护的 UnPeek-LiveData 等框架。
 
@@ -110,7 +110,7 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 
 | 集团 / 公司          | 产品               |
 | -------------------- | ------------------ |
-| 腾讯音乐             | 即将更新，暂时保密 |
+| 腾讯音乐             | 即将更新，敬请期待 |
 | TCL                  | 内置应用，暂时保密 |
 | 左医科技             | 诊室听译机器人     |
 | BMW                  | Speech             |
