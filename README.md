@@ -10,7 +10,7 @@
 
 &nbsp;
 
-## 本文的目标
+## 背景
 
 由于本文的目标主要是来介绍 官方 Demo 现有解决方案的缺陷，以及经过 2 年迭代的趋于完美的解决方案，
 
@@ -56,6 +56,29 @@
 
 &nbsp;
 
+## UnPeek-LiveData 特点
+
+> 1.一条消息能被多个观察者消费（since v1.0）
+
+> 2.消息被所有观察者消费完毕后才开始阻止倒灌（since v4.0）
+
+> 3.可以通过 clear 方法手动将消息从内存中移除（since v4.0）
+
+> 4.让非入侵设计成为可能，遵循开闭原则（since v3.0）
+
+> 5.基于 "访问权限控制" 支持 "读写分离"，遵循唯一可信源的消息分发理念（since v2.0，详见 ProtectedUnPeekLiveData）
+
+并且 UnPeekLiveData 提供构造器模式，后续可通过构造器组装适合自己业务场景的 UnPeekLiveData。
+
+```java
+UnPeekLiveData<Moment> test =
+  new UnPeekLiveData.Builder<Moment>()
+    .setAllowNullValue(false)
+    .create();
+```
+
+&nbsp;
+
 ## Maven 依赖
 
 ```groovy
@@ -67,6 +90,49 @@ implementation 'com.kunminx.arch:unpeek-livedata:7.2.0-beta1'
 > 1.上述 implementation 的命名，我们已从 `archi` 改为 `arch`，请注意修改，
 >
 > 2.鉴于 Jcenter 的关闭，我们已将仓库迁移至 Maven Central，请自行在根目录 build.gradle 添加 `mavenCentral()`。
+
+&nbsp;
+
+## Thanks
+
+PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flynn、[Joker_Wan](https://juejin.im/user/5829b958d20309005403f4d6)、小暑知秋、[大棋](https://juejin.im/user/1785262613208376/posts)、空白、qh、lvrenzhao、半节树人 等小伙伴积极的试用和反馈，使得未被觉察的问题 被及时发现和纳入考虑。
+
+&nbsp;
+
+## 谁在使用
+
+感谢小伙伴们对 “开源库使用情况” 匿名调查问卷的参与，通过小伙伴的私下反馈和调查问卷我们了解到
+
+包括 “腾讯音乐、BMW、TCL” 在内的诸多知名厂商的软件，都参考过我们开源的 [Jetpack MVVM Scaffold](https://github.com/KunMinX/Jetpack-MVVM-Scaffold) 架构模式，以及正在使用我们维护的 UnPeek-LiveData 等框架。
+
+[问卷调查](https://wj.qq.com/s2/8362688/124a/)我们长期保持对外开放，如有意可自行登记，以便吸引更多小伙伴 参与到对这些架构组件的 使用、反馈，集众人之所长，让架构组件得以不断演化和升级。
+
+
+| 集团 / 公司          | 产品               |
+| -------------------- | ------------------ |
+| 腾讯音乐             | 即将更新，暂时保密 |
+| TCL                  | 内置应用，暂时保密 |
+| 左医科技             | 诊室听译机器人     |
+| BMW                  | Speech             |
+| 上海互教信息有限公司 | 知心慧学教师       |
+| 美术宝               | 弹唱宝             |
+|                      | 网安               |
+
+&nbsp;
+
+## 历史版本
+
+| 版本                | 更新日期   |
+| ------------------- | ---------- |
+| UnPeekLiveData v7.2 | 2021.8.20  |
+| UnPeekLiveData v7.1 | 2021.8.16  |
+| UnPeekLiveData v7   | 2021.8.10  |
+| UnPeekLiveData v6.1 | 2021.7.15  |
+| UnPeekLiveData v6   | 2021.6.17  |
+| UnPeekLiveData v5   | 2021.4.21  |
+| UnPeekLiveData v4.4 | 2021.1.27  |
+| UnPeekLiveData v4.2 | 2020.12.15 |
+| UnPeekLiveData v4   | 2020.10.16 |
 
 &nbsp;
 
@@ -136,77 +202,8 @@ V6 版源码相比于 V5 版的改进之处在于，引入 Observer 代理类的
 
 > 注：出于在现有 AndroidX 源码的背景下实现 "防倒灌机制" 的需要，**v4.0 对 Observe 方法的使用做了微调**，改为分别针对 Activity/Fragment 提供 ObserveInActivity 和 ObserveInFragment 方法，具体缘由详见源码注释的说明。
 
-目前为止，UnPeekLiveData 实现和保留的特点如下：
-
-> 1.一条消息能被多个观察者消费（since v1.0）
-
-> 2.消息被所有观察者消费完毕后才开始阻止倒灌（since v4.0）
-
-> 3.可以通过 clear 方法手动将消息从内存中移除（since v4.0）
-
-> 4.让非入侵设计成为可能，遵循开闭原则（since v3.0）
-
-> 5.基于 "访问权限控制" 支持 "读写分离"，遵循唯一可信源的消息分发理念（since v2.0，详见 ProtectedUnPeekLiveData）
-
-并且 UnPeekLiveData 提供了构造器模式，可通过构造器组装适合自己业务场景的 UnPeekLiveData。
-
-```java
-UnPeekLiveData<Moment> test =
-  new UnPeekLiveData.Builder<Moment>()
-    .setAllowNullValue(false)
-    .create();
-```
-
-
-|                       零入侵设计                       |                       防倒灌机制                       |                     Builder 构造器                     |
-| :----------------------------------------------------: | :----------------------------------------------------: | :----------------------------------------------------: |
-| ![](https://i.loli.net/2020/10/17/WTXzc48qkajwvd1.jpg) | ![](https://i.loli.net/2020/10/17/PbAkvTwVCflXY7G.jpg) | ![](https://i.loli.net/2020/10/17/RBfncrZkCWwb9eV.jpg) |
-
 &nbsp;
 
-## Thanks
-
-PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flynn、[Joker_Wan](https://juejin.im/user/5829b958d20309005403f4d6)、小暑知秋、[大棋](https://juejin.im/user/1785262613208376/posts)、空白、qh、lvrenzhao、半节树人 等小伙伴积极的试用和反馈，使得未被觉察的问题 被及时发现和纳入考虑。
-
-&nbsp;
-
-## 谁在使用
-
-感谢小伙伴们对 “开源库使用情况” 匿名调查问卷的参与，截至 2021年4月25日，通过小伙伴的私下反馈和调查问卷我们了解到
-
-包括 “腾讯音乐、BMW、TCL” 在内的诸多知名厂商的软件，都参考过我们开源的 [Jetpack MVVM Scaffold](https://github.com/KunMinX/Jetpack-MVVM-Scaffold) 架构模式，以及正在使用我们维护的 UnPeek-LiveData 等框架。
-
-目前我们已将具体的统计数据更新到 相关的开源库 ReadMe 中，问卷调查我们也继续保持开放，不定期将小伙伴们登记的公司和产品更新到表格，以便吸引到更多的小伙伴 参与到对这些架构组件的 使用、反馈，集众人之所长，让架构组件得以不断演化和升级。
-
-https://wj.qq.com/s2/8362688/124a/
-
-| 集团 / 公司          | 产品               |
-| -------------------- | ------------------ |
-| 腾讯音乐             | 即将更新，暂时保密 |
-| TCL                  | 内置应用，暂时保密 |
-| 左医科技             | 诊室听译机器人     |
-| BMW                  | Speech             |
-| 上海互教信息有限公司 | 知心慧学教师       |
-| 美术宝               | 弹唱宝             |
-|                      | 网安               |
-
-&nbsp;
-
-## History
-
-| 版本                | 更新日期   |
-| ------------------- | ---------- |
-| UnPeekLiveData v7.2 | 2021.8.20  |
-| UnPeekLiveData v7.1 | 2021.8.16  |
-| UnPeekLiveData v7   | 2021.8.10  |
-| UnPeekLiveData v6.1 | 2021.7.15  |
-| UnPeekLiveData v6   | 2021.6.17  |
-| UnPeekLiveData v5   | 2021.4.21  |
-| UnPeekLiveData v4.4 | 2021.1.27  |
-| UnPeekLiveData v4.2 | 2020.12.15 |
-| UnPeekLiveData v4   | 2020.10.16 |
-
-&nbsp;
 
 ### UnPeekLiveData v3.0
 
