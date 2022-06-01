@@ -101,12 +101,13 @@ PS：非常感谢近期 [hegaojian](https://github.com/hegaojian)、Angki、Flyn
 
 ## 谁在使用
 
-通过小伙伴的私下反馈和调查问卷我们了解到
+根据小伙伴们私下反馈和调查问卷，我们了解到
 
-包括 “腾讯音乐、BMW、TCL” 在内的诸多知名厂商的软件，都参考过我们开源的 [Jetpack MVVM Scaffold](https://github.com/KunMinX/Jetpack-MVVM-Scaffold) 架构模式，以及正在使用我们维护的 UnPeek-LiveData 等框架。
+包括 “腾讯音乐、BMW、TCL” 在内的诸多知名厂商的软件，都参考过我们开源的 [Jetpack MVVM Scaffold](https://github.com/KunMinX/Jetpack-MVVM-Scaffold) 架构模式，及正在使用我们维护的 UnPeek-LiveData 等框架。
 
-[问卷调查](https://wj.qq.com/s2/8362688/124a/)我们长期保持对外开放，如有意可自行登记，以便吸引更多小伙伴 参与到对这些架构组件的 使用、反馈，集众人之所长，让架构组件得以不断演化和升级。
+“问卷调查” 我们长期保持对外开放，如有意可自行登记，以便吸引更多小伙伴 参与到对这些架构组件的使用和反馈，集众人之所长，让架构组件得以不断演化和升级。
 
+https://wj.qq.com/s2/8362688/124a/
 
 | 集团 / 公司          | 产品               |
 | -------------------- | ---------------- |
