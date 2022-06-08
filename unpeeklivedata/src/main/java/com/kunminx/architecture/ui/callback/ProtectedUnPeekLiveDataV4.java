@@ -29,15 +29,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO：UnPeekLiveData 的存在是为了在 "重回二级页面" 的场景下，解决 "数据倒灌" 的问题。
- * 对 "数据倒灌" 的状况不理解的小伙伴，可参考《LiveData 数据倒灌 背景缘由全貌 独家解析》文章开头的解析
+ * TODO：UnPeekLiveData 的存在是为在 "重回二级页面" 场景下，解决 "数据倒灌" 问题。
+ * 对 "数据倒灌" 状况不理解小伙伴，可参考《LiveData 数据倒灌 背景缘由全貌 独家解析》解析
  * <p>
  * https://xiaozhuanlan.com/topic/6719328450
  * <p>
- * 本类参考了官方 SingleEventLive 的非入侵设计，
- * 以及小伙伴 Flywith24 在 wrapperLiveData 中通过 ViewModelStore 来唯一确定订阅者的思路，
+ * 本类参考官方 SingleEventLive 非入侵设计，
+ * 及小伙伴 Flywith24 在 wrapperLiveData 中通过 ViewModelStore 来唯一确定订阅者思路，
  * <p>
- * TODO：在当前最新版中，我们透过对 ViewModelStore 的内存地址的遍历，
+ * TODO：当前最新版，我们透过对 ViewModelStore 内存地址遍历，
  * 来确保：
  * 1.一条消息能被多个观察者消费
  * 2.消息被所有观察者消费完毕后才开始阻止倒灌
@@ -45,9 +45,9 @@ import java.util.Map;
  * 4.让非入侵设计成为可能，遵循开闭原则
  * <p>
  * TODO：增加一层 ProtectedUnPeekLiveData，
- * 用于限制从 Activity/Fragment 篡改来自 "数据层" 的数据，数据层的数据务必通过 "唯一可信源" 来分发，
- * 如果这样说还不理解，详见：
- * https://xiaozhuanlan.com/topic/0168753249 和 https://xiaozhuanlan.com/topic/6719328450
+ * 用于限制从 Activity/Fragment 推送数据，推送数据务必通过唯一可信源来分发，
+ * 如这么说无体会，详见：
+ * https://xiaozhuanlan.com/topic/6719328450 和 https://xiaozhuanlan.com/topic/0168753249
  * <p>
  * Create by KunMinX at 19/9/23
  */
@@ -59,7 +59,7 @@ public class ProtectedUnPeekLiveDataV4<T> extends LiveData<T> {
     private final HashMap<Integer, Boolean> observers = new HashMap<>();
 
     /**
-     * 适合在 activity 中使用的 observe UnPeek 方法
+     * 适用于 activity 的 observe UnPeek 方法
      * A Observe UnPeek method which suitable for use in an activity
      *
      * @param activity
@@ -72,7 +72,7 @@ public class ProtectedUnPeekLiveDataV4<T> extends LiveData<T> {
     }
 
     /**
-     * 适合在 fragment 中使用的 observe UnPeek 方法
+     * 适用于 fragment 的 observe UnPeek 方法
      * A Observe UnPeek method which suitable for use in an fragment
      *
      * @param fragment
@@ -118,7 +118,7 @@ public class ProtectedUnPeekLiveDataV4<T> extends LiveData<T> {
     /**
      * 重写的 setValue 方法，默认不接收 null
      * 可通过 Builder 配置允许接收
-     * 可通过 Builder 配置消息延时清理的时间
+     * 可通过 Builder 配置消息延时清理时间
      * <p>
      * override setValue, do not receive null by default
      * You can configure to allow receiving through Builder

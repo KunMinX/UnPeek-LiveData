@@ -11,29 +11,28 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * TODO 感谢小伙伴 wl0073921 对 UnPeekLiveData 源码的演化做出的贡献，
- * V6 版源码翻译和完善自小伙伴 wl0073921 在 issue 中的分享，
+ * TODO V6 版源码翻译和完善自小伙伴 wl0073921 在 issue 中分享，
  * https://github.com/KunMinX/UnPeek-LiveData/issues/11
  * <p>
- * V6 版源码相比于 V5 版的改进之处在于，引入 Observer 代理类的设计，
- * 这使得在旋屏重建时，无需通过反射方式跟踪和复用基类 Map 中的 Observer，
- * 转而通过 removeObserver 的方式来自动移除和在页面重建后重建新的 Observer，
+ * 相比 V5 版改进在于，引入 Observer 代理类设计，
+ * 这使旋屏重建时，无需通过反射方式跟踪和复用基类 Map 中 Observer，
+ * 转而通过 removeObserver 方式来自动移除和在页面重建后重建新 Observer，
  * <p>
- * 因而复杂度由原先的分散于基类数据结构，到集中在 proxy 对象这一处，
- * 进一步方便了源码逻辑的阅读和后续的修改。
+ * 因而复杂度由原先分散于基类数据结构，到集中在 proxy 对象这一处，
+ * 进一步方便源码逻辑阅读和后续修改。
  * <p>
  * <p>
  * TODO 唯一可信源设计
- * 我们在 V6 中继续沿用从 V3 版延续下来的基于 "唯一可信源" 理念的设计，
- * 来确保 "事件" 的发送权牢牢握在可信的逻辑中枢单元手里，从而确保所有订阅者收到的信息都是可靠且一致的，
+ * 我们在 V6 中继续沿用从 V3 版 "唯一可信源" 理念设计，
+ * 确保 "事件" 发送权牢牢握在可信逻辑中枢手里，从而确保所有订阅者收到消息皆可靠且致，
  * <p>
- * 如果这样说还不理解，可自行查阅《LiveData 唯一可信源 读写分离设计》的解析：
- * https://xiaozhuanlan.com/topic/2049857631
+ * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+ * https://xiaozhuanlan.com/topic/6017825943
  * <p>
  * TODO 以及支持消息从内存清空
- * 我们在 V6 中继续沿用从 V3 版延续下来的 "消息清空" 设计，
- * 我们支持通过 clear 方法手动将消息从内存中清空，
- * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
+ * 我们在 V6 中继续沿用从 V3 版 "消息清空" 设计，
+ * 支持通过 clear 方法手动将消息从内存中清空，
+ * 以免无用消息随着 SharedViewModel 长时间驻留而导致内存溢出发生。
  * <p>
  * Create by KunMinX at 2021/6/17
  */
@@ -49,13 +48,13 @@ public class ProtectedUnPeekLiveDataV6_0<T> extends LiveData<T> {
   private final ConcurrentHashMap<Observer<? super T>, Observer<? super T>> observerProxyMap = new ConcurrentHashMap();
 
   /**
-   * TODO 当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期敏感" 的非粘性消息
+   * TODO 当 liveData 用作 event 时，可使用该方法观察 "生命周期敏感" 非粘性消息
    * <p>
-   * state 是可变且私用的，event 是只读且公用的，
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   * state 可变且私有，event 只读且公有，
+   * state 倒灌应景，event 倒灌不符预期，
    * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+   * https://xiaozhuanlan.com/topic/6017825943
    *
    * @param owner
    * @param observer
@@ -69,13 +68,13 @@ public class ProtectedUnPeekLiveDataV6_0<T> extends LiveData<T> {
   }
 
   /**
-   * TODO 当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期不敏感" 的非粘性消息
+   * TODO 当 liveData 用作 event 时，可使用该方法观察 "生命周期不敏感" 非粘性消息
    * <p>
-   * state 是可变且私用的，event 是只读且公用的，
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   * state 可变且私有，event 只读且公有，
+   * state 倒灌应景，event 倒灌不符预期，
    * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+   * https://xiaozhuanlan.com/topic/6017825943
    *
    * @param observer
    */
@@ -123,13 +122,13 @@ public class ProtectedUnPeekLiveDataV6_0<T> extends LiveData<T> {
   }
 
   /**
-   * TODO 当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期敏感" 的粘性消息
+   * TODO 当 liveData 用作 state 时，可使用该方法来观察 "生命周期敏感" 粘性消息
    * <p>
-   * state 是可变且私用的，event 是只读且公用的，
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   * state 可变且私有，event 只读且公有，
+   * state 倒灌应景，event 倒灌不符预期，
    * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+   * https://xiaozhuanlan.com/topic/6017825943
    *
    * @param owner
    * @param observer
@@ -139,13 +138,13 @@ public class ProtectedUnPeekLiveDataV6_0<T> extends LiveData<T> {
   }
 
   /**
-   * TODO 当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期不敏感" 的粘性消息
+   * TODO 当 liveData 用作 state 时，可使用该方法来观察 "生命周期不敏感" 粘性消息
    * <p>
-   * state 是可变且私用的，event 是只读且公用的
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   * state 可变且私有，event 只读且公有，
+   * state 倒灌应景，event 倒灌不符预期，
    * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+   * https://xiaozhuanlan.com/topic/6017825943
    *
    * @param observer
    */
@@ -183,7 +182,7 @@ public class ProtectedUnPeekLiveDataV6_0<T> extends LiveData<T> {
 
   /**
    * 手动将消息从内存中清空，
-   * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
+   * 以免无用消息随着 SharedViewModel 长时间驻留而导致内存溢出发生。
    */
   public void clear() {
     super.setValue(null);

@@ -25,23 +25,23 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * TODO：UnPeekLiveData 的存在是为了在 "重回二级页面" 的场景下，解决 "数据倒灌" 的问题。
- * 对 "数据倒灌" 的状况不理解的小伙伴，可参考《jetpack MVVM 精讲》的解析
+ * TODO：UnPeekLiveData 的存在是为在 "重回二级页面" 场景下，解决 "数据倒灌" 问题。
+ * 对 "数据倒灌" 状况不理解小伙伴，可参考《LiveData 数据倒灌 背景缘由全貌 独家解析》解析
  * <p>
- * https://juejin.im/post/5dafc49b6fb9a04e17209922
+ * https://xiaozhuanlan.com/topic/6719328450
  * <p>
- * 本类参考了官方 SingleEventLive 的非入侵设计，
+ * 本类参考官方 SingleEventLive 非入侵设计，
  * <p>
- * TODO：并创新性地引入了 "延迟清空消息" 的设计，
+ * TODO：并创新引入 "延迟清空消息" 设计，
  * 如此可确保：
  * 1.一条消息能被多个观察者消费
- * 2.延迟期结束，不再能够收到旧消息的推送
- * 3.并且旧消息在延迟期结束时能从内存中释放，避免内存溢出等问题
+ * 2.延迟期结束，不再能够收到旧消息推送
+ * 3.且旧消息在延迟期结束时能从内存中释放，避免内存溢出等问题
  * 4.让非入侵设计成为可能，遵循开闭原则
  * <p>
  * TODO：增加一层 ProtectedUnPeekLiveData，
  * 用于限制从 Activity/Fragment 推送数据，推送数据务必通过唯一可信源来分发，
- * 如果这样说还不理解，详见：
+ * 如这么说无体会，详见：
  * https://xiaozhuanlan.com/topic/6719328450 和 https://xiaozhuanlan.com/topic/0168753249
  * <p>
  * Create by KunMinX at 19/9/23
@@ -81,10 +81,10 @@ public class ProtectedUnPeekLiveDataV3<T> extends LiveData<T> {
     }
 
     /**
-     * UnPeekLiveData 主要用于表现层的 页面转场 和 页面间通信 场景下的非粘性消息分发，
-     * 出于生命周期安全等因素的考虑，不建议使用 observeForever 方法，
+     * UnPeekLiveData 主要用于表现层 页面转场 和 页面间通信 场景非粘性消息分发，
+     * 出于生命周期安全等考虑，不建议使用 observeForever 方法，
      * <p>
-     * 对于数据层的工作，如有需要，可结合实际场景使用 MutableLiveData 或 kotlin flow。
+     * 对于数据层工作，如有需要，可结合实际场景使用 MutableLiveData 或 kotlin flow。
      *
      * @param observer
      */
@@ -96,7 +96,7 @@ public class ProtectedUnPeekLiveDataV3<T> extends LiveData<T> {
     /**
      * 重写的 setValue 方法，默认不接收 null
      * 可通过 Builder 配置允许接收
-     * 可通过 Builder 配置消息延时清理的时间
+     * 可通过 Builder 配置消息延时清理时间
      * <p>
      * override setValue, do not receive null by default
      * You can configure to allow receiving through Builder

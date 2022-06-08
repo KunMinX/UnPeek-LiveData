@@ -9,35 +9,41 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * TODO 感谢小伙伴 RebornWolfman 对 UnPeekLiveData 源码的演化做出的贡献，
- * <p>
- * V7 版源码完善自小伙伴 RebornWolfman 在 issue 中的分享，
+ * TODO V7 版源码完善自小伙伴 RebornWolfman 在 issue 中分享，
  * https://github.com/KunMinX/UnPeek-LiveData/issues/17
  * <p>
- * V7 版源码相比于 V6 版的改进之处在于：
+ * 相比 V6 版改进在于：
  * 通过在 "代理类/包装类" 中自行维护一个版本号，在 UnPeekLiveData 中维护一个当前版本号，
  * 分别来在 setValue 和 Observe 的时机来改变和对齐版本号，
- * 如此使得无需另外管理一个 Observer map，从而进一步规避了内存管理的问题，
- * 同时也是继 V6 版源码以来，最简的源码设计，方便阅读理解和后续修改。
+ * 如此使得无需另外管理一个 Observer map，从而进一步规避内存管理问题，
+ * 这是继 V6 版源码以来，最简源码设计。
  *
  * <p>
  * <p>
  * TODO 唯一可信源设计
- * 我们在 V7 中继续沿用从 V3 版延续下来的基于 "唯一可信源" 理念的设计，
- * 来确保 "事件" 的发送权牢牢握在可信的逻辑中枢单元手里，从而确保所有订阅者收到的信息都是可靠且一致的，
+ * 我们在 V6 中继续沿用从 V3 版 "唯一可信源" 理念设计，
+ * 确保 "事件" 发送权牢牢握在可信逻辑中枢手里，从而确保所有订阅者收到消息皆可靠且致，
  * <p>
- * 如果这样说还不理解，可自行查阅《LiveData 唯一可信源 读写分离设计》的解析：
- * https://xiaozhuanlan.com/topic/2049857631
+ * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+ * https://xiaozhuanlan.com/topic/6017825943
  * <p>
  * TODO 以及支持消息从内存清空
- * 我们在 V7 中继续沿用从 V3 版延续下来的 "消息清空" 设计，
- * 我们支持通过 clear 方法手动将消息从内存中清空，
- * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
+ * 我们在 V6 中继续沿用从 V3 版 "消息清空" 设计，
+ * 支持通过 clear 方法手动将消息从内存中清空，
+ * 以免无用消息随着 SharedViewModel 长时间驻留而导致内存溢出发生。
  * <p>
  * <p>
  * Create by RebornWolfman, KunMinX at 2021/8/10
  */
 public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
+
+  public ProtectedUnPeekLiveData(T value) {
+    super(value);
+  }
+
+  public ProtectedUnPeekLiveData() {
+    super();
+  }
 
   private final static int START_VERSION = -1;
 
@@ -46,13 +52,13 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   protected boolean isAllowNullValue;
 
   /**
-   * TODO tip：当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期敏感" 的非粘性消息
+   * TODO 当 liveData 用作 event 时，可使用该方法观察 "生命周期敏感" 非粘性消息
    * <p>
-   * state 是可变且私用的，event 是只读且公用的，
-   * state 的倒灌是应景的，event 倒灌是不符预期的，
+   * state 可变且私有，event 只读且公有，
+   * state 倒灌应景，event 倒灌不符预期，
    * <p>
-   * 如果这样说还不理解，详见《LiveData 唯一可信源 读写分离设计》的解析：
-   * https://xiaozhuanlan.com/topic/2049857631
+   * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+   * https://xiaozhuanlan.com/topic/6017825943
    *
    * @param owner    activity 传入 this，fragment 建议传入 getViewLifecycleOwner
    * @param observer observer
@@ -63,7 +69,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   }
 
   /**
-   * TODO tip：当 liveData 用作 event 用途时，可使用该方法来观察 "生命周期不敏感" 的非粘性消息
+   * TODO 当 liveData 用作 event 时，可使用该方法观察 "生命周期不敏感" 非粘性消息
    *
    * @param observer observer
    */
@@ -73,7 +79,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   }
 
   /**
-   * TODO tip：当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期敏感" 的粘性消息
+   * TODO 当 liveData 用作 state 时，可使用该方法来观察 "生命周期敏感" 粘性消息
    *
    * @param owner    activity 传入 this，fragment 建议传入 getViewLifecycleOwner
    * @param observer observer
@@ -83,7 +89,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   }
 
   /**
-   * TODO tip：当 liveData 用作 state 用途时，可使用该方法来观察 "生命周期不敏感" 的粘性消息
+   * TODO 当 liveData 用作 state 时，可使用该方法来观察 "生命周期不敏感" 粘性消息
    *
    * @param observer observer
    */
@@ -105,7 +111,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
   /**
    * TODO tip：
-   * 1.添加一个包装类，自己维护一个版本号判断，用于无需 map 的帮助也能逐一判断消费情况
+   * 1.添加一个包装类，自己维护一个版本号判断，用于无需 map 帮助也能逐一判断消费情况
    * 2.重写 equals 方法和 hashCode，在用于手动 removeObserver 时，忽略版本号的变化引起的变化
    */
   class ObserverWrapper implements Observer<T> {
@@ -145,9 +151,9 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
 
   /**
    * TODO tip：
-   * 通过 ObserveForever 的 Observe，需要记得 remove，不然存在 LiveData 内存泄漏的隐患，
-   * 保险的做法是，在页面的 onDestroy 环节安排 removeObserver 代码，
-   * 具体可参见 app module 中 ObserveForeverFragment 的案例
+   * 通过 ObserveForever Observe，需记得 remove，不然存在 LiveData 内存泄漏隐患，
+   * 保险做法是，在页面 onDestroy 环节安排 removeObserver 代码，
+   * 具体可参见 app module ObserveForeverFragment 案例
    *
    * @param observer observeForever 注册的 observer，或 observe 注册的 observerWrapper
    */
@@ -167,7 +173,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
   /**
    * TODO tip：
    * 手动将消息从内存中清空，
-   * 以免无用消息随着 SharedViewModel 的长时间驻留而导致内存溢出的发生。
+   * 以免无用消息随着 SharedViewModel 长时间驻留而导致内存溢出发生。
    */
   public void clear() {
     super.setValue(null);

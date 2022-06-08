@@ -2,19 +2,27 @@ package com.kunminx.architecture.ui.callback;
 
 /**
  * TODO 唯一可信源设计
- * 我们在 V6 中继续沿用从 V3 版延续下来的基于 "唯一可信源" 理念的设计，
- * 来确保 "事件" 的发送权牢牢握在可信的逻辑中枢单元手里，从而确保所有订阅者收到的信息都是可靠且一致的，
+ * 我们在 V6 中继续沿用从 V3 版 "唯一可信源" 理念设计，
+ * 确保 "事件" 发送权牢牢握在可信逻辑中枢手里，从而确保所有订阅者收到消息皆可靠且致，
  * <p>
- * 如果这样说还不理解，可自行查阅《LiveData 唯一可信源 读写分离设计》的解析：
- * https://xiaozhuanlan.com/topic/2049857631
+ * 如这么说无体会，详见《吃透 LiveData 本质，享用可靠消息鉴权机制》解析：
+ * https://xiaozhuanlan.com/topic/6017825943
  * <p>
- * TODO 提供 Builder 选项的支持
- * 我们在 V6 中继续沿用从 V3 版延续下来的 Builder 选项设计，
- * 目前提供 "是否允许发送 null" 的选项。
+ * TODO 提供 Builder 选项支持
+ * 我们在 V6 中继续沿用 V3 版延 Builder 选项设计，
+ * 目前提供 "是否允许发送 null" 选项。
  * <p>
  * Create by KunMinX at 2021/6/17
  */
 public class UnPeekLiveData<T> extends ProtectedUnPeekLiveData<T> {
+
+  public UnPeekLiveData(T value) {
+    super(value);
+  }
+
+  public UnPeekLiveData() {
+    super();
+  }
 
   @Override
   public void setValue(T value) {
