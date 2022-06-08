@@ -82,7 +82,7 @@ UnPeekLiveData<Moment> test =
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.2.0-beta1'
+implementation 'com.kunminx.arch:unpeek-livedata:7.3.0'
 ```
 
 > 温馨提示：
@@ -135,6 +135,9 @@ https://wj.qq.com/s2/8362688/124a/
 | UnPeekLiveData v4.4 | 2021.1.27  |
 | UnPeekLiveData v4.2 | 2020.12.15 |
 | UnPeekLiveData v4   | 2020.10.16 |
+| UnPeekLiveData v3   | 2020.07.10 |
+| UnPeekLiveData v2   | 2020.05.09 |
+| UnPeekLiveData v1   | 2019.07.15 |
 
 &nbsp;
 

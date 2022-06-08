@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 
 ext {
     PUBLISH_GROUP_ID = 'com.kunminx.arch'
-    PUBLISH_VERSION = '7.2.0-beta1'
-    VERSION_CODE = 7020001
+    PUBLISH_VERSION = appVersionName
+    VERSION_CODE = appVersionCode
 
     PUBLISH_ARTIFACT_ID = 'unpeek-livedata'
     ARTIFACT_DESCRIPTION = 'Perfect alternative to SingleLiveEvent, supporting multiple observers.'
@@ -29,14 +29,21 @@ apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
 
 
 android {
-    compileSdkVersion 30
-
+    compileSdk appTargetSdk
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdk appMinSdk
+        targetSdk appTargetSdk
+        versionCode appVersionCode
+        versionName appVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
     }
 
     buildTypes {
@@ -57,7 +64,7 @@ tasks.withType(Javadoc) {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'org.jetbrains:annotations:23.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
