@@ -50,10 +50,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-common-java8:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.1'
-//    implementation 'androidx.lifecycle:lifecycle-livedata:2.4.1'
     implementation 'androidx.navigation:navigation-runtime:2.4.2'
 
     implementation 'com.kunminx.arch:smooth-navigation:4.0.0-beta1'
@@ -65,6 +61,6 @@ dependencies {
 
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
 
 }

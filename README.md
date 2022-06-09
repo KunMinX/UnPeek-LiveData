@@ -4,7 +4,7 @@
 
 大家好，我是[《Jetpack MVVM Best Practice》](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice)作者 KunMinX。
 
-今天提到 “数据倒灌” 一词，缘于我为方便理解和记忆 **“二次进入二级页面时收到旧数据推送” 情况**，而在 2019 年 **自创并于网上传播的此现象概括**。
+今天提到 “数据倒灌” 一词，缘于我为方便理解和记忆 **“再入二级页面时收到旧数据推送” 情况**，而在 2019 年 **自创并于网上传播的此现象概括**。
 
 它主要发生于：SharedViewModel + LiveData 组合实现页面通信场景。
 
@@ -24,7 +24,7 @@
 
 > 及为何 “页面通信” 场景下，不用静态单例或 EventBus、LiveDataBus 等消息总线，
 
-如对这些前置知识也尚不了解，可结合个人兴趣前往[《LiveData 数据倒灌 背景缘由全貌 独家解析》](https://xiaozhuanlan.com/topic/6719328450)查阅，此处不再累述。
+如对这些前置知识也尚无体会，可结合个人兴趣前往[《LiveData 数据倒灌 背景缘由全貌 独家解析》](https://xiaozhuanlan.com/topic/6719328450)查阅，此处不再累述。
 
 &nbsp;
 
@@ -82,7 +82,7 @@ UnPeekLiveData<Moment> test =
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.3.0'
+implementation 'com.kunminx.arch:unpeek-livedata:7.4.1'
 ```
 
 > 温馨提示：
@@ -142,6 +142,10 @@ https://wj.qq.com/s2/8362688/124a/
 &nbsp;
 
 ## 最新更新动态
+
+### UnPeekLiveData v7.4 特点
+
+引入 MutableEvent/Event 类，以契合 "消息分发" 语义。
 
 ### UnPeekLiveData v7.2 特点
 

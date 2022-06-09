@@ -18,12 +18,9 @@
 package com.kunminx.architecture.ui.callback;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelStore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,90 +51,89 @@ import java.util.Map;
 @Deprecated
 public class ProtectedUnPeekLiveDataV4<T> extends LiveData<T> {
 
-    protected boolean isAllowNullValue;
+  protected boolean isAllowNullValue;
 
-    private final HashMap<Integer, Boolean> observers = new HashMap<>();
+  private final HashMap<Integer, Boolean> observers = new HashMap<>();
 
-    /**
-     * 适用于 activity 的 observe UnPeek 方法
-     * A Observe UnPeek method which suitable for use in an activity
-     *
-     * @param activity
-     * @param observer
-     */
-    public void observeInActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
-        LifecycleOwner owner = activity;
-        Integer storeId = System.identityHashCode(activity.getViewModelStore());
-        observe(storeId, owner, observer);
+  /**
+   * 适用于 activity 的 observe UnPeek 方法
+   * A Observe UnPeek method which suitable for use in an activity
+   *
+   * @param activity
+   * @param observer
+   */
+//    public void observeInActivity(@NonNull AppCompatActivity activity, @NonNull Observer<? super T> observer) {
+//        LifecycleOwner owner = activity;
+//        Integer storeId = System.identityHashCode(activity.getViewModelStore());
+//        observe(storeId, owner, observer);
+//    }
+
+  /**
+   * 适用于 fragment 的 observe UnPeek 方法
+   * A Observe UnPeek method which suitable for use in an fragment
+   *
+   * @param fragment
+   * @param observer
+   */
+//    public void observeInFragment(@NonNull Fragment fragment, @NonNull Observer<? super T> observer) {
+//        LifecycleOwner owner = fragment.getViewLifecycleOwner();
+//        Integer storeId = System.identityHashCode(fragment.getViewModelStore());
+//        observe(storeId, owner, observer);
+//    }
+
+  /**
+   * 通用的 observe UnPeek 方法
+   * A universal Observe UnPeek method
+   *
+   * @param owner
+   * @param store
+   * @param observer
+   */
+//    public void observeUnPeek(@NonNull LifecycleOwner owner, @NonNull ViewModelStore store, @NonNull Observer<? super T> observer) {
+//        Integer storeId = System.identityHashCode(store);
+//        observe(storeId, owner, observer);
+//    }
+  private void observe(@NonNull Integer storeId,
+                       @NonNull LifecycleOwner owner,
+                       @NonNull Observer<? super T> observer) {
+
+    if (observers.get(storeId) == null) {
+      observers.put(storeId, true);
     }
 
-    /**
-     * 适用于 fragment 的 observe UnPeek 方法
-     * A Observe UnPeek method which suitable for use in an fragment
-     *
-     * @param fragment
-     * @param observer
-     */
-    public void observeInFragment(@NonNull Fragment fragment, @NonNull Observer<? super T> observer) {
-        LifecycleOwner owner = fragment.getViewLifecycleOwner();
-        Integer storeId = System.identityHashCode(fragment.getViewModelStore());
-        observe(storeId, owner, observer);
-    }
-
-    /**
-     * 通用的 observe UnPeek 方法
-     * A universal Observe UnPeek method
-     *
-     * @param owner
-     * @param store
-     * @param observer
-     */
-    public void observeUnPeek(@NonNull LifecycleOwner owner, @NonNull ViewModelStore store, @NonNull Observer<? super T> observer) {
-        Integer storeId = System.identityHashCode(store);
-        observe(storeId, owner, observer);
-    }
-
-    private void observe(@NonNull Integer storeId,
-                         @NonNull LifecycleOwner owner,
-                         @NonNull Observer<? super T> observer) {
-
-        if (observers.get(storeId) == null) {
-            observers.put(storeId, true);
+    super.observe(owner, t -> {
+      if (!observers.get(storeId)) {
+        observers.put(storeId, true);
+        if (t != null || isAllowNullValue) {
+          observer.onChanged(t);
         }
+      }
+    });
+  }
 
-        super.observe(owner, t -> {
-            if (!observers.get(storeId)) {
-                observers.put(storeId, true);
-                if (t != null || isAllowNullValue) {
-                    observer.onChanged(t);
-                }
-            }
-        });
+  /**
+   * 重写的 setValue 方法，默认不接收 null
+   * 可通过 Builder 配置允许接收
+   * 可通过 Builder 配置消息延时清理时间
+   * <p>
+   * override setValue, do not receive null by default
+   * You can configure to allow receiving through Builder
+   * And also, You can configure the delay time of message clearing through Builder
+   *
+   * @param value
+   */
+  @Override
+  protected void setValue(T value) {
+    if (value != null || isAllowNullValue) {
+      for (Map.Entry<Integer, Boolean> entry : observers.entrySet()) {
+        entry.setValue(false);
+      }
+      super.setValue(value);
     }
+  }
 
-    /**
-     * 重写的 setValue 方法，默认不接收 null
-     * 可通过 Builder 配置允许接收
-     * 可通过 Builder 配置消息延时清理时间
-     * <p>
-     * override setValue, do not receive null by default
-     * You can configure to allow receiving through Builder
-     * And also, You can configure the delay time of message clearing through Builder
-     *
-     * @param value
-     */
-    @Override
-    protected void setValue(T value) {
-        if (value != null || isAllowNullValue) {
-            for (Map.Entry<Integer, Boolean> entry : observers.entrySet()) {
-                entry.setValue(false);
-            }
-            super.setValue(value);
-        }
-    }
-
-    public void clear() {
-        super.setValue(null);
-    }
+  public void clear() {
+    super.setValue(null);
+  }
 }
 

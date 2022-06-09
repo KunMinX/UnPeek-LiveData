@@ -8,18 +8,18 @@ ext {
     PUBLISH_ARTIFACT_ID = 'unpeek-livedata'
     ARTIFACT_DESCRIPTION = 'Perfect alternative to SingleLiveEvent, supporting multiple observers.'
 
-    POM_URL='https://github.com/KunMinX/UnPeek-LiveData'
-    POM_SCM_URL='https://github.com/KunMinX/UnPeek-LiveData/tree/master'
-    POM_SCM_CONNECTION='scm:git:github.com/KunMinX/UnPeek-LiveData.git'
-    POM_SCM_DEV_CONNECTION='scm:git:ssh://github.com/KunMinX/UnPeek-LiveData.git'
+    POM_URL = 'https://github.com/KunMinX/UnPeek-LiveData'
+    POM_SCM_URL = 'https://github.com/KunMinX/UnPeek-LiveData/tree/master'
+    POM_SCM_CONNECTION = 'scm:git:github.com/KunMinX/UnPeek-LiveData.git'
+    POM_SCM_DEV_CONNECTION = 'scm:git:ssh://github.com/KunMinX/UnPeek-LiveData.git'
 
-    POM_DEVELOPER_ID='KunMinX'
-    POM_DEVELOPER_NAME='KunMinX'
-    POM_DEVELOPER_URL='https://github.com/KunMinX'
-    POM_DEVELOPER_EMAIL='kunminx@gmail.com'
+    POM_DEVELOPER_ID = 'KunMinX'
+    POM_DEVELOPER_NAME = 'KunMinX'
+    POM_DEVELOPER_URL = 'https://github.com/KunMinX'
+    POM_DEVELOPER_EMAIL = 'kunminx@gmail.com'
 
-    LICENSE_NAME='The Apache Software License, Version 2.0'
-    LICENSE_URL='http://www.apache.org/licenses/LICENSE-2.0.txt'
+    LICENSE_NAME = 'The Apache Software License, Version 2.0'
+    LICENSE_URL = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
 
     uploadJavadocs = false
     uploadSources = false
@@ -64,7 +64,7 @@ tasks.withType(Javadoc) {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation "androidx.lifecycle:lifecycle-livedata:2.4.1"
     implementation 'org.jetbrains:annotations:23.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

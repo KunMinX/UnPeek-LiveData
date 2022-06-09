@@ -19,7 +19,6 @@ package com.kunminx.architecture.ui.callback;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.internal.SafeIterableMap;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -91,17 +90,17 @@ public class ProtectedUnPeekLiveDataV5<T> extends LiveData<T> {
 
   @Override
   public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-    if (owner instanceof Fragment && ((Fragment) owner).getViewLifecycleOwner() != null) {
-      /**
-       * Fragment 场景下使用 getViewLifeCycleOwner 作为 liveData 订阅者，
-       * 如此可确保 "视图实例" 生命周期安全（getView 不为 null），
-       * 因而需要注意的是，getViewLifeCycleOwner 使用应在 onCreateView 之后和 onDestroyView 之前。
-       *
-       * 如这么说无体会，详见《LiveData 鲜为人知 身世背景 和 独特使命》解析
-       * https://xiaozhuanlan.com/topic/0168753249
-       */
-      owner = ((Fragment) owner).getViewLifecycleOwner();
-    }
+//    if (owner instanceof Fragment && ((Fragment) owner).getViewLifecycleOwner() != null) {
+//      /**
+//       * Fragment 场景下使用 getViewLifeCycleOwner 作为 liveData 订阅者，
+//       * 如此可确保 "视图实例" 生命周期安全（getView 不为 null），
+//       * 因而需要注意的是，getViewLifeCycleOwner 使用应在 onCreateView 之后和 onDestroyView 之前。
+//       *
+//       * 如这么说无体会，详见《LiveData 鲜为人知 身世背景 和 独特使命》解析
+//       * https://xiaozhuanlan.com/topic/0168753249
+//       */
+//      owner = ((Fragment) owner).getViewLifecycleOwner();
+//    }
 
     Integer observeKey = System.identityHashCode(observer);
     observe(observeKey, owner, observer);
