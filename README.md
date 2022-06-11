@@ -1,10 +1,20 @@
 ![](https://images.xiaozhuanlan.com/photo/2022/11110ff4abb5e546b05031baee3ea97e.png)
 
+## 框架现状
+
+腾讯音乐小伙伴贡献过 v5 版重构代码，用于月活过亿 “生产环境” 痛点治理。
+
+最新版基于 2021 年 8 月小伙伴 RebornWolfman 贡献 v7 版重构代码，稳定运行至今。
+
+为契合消息分发语义，我们于最新版加入 MutableEvent/Event 类命名。
+
+&nbsp;
+
 ## 前言
 
 大家好，我是[《Jetpack MVVM Best Practice》](https://github.com/KunMinX/Jetpack-MVVM-Best-Practice)作者 KunMinX。
 
-今天提到 “数据倒灌” 一词，缘于我为方便理解和记忆 **“再入二级页面时收到旧数据推送” 情况**，而在 2019 年 **自创并于网上传播的此现象概括**。
+今天提到 “数据倒灌” 一词，缘于我为方便理解和记忆 **“再入二级页面时收到旧数据推送” 情况**，而于 2019 年 **自创并在网上传播的关于此类现象概括**。
 
 它主要发生于：SharedViewModel + LiveData 组合实现页面通信场景。
 
@@ -18,13 +28,13 @@
 
 > 为何 LiveData 默认被设计为粘性事件
 
-> 为何 [官方文档 ](https://developer.android.google.cn/topic/libraries/architecture/viewmodel#sharing) 推荐使用 SharedViewModel + LiveData（文档没明说，但事实上包含三个关键背景缘由）
+> 为何 [官方文档 ](https://developer.android.google.cn/topic/libraries/architecture/viewmodel#sharing) 推荐使用 SharedViewModel + LiveData（文档没明说，事实上包含三个关键背景缘由）
 
 > 乃至为何存在 “数据倒灌” 现象
 
 > 及为何 “页面通信” 场景下，不用静态单例或 EventBus、LiveDataBus 等消息总线，
 
-如对这些前置知识也尚无体会，可结合个人兴趣前往[《LiveData 数据倒灌 背景缘由全貌 独家解析》](https://xiaozhuanlan.com/topic/6719328450)查阅，此处不再累述。
+如对这些 “前置知识” 也尚无体会，可结合个人兴趣前往[《LiveData 数据倒灌 背景缘由全貌 独家解析》](https://xiaozhuanlan.com/topic/6719328450)查阅，此处不再累述。
 
 &nbsp;
 
@@ -38,7 +48,7 @@
 
 对于多观察者情况，只允许第一个观察者消费，这不符合现实需求；
 
-而且手写 Event 事件包装器，在 Java 中存在 Null 安全一致性问题。
+且手写 Event 事件包装器，在 Java 中存在 Null 安全一致性问题。
 
 
 > **反射干预 Version 方式：**
@@ -68,11 +78,37 @@
 
 > 5.基于 "访问权限控制" 支持 "读写分离"，遵循 “唯一可信源” 消息分发理念（since v2.0，详见 ProtectedUnPeekLiveData）
 
+```java
+public class TestFragment extends Fragment {
+  protected void onViewCreate(){
+    viewModel.getXXXEvent().observe(this, xxx ->{
+      renderUI(...);
+    })
+    
+    viewModel.requestXXX();
+  }
+}
+
+public class SharedViewModel extends ViewModel {
+  private final MutableEvent<XXX> xxxEvent = new MutableEvent<>();
+  
+  public Event<XXX> getXXXEvent(){
+    return xxxEvent;
+  }
+  
+  public void requestXXX(){
+    //业务逻辑 ...
+    ...
+    xxxEvent.setValue(...);
+  }
+}
+```
+
 且 UnPeekLiveData 提供构造器模式，后续可通过构造器组装适合自己业务场景 UnPeekLiveData。
 
 ```java
-UnPeekLiveData<Moment> test =
-  new UnPeekLiveData.Builder<Moment>()
+MutableEvent<Moment> test =
+  new MutableEvent.Builder<Moment>()
     .setAllowNullValue(false)
     .create();
 ```
@@ -147,9 +183,11 @@ https://wj.qq.com/s2/8362688/124a/
 
 引入 MutableEvent/Event 类，以契合 "消息分发" 语义。
 
+&nbsp;
+
 ### UnPeekLiveData v7.2 特点
 
-根据小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/21) 中分享，通过更简便方式修复 v7.0 潜在 removeObserver 内存泄漏问题。
+根据小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 的[分享](https://github.com/KunMinX/UnPeek-LiveData/issues/21)，通过更简便方式修复 v7.0 潜在 removeObserver 内存泄漏问题。
 
 &nbsp;
 
@@ -161,7 +199,7 @@ https://wj.qq.com/s2/8362688/124a/
 
 ### UnPeekLiveData v7.0 特点
 
-感谢小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/17) 中分享。
+感谢小伙伴 @[RebornWolfman](https://github.com/RebornWolfman) 的[分享](https://github.com/KunMinX/UnPeek-LiveData/issues/17)。
 
 相较上一版，V7 版源码在 "代理类/包装类" 自行维护一个版本号，在 UnPeekLiveData 中维护一个当前版本号，且分别在 setValue 和 Observe 时机改变和对齐版本号，如此使得无需额外管理 Observer Map，从而进一步规避内存管理问题，
 
@@ -173,13 +211,13 @@ https://wj.qq.com/s2/8362688/124a/
 
 ### UnPeekLiveData v6.1 特点
 
-根据小伙伴 @[liweiGe](https://github.com/liweiGe) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/16) 中启发，我们将 state 演变为 ObserverProxy 字段来管理，从而使 Map 合二为一，代码逻辑进一步简化。
+根据小伙伴 @[liweiGe](https://github.com/liweiGe) 的[启发](https://github.com/KunMinX/UnPeek-LiveData/issues/16)，我们将 state 演变为 ObserverProxy 字段来管理，从而使 Map 合二为一，代码逻辑进一步简化。
 
 &nbsp;
 
 ### UnPeekLiveData v6.0 特点
 
-V6 版源码翻译和完善自小伙伴 @[wl0073921](https://github.com/wl0073921) 在 [issue](https://github.com/KunMinX/UnPeek-LiveData/issues/11) 中分享。
+V6 版源码翻译和完善自小伙伴 @[wl0073921](https://github.com/wl0073921) 的[分享](https://github.com/KunMinX/UnPeek-LiveData/issues/11)。
 
 相比 V5 版改进之处在于，引入 Observer 代理类设计，这使页面旋屏重建时，无需通过反射方式跟踪和复用基类 Map 中 Observer，转而通过 removeObserver 方式自动移除和在页面重建后重建新 Observer，
 
