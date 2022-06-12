@@ -80,7 +80,9 @@
 
 ```java
 public class TestFragment extends Fragment {
+  
   protected void onViewCreate(){
+    
     viewModel.getXXXEvent().observe(this, xxx ->{
       renderUI(...);
     })
@@ -90,6 +92,7 @@ public class TestFragment extends Fragment {
 }
 
 public class SharedViewModel extends ViewModel {
+  
   private final MutableEvent<XXX> xxxEvent = new MutableEvent<>();
   
   public Event<XXX> getXXXEvent(){
@@ -118,7 +121,7 @@ MutableEvent<Moment> test =
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.4.1'
+implementation 'com.kunminx.arch:unpeek-livedata:7.5.0'
 ```
 
 > 温馨提示：
@@ -162,6 +165,8 @@ https://wj.qq.com/s2/8362688/124a/
 
 | 版本                | 更新日期   |
 | ------------------- | ---------- |
+| UnPeekLiveData v7.5 | 2022.6.12  |
+| UnPeekLiveData v7.4 | 2022.6.10  |
 | UnPeekLiveData v7.2 | 2021.8.20  |
 | UnPeekLiveData v7.1 | 2021.8.16  |
 | UnPeekLiveData v7   | 2021.8.10  |
@@ -178,6 +183,14 @@ https://wj.qq.com/s2/8362688/124a/
 &nbsp;
 
 ## 最新更新动态
+
+### UnPeekLiveData v7.5 特点
+
+为方便后来者学习参考，往期版本 UnPeekLiveData 类皆存留库中，
+
+**现将过往类从库中移至 [Wiki](https://github.com/KunMinX/UnPeek-LiveData/wiki/UnPeekLiveData-v7-%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF)**，感兴趣可自行查阅。
+
+&nbsp;
 
 ### UnPeekLiveData v7.4 特点
 
