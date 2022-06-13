@@ -6,7 +6,7 @@
 
 最新版基于 2021 年 8 月小伙伴 RebornWolfman 贡献 v7 版重构代码，稳定运行至今。
 
-为契合消息分发语义，我们于最新版加入 MutableEvent/Event 类命名。
+为契合消息分发语义，我们于最新版加入 MutableResult/Result 类命名。
 
 &nbsp;
 
@@ -80,10 +80,8 @@
 
 ```java
 public class TestFragment extends Fragment {
-  
   protected void onViewCreate(){
-    
-    viewModel.getXXXEvent().observe(this, xxx ->{
+    viewModel.getXXXResult().observe(this, xxx ->{
       renderUI(...);
     })
     
@@ -92,17 +90,16 @@ public class TestFragment extends Fragment {
 }
 
 public class SharedViewModel extends ViewModel {
+  private final MutableResult<XXX> xxxResult = new MutableResult<>();
   
-  private final MutableEvent<XXX> xxxEvent = new MutableEvent<>();
-  
-  public Event<XXX> getXXXEvent(){
-    return xxxEvent;
+  public Result<XXX> getXXXResult(){
+    return xxxResult;
   }
   
   public void requestXXX(){
     //业务逻辑 ...
     ...
-    xxxEvent.setValue(...);
+    xxxResult.setValue(...);
   }
 }
 ```
@@ -110,8 +107,8 @@ public class SharedViewModel extends ViewModel {
 且 UnPeekLiveData 提供构造器模式，后续可通过构造器组装适合自己业务场景 UnPeekLiveData。
 
 ```java
-MutableEvent<Moment> test =
-  new MutableEvent.Builder<Moment>()
+MutableResult<Moment> test =
+  new MutableResult.Builder<Moment>()
     .setAllowNullValue(false)
     .create();
 ```
@@ -121,7 +118,7 @@ MutableEvent<Moment> test =
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.5.0'
+implementation 'com.kunminx.arch:unpeek-livedata:7.6.0'
 ```
 
 > 温馨提示：
@@ -165,6 +162,7 @@ https://wj.qq.com/s2/8362688/124a/
 
 | 版本                | 更新日期   |
 | ------------------- | ---------- |
+| UnPeekLiveData v7.6 | 2022.6.13  |
 | UnPeekLiveData v7.5 | 2022.6.12  |
 | UnPeekLiveData v7.4 | 2022.6.10  |
 | UnPeekLiveData v7.2 | 2021.8.20  |
@@ -183,6 +181,16 @@ https://wj.qq.com/s2/8362688/124a/
 &nbsp;
 
 ## 最新更新动态
+
+### UnPeekLiveData v7.6 特点
+
+事件 Event 倾向于 "发送" 语境，事件通常来自 UI 层，例如通过 Button click 发起某事件。
+
+而 mutable 系框架倾向于 "接收事件、处理业务逻辑" 后的末流消息分发。
+
+因而基于 "单一职责原则"，最终我们将 UnPeekLiveData 更名为 Result，示意其纯粹 "消息分发" 用途，
+
+也即通过语义，让使用者在视图控制器中使用 result.setValue 时感觉别扭，促使其仅于 "唯一可信源" 内部业务逻辑末端使用。
 
 ### UnPeekLiveData v7.5 特点
 

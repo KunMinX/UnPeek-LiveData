@@ -5,13 +5,13 @@ import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
 /**
  * Create by KunMinX at 2022/5/31
  */
-public class Event<T> extends ProtectedUnPeekLiveData<T> {
+public class Result<T> extends ProtectedUnPeekLiveData<T> {
 
-  public Event(T value) {
+  public Result(T value) {
     super(value);
   }
 
-  public Event() {
+  public Result() {
     super();
   }
 

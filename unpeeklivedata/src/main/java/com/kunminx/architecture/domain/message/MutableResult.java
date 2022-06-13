@@ -3,13 +3,13 @@ package com.kunminx.architecture.domain.message;
 /**
  * Create by KunMinX at 2022/5/31
  */
-public class MutableEvent<T> extends Event<T> {
+public class MutableResult<T> extends Result<T> {
 
-  public MutableEvent(T value) {
+  public MutableResult(T value) {
     super(value);
   }
 
-  public MutableEvent() {
+  public MutableResult() {
     super();
   }
 
@@ -48,8 +48,8 @@ public class MutableEvent<T> extends Event<T> {
       return this;
     }
 
-    public MutableEvent<T> create() {
-      MutableEvent<T> liveData = new MutableEvent<>();
+    public MutableResult<T> create() {
+      MutableResult<T> liveData = new MutableResult<>();
       liveData.isAllowNullValue = this.isAllowNullValue;
       return liveData;
     }
