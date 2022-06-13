@@ -84,18 +84,18 @@ public class TestFragment extends Fragment {
     viewModel.getXXXResult().observe(this, xxx ->{
       renderUI(...);
     })
-    
+
     viewModel.requestXXX();
   }
 }
 
 public class SharedViewModel extends ViewModel {
   private final MutableResult<XXX> xxxResult = new MutableResult<>();
-  
+
   public Result<XXX> getXXXResult(){
     return xxxResult;
   }
-  
+
   public void requestXXX(){
     //业务逻辑 ...
     ...
@@ -108,9 +108,9 @@ public class SharedViewModel extends ViewModel {
 
 ```java
 MutableResult<Moment> test =
-  new MutableResult.Builder<Moment>()
-    .setAllowNullValue(false)
-    .create();
+        new MutableResult.Builder<Moment>()
+        .setAllowNullValue(false)
+        .create();
 ```
 
 &nbsp;
@@ -164,7 +164,6 @@ https://wj.qq.com/s2/8362688/124a/
 | ------------------- | ---------- |
 | UnPeekLiveData v7.6 | 2022.6.13  |
 | UnPeekLiveData v7.5 | 2022.6.12  |
-| UnPeekLiveData v7.4 | 2022.6.10  |
 | UnPeekLiveData v7.2 | 2021.8.20  |
 | UnPeekLiveData v7.1 | 2021.8.16  |
 | UnPeekLiveData v7   | 2021.8.10  |
@@ -188,21 +187,17 @@ https://wj.qq.com/s2/8362688/124a/
 
 而 mutable 系框架倾向于 "接收事件、处理业务逻辑" 后的末流消息分发。
 
-因而基于 "单一职责原则"，最终我们将 UnPeekLiveData 更名为 Result，示意其纯粹 "消息分发" 用途，
+为此，基于 "单一职责原则"，最终我们将 UnPeekLiveData 更名为 Result，示意其纯粹 "消息分发" 用途，
 
-也即通过语义，让使用者在视图控制器中使用 result.setValue 时感觉别扭，促使其仅于 "唯一可信源" 内部业务逻辑末端使用。
+通过语义，让团队成员在 Activity/Fragment 中使用 result.setValue 时感觉别扭，促使其仅于 "唯一可信源" 内部业务逻辑末端使用。
+
+&nbsp;
 
 ### UnPeekLiveData v7.5 特点
 
 为方便后来者学习参考，往期版本 UnPeekLiveData 类皆存留库中，
 
 **现将过往类从库中移至 [Wiki](https://github.com/KunMinX/UnPeek-LiveData/wiki/UnPeekLiveData-v7-%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF)**，感兴趣可自行查阅。
-
-&nbsp;
-
-### UnPeekLiveData v7.4 特点
-
-引入 MutableEvent/Event 类，以契合 "消息分发" 语义。
 
 &nbsp;
 
