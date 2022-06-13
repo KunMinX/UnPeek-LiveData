@@ -14,25 +14,29 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.ui.state;
+package com.kunminx.puremusic.domain.request;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.domain.message.MutableResult;
+import com.kunminx.puremusic.data.DataRepository;
 import com.kunminx.puremusic.data.bean.Moment;
-import com.kunminx.puremusic.domain.MomentRequest;
 
 import java.util.List;
 
 /**
  * Create by KunMinX at 2020/5/30
  */
-public class ListViewModel extends ViewModel {
+public class MomentRequest extends ViewModel {
 
-    public final MutableLiveData<List<Moment>> list = new MutableLiveData<>();
+  private final MutableResult<List<Moment>> listResult = new MutableResult<>();
 
-    public final MutableLiveData<Boolean> autoScrollToTopWhenInsert = new MutableLiveData<>(true);
+  public LiveData<List<Moment>> getListResult() {
+    return listResult;
+  }
 
-    public final MomentRequest momentRequest = new MomentRequest();
-    
+  public void requestList() {
+    DataRepository.getInstance().requestList(listResult);
+  }
 }

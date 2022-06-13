@@ -29,17 +29,17 @@ import androidx.recyclerview.widget.DiffUtil;
  */
 public abstract class SimpleBindingAdapter<M, B extends ViewDataBinding> extends BaseBindingAdapter<M, B> {
 
-    private final int layout;
+  private final int layout;
 
-    public SimpleBindingAdapter(Context context, int layout, @NonNull DiffUtil.ItemCallback<M> diffCallback) {
-        super(context, diffCallback);
-        this.layout = layout;
-    }
+  public SimpleBindingAdapter(Context context, int layout, @NonNull DiffUtil.ItemCallback<M> diffCallback) {
+    super(context, diffCallback);
+    this.layout = layout;
+  }
 
-    @Override
-    protected @LayoutRes
-    int getLayoutResId(int viewType) {
-        return this.layout;
-    }
+  @Override
+  protected @LayoutRes
+  int getLayoutResId(int viewType) {
+    return this.layout;
+  }
 
 }

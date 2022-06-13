@@ -29,21 +29,21 @@ import com.kunminx.puremusic.utils.Utils;
  */
 public class App extends Application implements ViewModelStoreOwner {
 
-    private ViewModelStore mAppViewModelStore;
+  private ViewModelStore mAppViewModelStore;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+  @Override
+  public void onCreate() {
+    super.onCreate();
 
-        mAppViewModelStore = new ViewModelStore();
+    mAppViewModelStore = new ViewModelStore();
 
-        Utils.init(this);
-    }
+    Utils.init(this);
+  }
 
-    @NonNull
-    @Override
-    public ViewModelStore getViewModelStore() {
-        return mAppViewModelStore;
-    }
+  @NonNull
+  @Override
+  public ViewModelStore getViewModelStore() {
+    return mAppViewModelStore;
+  }
 
 }

@@ -23,13 +23,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.FragmentDetailBinding;
+import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.DetailViewModel;
 
 /**
  * Create by KunMinX at 2020/5/30
@@ -37,13 +38,13 @@ import com.kunminx.puremusic.ui.state.DetailViewModel;
 public class DetailFragment extends BaseFragment {
 
   private DetailViewModel mState;
-  private SharedViewModel mEvent;
+  private PageMessenger mMessenger;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mState = getFragmentViewModel(DetailViewModel.class);
-    mEvent = getActivityViewModel(SharedViewModel.class);
+    mMessenger = getActivityViewModel(PageMessenger.class);
     if (mState.moment == null && getArguments() != null) {
       mState.moment = getArguments().getParcelable(Moment.MOMENT);
     }
@@ -66,7 +67,7 @@ public class DetailFragment extends BaseFragment {
 
     mState.content.set(mState.moment.getContent());
 
-    mEvent.getMoment().observe(getViewLifecycleOwner(), moment -> {
+    mMessenger.getMomentResult().observe(getViewLifecycleOwner(), moment -> {
       mState.moment = moment;
       mState.content.set(moment.getContent());
     });
@@ -83,6 +84,11 @@ public class DetailFragment extends BaseFragment {
     public void back() {
       nav().navigateUp();
     }
+  }
 
+  public static class DetailViewModel extends ViewModel {
+    public final State<String> content = new State<>("");
+    public final State<String> edit = new State<>("编辑");
+    public Moment moment;
   }
 }

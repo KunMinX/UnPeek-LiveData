@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.ui.state.ObserverViewModel" />
+            type="com.kunminx.puremusic.ui.ObserverFragment.ObserverViewModel" />
 
     </data>
 

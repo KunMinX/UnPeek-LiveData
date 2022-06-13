@@ -20,7 +20,7 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.ui.state.DetailViewModel" />
+            type="com.kunminx.puremusic.ui.DetailFragment.DetailViewModel" />
 
         <variable
             name="click"

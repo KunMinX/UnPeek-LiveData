@@ -25,13 +25,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.FragmentEditorBinding;
+import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.EditorViewModel;
 
 import java.util.UUID;
 
@@ -41,18 +42,15 @@ import java.util.UUID;
 public class EditorFragment extends BaseFragment {
 
   private EditorViewModel mState;
-  private SharedViewModel mEvent;
+  private PageMessenger mMessenger;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mState = getFragmentViewModel(EditorViewModel.class);
-    mEvent = getActivityViewModel(SharedViewModel.class);
-    if (mState.moment == null && getArguments() != null) {
+    mMessenger = getActivityViewModel(PageMessenger.class);
+    if (getArguments() != null) {
       mState.moment = getArguments().getParcelable(Moment.MOMENT);
-    }
-    if (mState.moment == null) {
-      mState.moment = new Moment();
     }
   }
 
@@ -77,7 +75,7 @@ public class EditorFragment extends BaseFragment {
   public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
     public void locate() {
-      mEvent.requestTestDelayMsg("延迟显示了");
+      mMessenger.requestTestDelayMsg("延迟显示了");
     }
 
     public void back() {
@@ -88,16 +86,24 @@ public class EditorFragment extends BaseFragment {
     public boolean onMenuItemClick(MenuItem item) {
       if (item.getItemId() == R.id.menu_save) {
         toggleSoftInput();
-        if(mState.moment.getUuid()==null){
-          mState.moment.setUuid(UUID.randomUUID().toString());
-          mState.moment.setUserName("KunMinX");
-          mState.moment.setLocation(mState.location.get());
-        }
-        mState.moment.setContent(mState.content.get());
-        mEvent.requestMoment(mState.moment);
+        mState.moment = new Moment(
+                UUID.randomUUID().toString(),
+                mState.content.get(),
+                mState.location.get(),
+                null,
+                "KunMinX",
+                null
+        );
+        mMessenger.requestMoment(mState.moment);
         nav().navigateUp();
       }
       return true;
     }
+  }
+
+  public static class EditorViewModel extends ViewModel {
+    public final State<String> content = new State<>("");
+    public final State<String> location = new State<>("发送 Toast");
+    public Moment moment = new Moment(null, null, null, null, null, null);
   }
 }

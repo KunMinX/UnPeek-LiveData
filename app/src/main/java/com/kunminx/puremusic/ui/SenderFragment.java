@@ -7,26 +7,27 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentEventSenderBinding;
+import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.SenderViewModel;
 
 /**
  * Create by KunMinX at 2021/8/10
  */
 public class SenderFragment extends BaseFragment {
 
-  private SharedViewModel mEvent;
   private SenderViewModel mState;
+  private PageMessenger mMessenger;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mEvent = getApplicationScopeViewModel(SharedViewModel.class);
     mState = getFragmentViewModel(SenderViewModel.class);
+    mMessenger = getApplicationScopeViewModel(PageMessenger.class);
   }
 
   @Nullable
@@ -42,8 +43,12 @@ public class SenderFragment extends BaseFragment {
 
   public class ClickProxy {
     public void addNumber() {
-      mState.number.setValue(mState.number.getValue() + 1);
-      mEvent.requestDispatchString(String.valueOf(mState.number.getValue()));
+      mState.number.set(mState.number.get() + 1);
+      mMessenger.requestDispatchString(String.valueOf(mState.number.get()));
     }
+  }
+
+  public static class SenderViewModel extends ViewModel {
+    public final State<Integer> number = new State<>(0);
   }
 }

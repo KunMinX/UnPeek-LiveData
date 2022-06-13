@@ -39,87 +39,87 @@ import java.util.List;
  */
 public abstract class BaseBindingAdapter<M, B extends ViewDataBinding> extends ListAdapter<M, RecyclerView.ViewHolder> {
 
-    protected Context mContext;
+  protected Context mContext;
 
-    private OnItemClickListener<M> mOnItemClickListener;
-    private OnItemLongClickListener<M> mOnItemLongClickListener;
+  private OnItemClickListener<M> mOnItemClickListener;
+  private OnItemLongClickListener<M> mOnItemLongClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener<M> onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
+  public void setOnItemClickListener(OnItemClickListener<M> onItemClickListener) {
+    mOnItemClickListener = onItemClickListener;
+  }
+
+  public void setOnItemLongClickListener(OnItemLongClickListener<M> onItemLongClickListener) {
+    mOnItemLongClickListener = onItemLongClickListener;
+  }
+
+  public BaseBindingAdapter(Context context, @NonNull DiffUtil.ItemCallback<M> diffCallback) {
+    super(diffCallback);
+    this.mContext = context;
+  }
+
+  @Override
+  public void submitList(@Nullable List<M> list) {
+    super.submitList(list, () -> {
+      super.submitList(list == null ? new ArrayList<>() : new ArrayList<>(list));
+    });
+  }
+
+  @Override
+  @NonNull
+  public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    B binding = DataBindingUtil.inflate(LayoutInflater.from(this.mContext), this.getLayoutResId(viewType), parent, false);
+    BaseBindingViewHolder holder = new BaseBindingViewHolder(binding.getRoot());
+    holder.itemView.setOnClickListener(v -> {
+      if (mOnItemClickListener != null) {
+        int position = holder.getBindingAdapterPosition();
+        mOnItemClickListener.onItemClick(getItem(position), position);
+      }
+    });
+    holder.itemView.setOnLongClickListener(v -> {
+      if (mOnItemLongClickListener != null) {
+        int position = holder.getBindingAdapterPosition();
+        mOnItemLongClickListener.onItemLongClick(getItem(position), position);
+        return true;
+      }
+      return false;
+    });
+    return holder;
+  }
+
+  @Override
+  public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    B binding = DataBindingUtil.getBinding(holder.itemView);
+    this.onBindItem(binding, getItem(position), holder);
+    if (binding != null) {
+      binding.executePendingBindings();
     }
+  }
 
-    public void setOnItemLongClickListener(OnItemLongClickListener<M> onItemLongClickListener) {
-        mOnItemLongClickListener = onItemLongClickListener;
+  protected abstract @LayoutRes
+  int getLayoutResId(int viewType);
+
+  /**
+   * 注意：
+   * RecyclerView 中的数据有位置改变（比如删除）时一般不会重新调用 onBindViewHolder() 方法，除非这个元素不可用。
+   * 为了实时获取元素的位置，我们通过 ViewHolder.getBindingAdapterPosition() 方法。
+   *
+   * @param binding .
+   * @param item    .
+   * @param holder  .
+   */
+  protected abstract void onBindItem(B binding, M item, RecyclerView.ViewHolder holder);
+
+  public static class BaseBindingViewHolder extends RecyclerView.ViewHolder {
+    BaseBindingViewHolder(View itemView) {
+      super(itemView);
     }
+  }
 
-    public BaseBindingAdapter(Context context, @NonNull DiffUtil.ItemCallback<M> diffCallback) {
-        super(diffCallback);
-        this.mContext = context;
-    }
+  public interface OnItemClickListener<M> {
+    void onItemClick(M item, int position);
+  }
 
-    @Override
-    public void submitList(@Nullable List<M> list) {
-        super.submitList(list, () -> {
-            super.submitList(list == null ? new ArrayList<>() : new ArrayList<>(list));
-        });
-    }
-
-    @Override
-    @NonNull
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        B binding = DataBindingUtil.inflate(LayoutInflater.from(this.mContext), this.getLayoutResId(viewType), parent, false);
-        BaseBindingViewHolder holder = new BaseBindingViewHolder(binding.getRoot());
-        holder.itemView.setOnClickListener(v -> {
-            if (mOnItemClickListener != null) {
-                int position = holder.getBindingAdapterPosition();
-                mOnItemClickListener.onItemClick(getItem(position), position);
-            }
-        });
-        holder.itemView.setOnLongClickListener(v -> {
-            if (mOnItemLongClickListener != null) {
-                int position = holder.getBindingAdapterPosition();
-                mOnItemLongClickListener.onItemLongClick(getItem(position), position);
-                return true;
-            }
-            return false;
-        });
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        B binding = DataBindingUtil.getBinding(holder.itemView);
-        this.onBindItem(binding, getItem(position), holder);
-        if (binding != null) {
-            binding.executePendingBindings();
-        }
-    }
-
-    protected abstract @LayoutRes
-    int getLayoutResId(int viewType);
-
-    /**
-     * 注意：
-     * RecyclerView 中的数据有位置改变（比如删除）时一般不会重新调用 onBindViewHolder() 方法，除非这个元素不可用。
-     * 为了实时获取元素的位置，我们通过 ViewHolder.getBindingAdapterPosition() 方法。
-     *
-     * @param binding .
-     * @param item    .
-     * @param holder  .
-     */
-    protected abstract void onBindItem(B binding, M item, RecyclerView.ViewHolder holder);
-
-    public static class BaseBindingViewHolder extends RecyclerView.ViewHolder {
-        BaseBindingViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    public interface OnItemClickListener<M> {
-        void onItemClick(M item, int position);
-    }
-
-    public interface OnItemLongClickListener<M> {
-        void onItemLongClick(M item, int position);
-    }
+  public interface OnItemLongClickListener<M> {
+    void onItemLongClick(M item, int position);
+  }
 }

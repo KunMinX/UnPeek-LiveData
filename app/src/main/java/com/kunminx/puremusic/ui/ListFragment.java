@@ -24,15 +24,18 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.FragmentListBinding;
+import com.kunminx.puremusic.domain.message.PageMessenger;
+import com.kunminx.puremusic.domain.request.MomentRequest;
 import com.kunminx.puremusic.ui.adapter.MomentAdapter;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.ListViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,13 +44,13 @@ import java.util.List;
 public class ListFragment extends BaseFragment {
 
   private ListViewModel mState;
-  private SharedViewModel mEvent;
+  private PageMessenger mMessenger;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mState = getFragmentViewModel(ListViewModel.class);
-    mEvent = getActivityViewModel(SharedViewModel.class);
+    mMessenger = getActivityViewModel(PageMessenger.class);
   }
 
   @Nullable
@@ -74,17 +77,18 @@ public class ListFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mState.momentRequest.getListMutableLiveData().observe(getViewLifecycleOwner(), moments -> {
-      mState.list.setValue(moments);
+    mState.momentRequest.getListResult().observe(getViewLifecycleOwner(), moments -> {
+      mState.list.set(moments);
     });
 
-    mEvent.getMoment().observe(getViewLifecycleOwner(), moment -> {
-      List<Moment> list = mState.list.getValue();
+    mMessenger.getMomentResult().observe(getViewLifecycleOwner(), moment -> {
+      List<Moment> list = mState.list.get();
       assert list != null;
       boolean modify = false;
       for (Moment moment1 : list) {
         if (moment1.getUuid().equals(moment.getUuid())) {
-          moment1.setContent(moment.getContent());
+          int index = list.indexOf(moment1);
+          list.set(index, moment);
           modify = true;
           break;
         }
@@ -92,16 +96,16 @@ public class ListFragment extends BaseFragment {
       if (!modify) {
         list.add(0, moment);
       }
-      mState.list.setValue(list);
+      mState.list.set(list);
     });
 
-    mEvent.getTestDelayMsg().observe(getViewLifecycleOwner(), s -> {
+    mMessenger.getTestDelayMsgResult().observe(getViewLifecycleOwner(), s -> {
       if (!TextUtils.isEmpty(s)) {
         showLongToast(s);
       }
     });
 
-    if (mState.list.getValue() == null || mState.list.getValue().size() == 0) {
+    if (mState.list.get() == null || mState.list.get().size() == 0) {
       mState.momentRequest.requestList();
     }
   }
@@ -110,5 +114,11 @@ public class ListFragment extends BaseFragment {
     public void fabClick() {
       nav().navigate(R.id.action_listFragment_to_editorFragment);
     }
+  }
+
+  public static class ListViewModel extends ViewModel {
+    public final State<List<Moment>> list = new State<>(new ArrayList<>());
+    public final State<Boolean> autoScrollToTopWhenInsert = new State<>(true);
+    public final MomentRequest momentRequest = new MomentRequest();
   }
 }

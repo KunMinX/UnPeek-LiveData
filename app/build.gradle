@@ -31,6 +31,12 @@ android {
 }
 
 dependencies {
+    configurations {
+        all {
+            exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
+        }
+    }
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation 'junit:junit:4.13.2'
@@ -38,12 +44,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation project(':unpeeklivedata')
-
-    configurations {
-        all {
-            exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
-        }
-    }
 
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -53,6 +53,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-runtime:2.4.2'
 
     implementation 'com.kunminx.arch:smooth-navigation:4.0.0-beta1'
+    implementation 'com.kunminx.arch:strict-databinding:5.1.0-beta1'
 
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'

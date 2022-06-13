@@ -14,51 +14,51 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.ui.event;
+package com.kunminx.puremusic.domain.message;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.architecture.ui.callback.ProtectedUnPeekLiveData;
-import com.kunminx.architecture.ui.callback.UnPeekLiveData;
+import com.kunminx.architecture.domain.message.MutableResult;
+import com.kunminx.architecture.domain.message.Result;
 import com.kunminx.puremusic.data.bean.Moment;
 
 /**
  * Create by KunMinX at 2020/5/30
  */
-public class SharedViewModel extends ViewModel {
+public class PageMessenger extends ViewModel {
 
-  private final UnPeekLiveData<Moment> mMoment = new UnPeekLiveData<>();
+  private final MutableResult<Moment> momentResult = new MutableResult<>();
 
-  private final UnPeekLiveData<String> mTestDelayMsg = new UnPeekLiveData<>();
+  private final MutableResult<String> testDelayMsgResult = new MutableResult<>();
 
-  private final UnPeekLiveData<String> mDispatchString = new UnPeekLiveData<>();
+  private final MutableResult<String> dispatchStringResult = new MutableResult<>();
 
-  public ProtectedUnPeekLiveData<Moment> getMoment() {
-    return mMoment;
+  public Result<Moment> getMomentResult() {
+    return momentResult;
   }
 
-  public ProtectedUnPeekLiveData<String> getTestDelayMsg() {
-    return mTestDelayMsg;
+  public Result<String> getTestDelayMsgResult() {
+    return testDelayMsgResult;
   }
 
-  public ProtectedUnPeekLiveData<String> getDispatchString() {
-    return mDispatchString;
+  public Result<String> getDispatchStringResult() {
+    return dispatchStringResult;
   }
 
   public void requestMoment(Moment moment) {
-    mMoment.setValue(moment);
+    momentResult.setValue(moment);
   }
 
   public void requestTestDelayMsg(String s) {
-    mTestDelayMsg.setValue(s);
+    testDelayMsgResult.setValue(s);
   }
 
   public void requestDispatchString(String s) {
-    mDispatchString.setValue(s);
+    dispatchStringResult.setValue(s);
   }
 
   public void requestRemoveObservers(LifecycleOwner owner) {
-    mDispatchString.removeObservers(owner);
+    dispatchStringResult.removeObservers(owner);
   }
 }

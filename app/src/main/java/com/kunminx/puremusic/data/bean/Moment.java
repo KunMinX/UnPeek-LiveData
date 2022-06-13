@@ -26,15 +26,12 @@ public class Moment implements Parcelable {
 
   public final static String MOMENT = "MOMENT";
 
-  private String uuid;
-  private String content;
-  private String location;
-  private String imgUrl;
-  private String userName;
-  private String userAvatar;
-
-  public Moment() {
-  }
+  private final String uuid;
+  private final String content;
+  private final String location;
+  private final String imgUrl;
+  private final String userName;
+  private final String userAvatar;
 
   public Moment(String uuid, String content, String location, String imgUrl, String userName, String userAvatar) {
     this.uuid = uuid;
@@ -70,50 +67,25 @@ public class Moment implements Parcelable {
     return uuid;
   }
 
-  public void setUuid(String uuid) {
-    this.uuid = uuid;
-  }
-
   public String getContent() {
     return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
   }
 
   public String getLocation() {
     return location;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
   public String getImgUrl() {
     return imgUrl;
-  }
-
-  public void setImgUrl(String imgUrl) {
-    this.imgUrl = imgUrl;
   }
 
   public String getUserName() {
     return userName;
   }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
   public String getUserAvatar() {
     return userAvatar;
   }
-
-  public void setUserAvatar(String userAvatar) {
-    this.userAvatar = userAvatar;
-  }
-
 
   @Override
   public int describeContents() {

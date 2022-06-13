@@ -8,27 +8,28 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentObserveForeverBinding;
+import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.ObserverViewModel;
 
 /**
  * Create by KunMinX at 2021/8/10
  */
 public class ObserveForeverFragment extends BaseFragment {
 
-  private SharedViewModel mEvent;
   private ObserverViewModel mState;
+  private PageMessenger mMessenger;
   private Observer<String> mObserver;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mEvent = getApplicationScopeViewModel(SharedViewModel.class);
     mState = getFragmentViewModel(ObserverViewModel.class);
+    mMessenger = getApplicationScopeViewModel(PageMessenger.class);
   }
 
   @Nullable
@@ -46,8 +47,8 @@ public class ObserveForeverFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mEvent.getDispatchString().observeForever(mObserver = s -> {
-      mState.number.setValue(s);
+    mMessenger.getDispatchStringResult().observeForever(mObserver = s -> {
+      mState.number.set(s);
     });
   }
 
@@ -55,15 +56,19 @@ public class ObserveForeverFragment extends BaseFragment {
   public void onDestroy() {
     super.onDestroy();
     if (mObserver != null) {
-      mEvent.getDispatchString().removeObserver(mObserver);
+      mMessenger.getDispatchStringResult().removeObserver(mObserver);
     }
   }
 
   public class ClickProxy {
     public void removeObserver() {
       if (mObserver != null) {
-        mEvent.getDispatchString().removeObserver(mObserver);
+        mMessenger.getDispatchStringResult().removeObserver(mObserver);
       }
     }
+  }
+
+  public static class ObserverViewModel extends ViewModel {
+    public final State<String> number = new State<>("0");
   }
 }

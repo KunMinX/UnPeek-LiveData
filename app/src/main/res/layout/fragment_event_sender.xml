@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.kunminx.puremusic.ui.state.SenderViewModel" />
+            type="com.kunminx.puremusic.ui.SenderFragment.SenderViewModel" />
 
         <variable
             name="click"

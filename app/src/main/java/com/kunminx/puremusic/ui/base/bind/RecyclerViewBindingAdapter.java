@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.kunminx.puremusic.ui.base.binding;
+package com.kunminx.puremusic.ui.base.bind;
 
 import androidx.databinding.BindingAdapter;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kunminx.puremusic.ui.base.adapter.SimpleBindingAdapter;

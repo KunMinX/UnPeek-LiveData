@@ -7,26 +7,27 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentObserverBinding;
+import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.ui.base.BaseFragment;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.ObserverViewModel;
 
 /**
  * Create by KunMinX at 2021/8/10
  */
 public class ObserverFragment extends BaseFragment {
 
-  private SharedViewModel mEvent;
   private ObserverViewModel mState;
+  private PageMessenger mMessenger;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mEvent = getApplicationScopeViewModel(SharedViewModel.class);
     mState = getFragmentViewModel(ObserverViewModel.class);
+    mMessenger = getApplicationScopeViewModel(PageMessenger.class);
   }
 
   @Nullable
@@ -38,7 +39,7 @@ public class ObserverFragment extends BaseFragment {
     binding.setVm(mState);
 
     binding.btn.setOnClickListener(v -> {
-      mEvent.requestRemoveObservers(getViewLifecycleOwner());
+      mMessenger.requestRemoveObservers(getViewLifecycleOwner());
     });
 
     return view;
@@ -48,8 +49,12 @@ public class ObserverFragment extends BaseFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    mEvent.getDispatchString().observe(getViewLifecycleOwner(), s -> {
-      mState.number.setValue(s);
+    mMessenger.getDispatchStringResult().observe(getViewLifecycleOwner(), s -> {
+      mState.number.set(s);
     });
+  }
+
+  public static class ObserverViewModel extends ViewModel {
+    public final State<String> number = new State<>("0");
   }
 }

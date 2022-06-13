@@ -22,13 +22,14 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
 
+import com.kunminx.architecture.ui.page.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.ActivityEditorBinding;
+import com.kunminx.puremusic.domain.message.PageMessenger;
 import com.kunminx.puremusic.ui.base.BaseActivity;
-import com.kunminx.puremusic.ui.event.SharedViewModel;
-import com.kunminx.puremusic.ui.state.EditorViewModel;
 
 import java.util.UUID;
 
@@ -37,44 +38,53 @@ import java.util.UUID;
  */
 public class EditorActivity extends BaseActivity {
 
-    private EditorViewModel mState;
-    private SharedViewModel mEvent;
+  private EditorViewModel mState;
+  private PageMessenger mMessenger;
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    mState = getActivityViewModel(EditorViewModel.class);
+    mMessenger = getApplicationScopeViewModel(PageMessenger.class);
+
+    ActivityEditorBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_editor);
+    binding.setLifecycleOwner(this);
+    binding.setVm(mState);
+    binding.setClick(new ClickProxy());
+  }
+
+  public class ClickProxy implements Toolbar.OnMenuItemClickListener {
+
+    public void locate() {
+      mMessenger.requestTestDelayMsg("延迟显示了");
+    }
+
+    public void back() {
+      finish();
+    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mState = getActivityViewModel(EditorViewModel.class);
-        mEvent = getApplicationScopeViewModel(SharedViewModel.class);
-
-        ActivityEditorBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_editor);
-        binding.setLifecycleOwner(this);
-        binding.setVm(mState);
-        binding.setClick(new ClickProxy());
+    public boolean onMenuItemClick(MenuItem item) {
+      if (item.getItemId() == R.id.menu_save) {
+        toggleSoftInput();
+        Moment moment = new Moment(
+                UUID.randomUUID().toString(),
+                mState.content.get(),
+                mState.location.get(),
+                null,
+                "KunMinX",
+                null
+        );
+        mMessenger.requestMoment(moment);
+        finish();
+      }
+      return true;
     }
+  }
 
-    public class ClickProxy implements Toolbar.OnMenuItemClickListener {
-
-        public void locate() {
-            mEvent.requestTestDelayMsg("延迟显示了");
-        }
-
-        public void back() {
-            finish();
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            if (item.getItemId() == R.id.menu_save) {
-                toggleSoftInput();
-                Moment moment = new Moment();
-                moment.setUuid(UUID.randomUUID().toString());
-                moment.setUserName("KunMinX");
-                moment.setLocation(mState.location.get());
-                moment.setContent(mState.content.get());
-                mEvent.requestMoment(moment);
-                finish();
-            }
-            return true;
-        }
-    }
+  public static class EditorViewModel extends ViewModel {
+    public final State<String> content = new State<>("");
+    public final State<String> location = new State<>("发送 Toast");
+    public Moment moment = new Moment(null, null, null, null, null, null);
+  }
 }
