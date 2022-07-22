@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.KunMinX'
 
 ext {
     PUBLISH_GROUP_ID = 'com.kunminx.arch'
@@ -29,21 +31,15 @@ apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
 
 
 android {
-    compileSdk appTargetSdk
+    compileSdkVersion appTargetSdk
     defaultConfig {
-        minSdk appMinSdk
-        targetSdk appTargetSdk
+        minSdkVersion appMinSdk
+        targetSdkVersion appTargetSdk
         versionCode appVersionCode
         versionName appVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-    }
-
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
     }
 
     buildTypes {
@@ -52,7 +48,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 tasks.withType(Javadoc) {

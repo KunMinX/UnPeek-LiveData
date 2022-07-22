@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk appTargetSdk
+    compileSdkVersion appTargetSdk
     defaultConfig {
         applicationId "com.kunminx.unpeeklivedata"
-        minSdk appMinSdk
-        targetSdk appTargetSdk
+        minSdkVersion appMinSdk
+        targetSdkVersion appTargetSdk
         versionCode appVersionCode
         versionName appVersionName
 
@@ -31,11 +31,11 @@ android {
 }
 
 dependencies {
-    configurations {
-        all {
-            exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
-        }
-    }
+//    configurations {
+//        all {
+//            exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
+//        }
+//    }
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
-    implementation 'androidx.navigation:navigation-runtime:2.4.2'
+    implementation 'androidx.navigation:navigation-runtime:2.5.0'
 
     implementation 'com.kunminx.arch:smooth-navigation:4.0.0-beta1'
     implementation 'com.kunminx.arch:strict-databinding:5.1.0-beta1'
