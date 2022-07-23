@@ -32,6 +32,7 @@
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/iv_avatar"
+            imageUrl="@{moment.userAvatar}"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginStart="12dp"
