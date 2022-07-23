@@ -28,15 +28,15 @@ android {
         dataBinding = true
     }
 
+    android{
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
 }
 
 dependencies {
-//    configurations {
-//        all {
-//            exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
-//        }
-//    }
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation 'junit:junit:4.13.2'
@@ -52,8 +52,8 @@ dependencies {
 
     implementation 'androidx.navigation:navigation-runtime:2.5.0'
 
-    implementation 'com.kunminx.arch:smooth-navigation:4.0.0-beta1'
-    implementation 'com.kunminx.arch:strict-databinding:5.1.0-beta1'
+    implementation 'com.github.KunMinX:Smooth-Navigation:v4.0.0'
+    implementation 'com.github.KunMinX.Strict-DataBinding:strict_databinding:v5.2.0'
 
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'

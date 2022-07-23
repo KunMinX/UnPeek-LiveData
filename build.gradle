@@ -5,7 +5,7 @@ apply plugin: 'io.codearte.nexus-staging'
 buildscript {
     ext {
         appTargetSdk = 31
-        appMinSdk = 15
+        appMinSdk = 23
         appVersionCode = 7060000
         appVersionName = "7.6.0"
         lifecycleVersion = "2.4.1"
@@ -15,6 +15,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
