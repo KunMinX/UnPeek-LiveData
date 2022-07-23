@@ -42,29 +42,10 @@ public class DataRepository {
   public void requestList(MutableResult<List<Moment>> listMutableResult) {
     List<Moment> list = new ArrayList<>();
 
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
-
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
-
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
-
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
-
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
-
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
-
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
-
-    list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
-            "台北夜市一条街", null, "KunMinX", null));
+    for (int i = 0; i < 10; i++) {
+      list.add(new Moment(getUUID(), Utils.getApp().getString(R.string.moment_content),
+              "台北夜市一条街", null, "KunMinX", "https://tva1.sinaimg.cn/large/e6c9d24ely1h4exa8m7quj20ju0juaax.jpg"));
+    }
 
     listMutableResult.setValue(list);
   }
