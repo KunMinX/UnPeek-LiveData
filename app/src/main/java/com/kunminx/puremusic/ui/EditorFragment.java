@@ -75,7 +75,7 @@ public class EditorFragment extends BaseFragment {
   public class ClickProxy implements Toolbar.OnMenuItemClickListener {
 
     public void locate() {
-      mMessenger.requestTestDelayMsg("延迟显示了");
+      mMessenger.requestTestDelayMsg("未延迟显示");
     }
 
     public void back() {
@@ -92,7 +92,7 @@ public class EditorFragment extends BaseFragment {
                 mState.location.get(),
                 null,
                 "KunMinX",
-                null
+                "https://tva1.sinaimg.cn/large/e6c9d24ely1h4exa8m7quj20ju0juaax.jpg"
         );
         mMessenger.requestMoment(mState.moment);
         nav().navigateUp();
