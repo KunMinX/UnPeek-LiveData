@@ -118,7 +118,7 @@ MutableResult<Moment> test =
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.6.0'
+implementation 'com.kunminx.arch:unpeek-livedata:7.7.0'
 ```
 
 > 温馨提示：

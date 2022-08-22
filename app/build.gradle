@@ -45,12 +45,12 @@ dependencies {
 
     implementation project(':unpeeklivedata')
 
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
-    implementation 'androidx.navigation:navigation-runtime:2.5.0'
+    implementation 'androidx.navigation:navigation-runtime:2.5.1'
 
     implementation 'com.github.KunMinX:Smooth-Navigation:v4.0.0'
     implementation 'com.github.KunMinX.Strict-DataBinding:strict_databinding:5.3.0'
@@ -58,7 +58,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
 
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
