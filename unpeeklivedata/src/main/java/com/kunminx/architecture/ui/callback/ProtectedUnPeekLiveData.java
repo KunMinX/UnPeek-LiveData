@@ -175,7 +175,7 @@ public class ProtectedUnPeekLiveData<T> extends LiveData<T> {
    * 手动将消息从内存中清空，
    * 以免无用消息随着 SharedViewModel 长时间驻留而导致内存溢出发生。
    */
-  public void clear() {
+  public void clean() {
     super.setValue(null);
   }
 

@@ -118,7 +118,7 @@ MutableResult<Moment> test =
 ## Maven 依赖
 
 ```groovy
-implementation 'com.kunminx.arch:unpeek-livedata:7.7.0'
+implementation 'com.kunminx.arch:unpeek-livedata:7.8.0'
 ```
 
 > 温馨提示：
@@ -162,6 +162,7 @@ https://wj.qq.com/s2/8362688/124a/
 
 | 版本                | 更新日期   |
 | ------------------- | ---------- |
+| UnPeekLiveData v7.8 | 2022.9.06  |
 | UnPeekLiveData v7.6 | 2022.6.13  |
 | UnPeekLiveData v7.5 | 2022.6.12  |
 | UnPeekLiveData v7.2 | 2021.8.20  |
@@ -180,6 +181,10 @@ https://wj.qq.com/s2/8362688/124a/
 &nbsp;
 
 ## 最新更新动态
+
+## UnPeekLiveData v7.8 特点
+
+clear 方法改名 clean，以免开发者和集合 clear 方法弄混。
 
 ### UnPeekLiveData v7.6 特点
 
