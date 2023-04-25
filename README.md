@@ -1,12 +1,40 @@
 ![](https://images.xiaozhuanlan.com/photo/2022/11110ff4abb5e546b05031baee3ea97e.png)
 
+## 背景
+
+LiveData 是效仿响应式编程 BehaviorSubject 的设计，由于
+
+1.Jetpack 架构示例通常只包含 “表现层” 和 “数据层” 两层，缺乏在 “领域层” 分发数据的工具，
+
+2.LiveData 的设计缺乏边界感，其开放式的 Observer 回调容易让开发者误当做 “一次性事件分发组件” 来使用，造成恢复状态时 “数据不一致” 等问题（具体可参见[《MVI 存在意义》篇](https://juejin.cn/post/7145317979708735496) 关于 “响应式编程漏洞” 的描述）
+
+3.DataBinding ObservableField 组件的观察者能一对一绑定控件，更适合承担表现层 BehaviorSubject 工作，
+
+4.LiveData 具备生命周期安全等优势，
+
+因此决定将 LiveData 往领域层 PublishSubject 方向改造，去除其 “自动推送最后一次状态” 的能力，使其专职生命周期安全的数据分发，
+
+&nbsp;
+
 ## 框架现状
+
+> **Note 2023.4.25：**
+
+由于 LiveData 存在的初衷并非是专业的 “一次性事件分发组件”，改造过的 UnPeekLiveData 也只适用于 “低频次数据分发（例如每秒推送 1 次）” 场景，
+
+因而若想满足 “高频次事件分发” 需求（例如每秒推送 5 次以上），请改用或参考专职 “领域层” 数据分发的 [MVI-Dispatcher](https://github.com/KunMinX/MVI-Dispatcher) 组件，该组件内部通过消息队列设计，确保不漏掉每一次推送。
+
+> **Note 2021.8.20：**
 
 腾讯音乐小伙伴贡献过 v5 版重构代码，用于月活过亿 “生产环境” 痛点治理。
 
 最新版基于 2021 年 8 月小伙伴 RebornWolfman 贡献 v7 版重构代码，稳定运行至今。
 
 为契合消息分发语义，我们于最新版加入 MutableResult/Result 类命名。
+
+&nbsp;
+
+- - - - - - - - - - - - - - -
 
 &nbsp;
 
