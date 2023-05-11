@@ -6,9 +6,13 @@ LiveData 是效仿响应式编程 BehaviorSubject 的设计，由于
 
 1.Jetpack 架构示例通常只包含 “表现层” 和 “数据层” 两层，缺乏在 “领域层” 分发数据的工具，
 
-2.LiveData 的设计缺乏边界感，其开放式的 Observer 回调容易让开发者误当做 “一次性事件分发组件” 来使用，造成恢复状态时 “数据不一致” 等问题（具体可参见[《MVI 存在意义》篇](https://juejin.cn/post/7145317979708735496) 关于 “响应式编程漏洞” 的描述）
+2.LiveData Observer 的设计缺乏边界感，
 
-3.DataBinding ObservableField 组件的观察者能一对一绑定控件，更适合承担表现层 BehaviorSubject 工作，
+容易让开发者误当做 “一次性事件分发组件” 来使用，造成订阅时 "自动回推脏数据"；
+
+容易让开发者误将同一控件实例放在多个 Observer 回调中 造成恢复状态时 “数据不一致” 等问题（具体可参见[《MVI 存在意义》篇](https://juejin.cn/post/7145317979708735496) 关于 “响应式编程漏洞” 的描述）
+
+3.DataBinding ObservableField 组件的 Observer 能限定为 "与控件一对一绑定"，更适合承担表现层 BehaviorSubject 工作，
 
 4.LiveData 具备生命周期安全等优势，
 
