@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.architecture.ui.page.State;
+import com.kunminx.architecture.ui.state.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.databinding.FragmentObserveForeverBinding;
 import com.kunminx.puremusic.domain.message.PageMessenger;

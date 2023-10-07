@@ -24,7 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModel;
 
-import com.kunminx.architecture.ui.page.State;
+import com.kunminx.architecture.ui.state.State;
 import com.kunminx.puremusic.R;
 import com.kunminx.puremusic.data.bean.Moment;
 import com.kunminx.puremusic.databinding.ActivityEditorBinding;
